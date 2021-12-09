@@ -1,0 +1,15 @@
+- unless  Rails.application.secrets.interoperabilidad_plantillas.present?
+  - unless @error_guardar_acta
+    - unless @proceeding.new_record?
+      window.proceeding_path = "#{ proceeding_path(@proceeding) }";
+      window.location = "#{ proceeding_path(@proceeding, format: :pdf) }";
+    - else
+      alert('No ha seleccionado ningún Activo, por favor seleccione al menos un Activo Fijo');
+  - else
+    alert("#{@error_msg}");
+- else
+  alert('No puede realizar este procedimiento cuando la interoperabilidad esta activa.');
+  window.proceeding_path = "#{ assignation_assets_path }";
+  window.location = "#{ assignation_assets_path }";
+  window.plantillas = true
+

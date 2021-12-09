@@ -1,0 +1,71 @@
+= render 'header_assets'
+
+#devolution-urls{data: {'assets-search' => search_assets_path, 'proceedings' => proceedings_path}}
+
+.row{data: {action: 'devolution'}}
+  .col-md-12
+    %h3.text-center Devolución de Activos Fijos
+
+.row{data: {action: 'devolution'}}
+  .col-md-12.col-sm-12
+    %form.asset-code{role: 'form'}
+      .row
+        .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
+          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activo', autofocus: true
+        .col-md-3.col-sm-3.col-xs-3
+          = button_tag class: 'btn btn-success col-md-12 btn-lg' do
+            %span.glyphicon.glyphicon-search
+            Buscar
+%br/
+#container-tpl-selected-user
+%script{type: 'text/html', id: 'tpl-selected-user'}
+  .row
+    .col-md-6.col-sm-6
+      %h4
+        %span.text-muted Funcionario:
+        %strong {{name}}
+    .col-md-6.col-sm-6
+      %h4
+        %span.text-muted Cargo:
+        %strong {{title}}
+
+#container-tpl-selected-assets
+%script{type: 'text/html', id: 'tpl-selected-assets'}
+  .row
+    %table.table.table-striped.table-hover.table-condensed
+      %thead
+        %tr
+          %th.col-sm-1
+            %span.badge{title: 'Total'} {{total}}
+          %th.col-sm-9 Descripción
+          %th.col-sm-2 Código
+          %th
+      %tbody
+        {{#assets}}
+        %tr{ id: 'asset_{{id}}' }
+          %td {{index}}
+          %td {{description}}
+          %td {{code}}
+        {{/assets}}
+    .col-md-12.col-sm-12
+      %form{ id: "form_obs" }
+        %table.table.table-striped.table-hover.table-condensed
+          .row
+            .col-md-1.col-sm-2
+              .h4 Observaciones
+            .col-md-4.col-sm-6
+              = text_area :obs, '', class: 'form-control input-lg', placeholder: 'Observaciones', :value => "Ninguno", id: 'ta_obs'
+    .col-md-12.col-sm-12.text-center
+      = button_tag class: 'btn btn-danger', data: {type: 'reset'} do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar
+
+      = button_tag class: 'btn btn-primary', data: {type: 'next'} do
+        %span.glyphicon.glyphicon-arrow-right
+        Siguiente
+
+#proceeding-delivery
+= render 'proceedings/tpl_proceeding_delivery', display_buttons: true
+
+#success-message
+= render 'assets/tpl_success_message'

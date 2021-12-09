@@ -1,0 +1,20 @@
+.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1", id: "modal-editar-acta"}
+  .modal-dialog
+    .modal-content
+      = form_for :proceeding, url: proceedings_path + '/{{id}}', class: 'form-horizontal', data: {id: "{{id}}"} do |f|
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} &times;
+          %h4.modal-title Editar acta
+        .modal-body
+          = hidden_field_tag '_method', 'PUT'
+          .form-group
+            %label.col-sm-4.control-label Fecha
+            .col-sm-8
+              = f.text_field "fecha", value: "{{fecha}}", class: 'form-control'
+        .modal-footer
+          %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}
+            %span.glyphicon.glyphicon-ban-circle
+            = t('general.btn.cancel')
+          %button.btn.btn-primary{type: 'submit'}
+            %span.glyphicon.glyphicon-floppy-disk
+            = t('general.btn.save')

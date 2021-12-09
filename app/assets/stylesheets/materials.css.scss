@@ -1,0 +1,77 @@
+$table-border-color: #777;
+
+@mixin table-border {
+  border: 1px solid $table-border-color;
+}
+
+table.valorado {
+  @include table-border();
+  border-style: double;
+  font-size: 0.9rem;
+  thead {
+    tr {
+      th {
+        padding: 2px 3px 3px;
+      }
+    }
+  }
+  tbody {
+    tr {
+      th, td {
+        padding: 0px 1px;
+      }
+    }
+  }
+}
+
+table.valorado-sin-borde {
+  @include table-border();
+  font-size: 0.9rem;
+  thead {
+    tr {
+      th {
+        padding: 2px 3px 3px;
+      }
+    }
+  }
+  tbody {
+    tr {
+      th, td {
+        padding: 0px 3px;
+        border-top: none;
+      }
+    }
+  }
+}
+
+table.alineacion-media {
+  tbody {
+    tr {
+      td {
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+.contenedor {
+  margin-top: 0;
+  ul {
+    list-style: none;
+    margin-bottom: 0;
+    li {
+      margin-bottom: 1px;
+      padding-top: 0px;
+      &:first-child {
+        padding-top: 0px;
+      }
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}
+
+.no-dividir {
+  white-space: nowrap;
+}

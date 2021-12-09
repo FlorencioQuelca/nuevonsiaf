@@ -1,0 +1,10 @@
+.dropdown{style: 'float: right; margin-left: 3px;'}
+  %button#dropdownMenu.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button"}
+    Solicitudes:
+    %span= title_request(status)
+    %span.caret
+  %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu"}
+    %li= link_request('initiation')
+    %li= link_request('delivered')
+    %li= link_request('canceled')
+    %li= link_request('all')

@@ -1,0 +1,20 @@
+.page-header
+  .pull-right
+    - if can? :edit, @material
+      = link_to edit_material_path(@material), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+    - if can? :read, Material
+      = link_to materials_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        = t("materials.title.title")
+
+  %h2 Cuenta Contable
+
+%dl.dl-horizontal
+  %dt= Material.human_attribute_name('code')
+  %dd= @material.code
+  %dt= Material.human_attribute_name('description')
+  %dd= @material.description
+  %dt= t('general.status')
+  %dd= type_status(@material.status)

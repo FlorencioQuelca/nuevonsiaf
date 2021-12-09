@@ -1,0 +1,11 @@
+%td(class="nowrap sorting_1")= I18n.l(request.created_at, format: :version)
+- if params[:status].present? && params[:status] != 'initiation' # && Rails.application.secrets.interoperabilidad_plantillas.present?
+  %td(class="")= request.cite_ems
+%td(class="")= request.nro_solicitud
+%td(class="")= request.user_name
+%td(class="")= request.user_title
+%td(class="nowrap")
+  = link_to request, class: 'btn btn-default btn-xs', title: I18n.t('general.btn.show') do
+    %span(class="glyphicon glyphicon-eye-open")
+  = link_to '#editar', class: 'btn btn-primary btn-xs editar-solicitud', title: 'Establecer número de solicitud', data: {solicitud: request.as_json}, id: dom_id(request) do
+    %span(class="glyphicon glyphicon-edit")

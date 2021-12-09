@@ -1,0 +1,134 @@
+- titulo = 'KARDEX DE EXISTENCIAS V2'
+- desde = @desde
+- hasta = @hasta
+- unless is_pdf?
+  .pull-right.form-inline
+    .form-group.option-kardex
+      = link_to @subarticle, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-arrow-left
+        Atrás
+    - if @datos_kardex[:datos].present? && @datos_kardex[:datos].length > 0
+      .form-group.option-kardex
+        .dropdown
+          %button.btn.btn-success.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+            %span.glyphicon.glyphicon-save
+            Descargar
+            %span.caret
+          %ul.dropdown-menu
+            %li
+              = link_to 'PDF',kardex_v2_subarticle_path(@subarticle, desde: params[:desde], hasta: params[:hasta], format: :pdf), class: 'btn'
+            %li
+              = link_to 'ODS',kardex_v2_subarticle_path(@subarticle, desde: params[:desde], hasta: params[:hasta], format: :ods), class: 'btn'
+            -# %li
+            -#   = link_to 'CSV',kardex_v2_subarticle_path(@subarticle), class: 'btn btn-success'
+    .form-group.option-kardex
+      = link_to subarticles_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        Artículos
+
+  %h3= titulo
+
+  .page-header
+- else
+  .row
+    .col-sm-12
+      .text-center
+        %h3= titulo
+        %h5.fecha-al= titulo_rango_de_fechas(desde, hasta)
+      %table.kardex-table
+        %tbody
+          %tr
+            %td.etiqueta= Subarticle.human_attribute_name('code')
+            %td.valor= @subarticle.code
+          - if @subarticle.code_old.present?
+            %tr
+              %td.etiqueta= Subarticle.human_attribute_name('code_old')
+              %td.valor= @subarticle.code_old
+          %tr
+            %td.etiqueta= Subarticle.human_attribute_name('description')
+            %td.valor= @subarticle.description
+          %tr
+            %td.etiqueta= Subarticle.human_attribute_name('unit')
+            %td.valor= @subarticle.unit
+          %tr
+            %td.etiqueta= Subarticle.human_attribute_name('material')
+            %td.valor= @subarticle.material_description
+
+- unless is_pdf?
+  %dl.dl-horizontal
+    %dt= Subarticle.human_attribute_name('code')
+    %dd= @subarticle.code
+    - if @subarticle.code_old.present?
+      %dt= Subarticle.human_attribute_name('code_old')
+      %dd= @subarticle.code_old
+    %dt= Subarticle.human_attribute_name('description')
+    %dd= @subarticle.description
+    %dt= Subarticle.human_attribute_name('unit')
+    %dd= @subarticle.unit
+    %dt= Subarticle.human_attribute_name('material')
+    %dd
+      = link_to_if(@subarticle.material, @subarticle.material_description, @subarticle.material, title: @subarticle.material_code)
+
+%table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+  %thead
+    %tr.vertical-align
+      %th.text-center{rowspan: 2} Factura
+      %th.text-center{rowspan: 2} Nro pedido
+      - if Rails.application.secrets.interoperabilidad_plantillas.present?
+        %th.text-center{rowspan: 2} CITE Plantillas      
+      %th.text-center{rowspan: 2} Operación
+      %th.text-center{rowspan: 2} Fecha      
+      %th.text-center.col-sm-3{rowspan: 2} Detalle
+      %th.text-center{rowspan: 2} Precio unitario
+      %th.text-center{colspan: 3} Cantidades
+
+      %th.text-center{colspan: 3} Importes
+    %tr
+      %th.text-center Ingreso
+      %th.text-center Egreso
+      %th.text-center Saldo
+      %th.text-right Ingreso
+      %th.text-right Egreso
+      %th.text-right Saldo
+  %tbody
+    - @datos_kardex[:datos].each do |kardex|
+      %tr
+        %td.text-center= kardex["factura"]
+        %td.text-center= kardex["nro_pedido"]
+        - if Rails.application.secrets.interoperabilidad_plantillas.present?
+          %td.text-center= kardex["cite_ems_plantillas"]
+        %td.text-center= kardex["tipo"]
+        %td.text-center= l kardex["fecha"], format: :default        
+        %td= kardex["detalle"]
+        %td.number= number_with_delimiter kardex["costo_unitario"]
+        %td.text-center= mostrar_entero_float kardex["cantidad_ingreso"]
+        %td.text-center= mostrar_entero_float kardex["cantidad_egreso"]
+        %td.text-center= mostrar_entero_float kardex["cantidad_saldo"]
+        %td.number= number_with_delimiter kardex["importe_ingreso"]
+        %td.number= number_with_delimiter kardex["importe_egreso"]
+        %td.number= number_with_delimiter kardex["importe_saldo"]
+    %tr
+      - if Rails.application.secrets.interoperabilidad_plantillas.present?
+        %th.text-right{colspan: 4} SALDO FINAL
+      - else
+        %th.text-right{colspan: 3} SALDO FINAL
+      %th.text-center= l @hasta.to_date, format: :default
+      %th{colspan: 2}
+      %th.text-center= mostrar_entero_float @datos_kardex[:sumatoria_cantidad_ingreso]
+      %th.text-center= mostrar_entero_float @datos_kardex[:sumatoria_cantidad_egreso]
+      %th.text-center= mostrar_entero_float @datos_kardex[:saldo_final_cantidad]
+      %th.number= number_with_delimiter @datos_kardex[:sumatoria_importe_ingreso]
+      %th.number= number_with_delimiter @datos_kardex[:sumatoria_importe_egreso]
+      %th.number= number_with_delimiter @datos_kardex[:saldo_final_importe]
+
+= fecha_impresion if is_pdf?
+
+- if is_pdf?
+  %table{ style: 'width: 100%' }
+    %tr
+      %td.text-center.firma-funcionario
+        %p _______________________
+        %p Elaborado por
+      %td.text-center.firma-funcionario
+        %p _______________________
+        %p V.° B.°

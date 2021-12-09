@@ -1,0 +1,28 @@
+%script{ type: 'text/html', id: 'tpl-barcode' }
+  .row
+    {{#assets}}
+    .col-xs-6.col-sm-4.col-md-4.col-lg-4
+      .thumbnail
+        {{#barcode}}
+        .text-center
+          {{detalle}}
+        .barcode{ style: 'margin: 5px auto 0;', data: { barcode: '{{barcode}}' } }
+          {{barcode}}
+        {{/barcode}}
+        {{^barcode}}
+        .text-center.hide-item
+          none
+        .barcode.hide-item{ style: 'margin: 5px auto 0;', data: { barcode: 'none' } }
+          none
+        {{/barcode}}
+    {{/assets}}
+    {{#mostrarPdfBoton}}
+    .row
+      .action-buttons.col-md-12.col-sm-12.text-center
+        = button_to pdf_barcodes_path(format: :pdf), class: 'imprimir btn btn-lg btn-primary' do
+          = hidden_field_tag 'searchParam', ''
+          = hidden_field_tag 'searchType', ''
+          = hidden_field_tag 'searchGestion', ''
+          %span.glyphicon.glyphicon-print
+          Imprimir
+    {{/mostrarPdfBoton}}

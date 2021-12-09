@@ -1,0 +1,26 @@
+.title_pdf
+  %h3.text-center Reporte de Auxiliares por Cuenta
+  %br
+  %h4= 'Cuenta : '+ @account.name
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th.text-center Código
+      %th Auxiliar
+      %th.text-right Cantidad  Activos
+      %th.text-right Monto Total
+  %tbody
+    - @data.each_with_index do |auxiliar, i|
+      %tr
+        %td.text-center= i + 1
+        %td.text-center= auxiliar.code
+        %td= auxiliar.name
+        %td.number= auxiliar.cantidad_activos
+        %td.number= auxiliar.monto_activos
+    %tr
+      %td.text-right{colspan: 3}
+        %strong TOTAL
+      %td.number= @cantidad_activos
+      %td.number= @monto_activos
+

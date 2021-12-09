@@ -1,0 +1,35 @@
+%h1 Listing seguros
+
+%table
+  %tr
+    %th Supplier
+    %th User
+    %th Numero contrato
+    %th Factura numero
+    %th Factura autorizacion
+    %th Factura fecha
+    %th Fecha inicio vigencia
+    %th Fecha fin vigencia
+    %th Baja logica
+    %th
+    %th
+    %th
+
+  - @seguros.each do |seguro|
+    %tr
+      %td= seguro.supplier
+      %td= seguro.user
+      %td= seguro.numero_contrato
+      %td= seguro.factura_numero
+      %td= seguro.factura_autorizacion
+      %td= seguro.factura_fecha
+      %td= seguro.fecha_inicio_vigencia
+      %td= seguro.fecha_fin_vigencia
+      %td= seguro.baja_logica
+      %td= link_to 'Show', seguro
+      %td= link_to 'Edit', edit_seguro_path(seguro)
+      %td= link_to 'Destroy', seguro, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Seguro', new_seguro_path

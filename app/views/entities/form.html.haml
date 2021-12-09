@@ -1,0 +1,31 @@
+.page-header
+  %h2= t("entities.title.#{params[:action]}")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @entity, html: { class: 'form-horizontal' } do |f|
+    = f.input :code
+    = f.input :name
+    = f.input :acronym
+
+    - img_header = f.object.header.present? ? f.object.header.url : ''
+    - img_footer = f.object.footer.present? ? f.object.footer.url : ''
+    - data_header = f.object.header.present? ? '' : "holder.js/100%x180"
+    - data_footer = f.object.footer.present? ? '' : "holder.js/100%x180"
+
+    .form-group
+      .col-md-offset-2.col-sm-offset-2.col-lg-offset-2
+        #images_pdf Personalizar Encabezado y Pie de Página del PDF
+        %hr
+        .row
+          .col-xs-12.col-sm-6.col-md-6
+            %label Encabezado
+            = link_to '#', class: 'thumbnail' do
+              = image_tag img_header, "data-src" => data_header
+            = f.file_field :header, class: 'image imgHeaderEntity'
+          .col-xs-12.col-sm-6.col-md-6
+            %label Pie de página
+            = link_to '#', class: 'thumbnail' do
+              = image_tag img_footer, "data-src" => data_footer
+            = f.file_field :footer, class: 'image imgFooterEntity'
+
+    = render 'shared/form_buttons'

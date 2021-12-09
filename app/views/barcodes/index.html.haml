@@ -1,0 +1,29 @@
+.row{data: {action: 'barcode'}}
+  %h2.text-center Código de Barras
+
+  .col-md-12.col-sm-12
+    %form#ingresos-form{role: 'form',  action: '#'}
+      .row.has-success
+        .col-md-offset-3.col-sm-offset-3.col-xs-offset-3.col-md-5.col-sm-5.col-xs-5
+        .col-md-1.col-sm-1.col-xs-3
+          = select_tag :tipo, options_for_select([["Por Activos", "ACT"], ["Por Ingresos", "ING"]]), class: 'form-control input-sm', id: 'type'
+          %br/
+          = select_tag :tipo, options_for_select(@gestiones), class: 'form-control input-sm hide', id: 'gestion'
+      .clearfix
+      %br
+      .row.has-success
+        .col-md-offset-3.col-sm-offset-3.col-xs-offset-3.col-md-5.col-sm-5.col-xs-5
+          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos (Ej. 17, 20, 1-10, 3x14, x10)', autofocus: true
+        .col-md-3.col-sm-3.col-xs-3
+          = button_tag class: 'nuevo-cargar-barcode btn btn-success btn-lg', id: 'boton-buscar' do
+            %span.glyphicon.glyphicon-search
+            Buscar
+      .clearfix
+        .col-md-12.col-sm-12
+          %hr
+  #preview-barcodes.col-sm-12
+  
+
+#barcodes-urls{data: {'barcodes-obt-cod-barra' => obt_cod_barra_barcodes_path, 'barcodes-pdf' =>  pdf_barcodes_path(format: :pdf)}}
+
+= render 'pdf_barcode_tpl'

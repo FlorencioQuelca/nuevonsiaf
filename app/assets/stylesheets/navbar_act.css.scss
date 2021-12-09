@@ -1,0 +1,66 @@
+$bgDefault      : #10a775;
+$bgHighlight    : #2fb2c9;
+$colDefault     : #ffffff;
+$colHighlight   : #ffffff;
+$dropDown       : false;
+
+.navbar-act {
+  background: #1f364d;
+  .navbar-brand {
+    color: $colHighlight;
+    font-weight: bold;
+    background: linear-gradient(to right,#2fb2c9 10%,#10a775 100%)!important;
+    &:hover, &:focus {
+      color: $colDefault; }}
+  .navbar-text {
+    color: $colDefault; }
+  .navbar-nav {
+    > li {
+      > a {
+        color: #b8c4cf;
+        &:hover,  &:focus {
+          color: $colHighlight;
+          background-color: $bgDefault; }}
+      @if $dropDown {
+        > .dropdown-menu {
+          background-color: $bgDefault;
+          > li > a {
+            color: $colDefault;
+            &:hover,  &:focus {
+              color: $colHighlight;
+              background-color: $bgHighlight; }}
+          .divider {
+            background-color: $bgHighlight;}}}
+    }
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight; }}
+    > .open {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        background-color: $bgHighlight; }}}
+  .navbar-toggle {
+    border-color: $bgHighlight;
+    &:hover, &:focus {
+      background-color: $bgHighlight; }
+    .icon-bar {
+      background-color: $colDefault; }}
+  .navbar-collapse,
+  .navbar-form {
+    border-color: $colDefault; }
+  .navbar-link {
+    color: $colDefault;
+    &:hover {
+      color: $colHighlight; }}}
+@media (max-width: 767px) {
+  .navbar-act .navbar-nav .open .dropdown-menu {
+    > li > a {
+      color: $colDefault;
+      &:hover, &:focus {
+        color: $bgDefault; }}
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $bgDefault;
+        background-color: $bgHighlight; }}}
+}

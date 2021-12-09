@@ -1,0 +1,82 @@
+/* [THE LOADING SPINNER] */
+#spinner-front, #spinner-back {
+  position: fixed;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  opacity: 0;
+  width: 100%;
+  transition: all 1s;
+}
+#spinner-front {
+  z-index: 999;
+  margin-top: 45vh;
+  color: #fff;
+  text-align: center;
+}
+#spinner-back {
+  z-index: 998;
+  height: 100vh;
+  background: #000;
+}
+#spinner-front.show {
+  visibility: visible;
+  opacity: 1;
+}
+#spinner-back.show {
+  visibility: visible;
+  opacity: 0.7;
+}
+
+/* [DUMMY PAGE STYLES - YOU CAN IGNORE THESE] */
+html, body {
+  font-family: arial;
+  padding: 0;
+  margin: 0;
+}
+#page-header {
+  padding: 10px;
+  background: #ffdddd;
+}
+#page-body {
+  padding: 15px;
+}
+#page-footer {
+  padding: 10px;
+  background: #edf9d9;
+}
+
+.spinner-image {
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   height:60px;
+   width:60px;
+   margin:0px auto;
+   -webkit-animation: rotation .6s infinite linear;
+   -moz-animation: rotation .6s infinite linear;
+   -o-animation: rotation .6s infinite linear;
+   animation: rotation .6s infinite linear;
+   border-left:6px solid rgba(0,174,239,.15);
+   border-right:6px solid rgba(0,174,239,.15);
+   border-bottom:6px solid rgba(0,174,239,.15);
+   border-top:6px solid rgba(0,174,239,.8);
+   border-radius:100%;
+}
+
+@-webkit-keyframes rotation {
+   from {-webkit-transform: rotate(0deg);}
+   to {-webkit-transform: rotate(359deg);}
+}
+@-moz-keyframes rotation {
+   from {-moz-transform: rotate(0deg);}
+   to {-moz-transform: rotate(359deg);}
+}
+@-o-keyframes rotation {
+   from {-o-transform: rotate(0deg);}
+   to {-o-transform: rotate(359deg);}
+}
+@keyframes rotation {
+   from {transform: rotate(0deg);}
+   to {transform: rotate(359deg);}
+}

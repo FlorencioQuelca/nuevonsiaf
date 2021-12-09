@@ -1,0 +1,19 @@
+= form_for @proceeding do |f|
+  - if @proceeding.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@proceeding.errors.count, "error")} prohibited this proceeding from being saved:"
+      %ul
+        - @proceeding.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :user
+    = f.text_field :user
+  .field
+    = f.label :admin
+    = f.text_field :admin
+  .field
+    = f.label :proceeding_type
+    = f.text_field :proceeding_type
+  .actions
+    = f.submit 'Save'

@@ -1,0 +1,142 @@
+- titulo = 'Inventario de Activos Fijos por Grupo Contable'
+- desde = @desde.to_date
+- fecha = @hasta.to_date
+- imprime_pdf = false
+
+- unless is_pdf?
+  .page-header
+    .pull-right{data: {action: 'reportes-activos'}}
+      = form_tag depreciacion_reportes_path, method: :get, class: 'form-inline', id: 'buscador-form' do
+        .form-group
+          %label.sr-only{for: 'cuentas'} Cuentas
+          = select_tag :cuentas, options_for_select(get_accounts(true), params[:cuentas]), class: 'form-control', prompt: 'Seleccionar cuentas'
+        .form-group
+          %label.sr-only{for: 'fecha-desde'} Desde
+          = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+        .form-group
+          %label.sr-only{for: 'fecha-hasta'} Hasta
+          = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+        %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los artículos'}
+          %span.glyphicon.glyphicon-search
+
+    %h2= titulo
+- else
+  .row.reporte.reporte-10
+    .col-sm-12.text-center
+      %h2= titulo
+      %h4.fecha-al= titulo_a_la_fecha(fecha)
+
+:css
+  .page-break	{ display: block; page-break-before: always; }
+
+.row.reporte.reporte-10
+  .col-sm-12
+    - @cuentas.each_with_index do |account, indice|
+      - if indice > 0
+        .page-break
+      - activos = account.auxiliares_activos(desde, fecha)
+      - if activos.size > 0
+        - imprime_pdf = true
+        %table.table.table-condensed.table-bordered.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+          %thead
+            - if is_pdf?
+              %tr
+                %td{colspan: 20}
+                  = render 'encabezado_tabla', fecha: fecha, cuenta: account
+            - else
+              %tr
+                %th{colspan: 20}
+                  GRUPO CONTABLE: #{account.name}
+            %tr
+              %th.text-right{title: 'Numeración'} No
+              %th.text-center{title: 'Código'} Código
+              %th{title: 'Descripción'} Descripción
+              %th.text-center{title: 'Fecha Histórico'} Fecha Hist
+              %th.text-center{title: 'Revalúo Inicial'} Rev Inc
+              %th{title: 'Índice UFV'} Índice UFV
+              %th.number{title: 'Costo Histórico'} Costo Histórico
+              %th.number{title: 'Costo Actualizado Inicial'} Costo Actual Inicial
+              %th.number{title: 'Depreciación Acumulada Inicial'} Depreciación Acum. Inicial
+              %th.number{title: 'Vida Útil Residual Nominal'} Vida Útil Residual Nominal
+              %th.number{title: 'Facto de actualización'} Fact. Actualiz.
+              %th.number{title: 'Actualización de gestión'} Actualización de Gestión
+              %th.number{title: 'Costo actualizado'} Costo Actualizado
+              %th.number{title: 'Porcentaje de depreciación anual'} % Depr. Anual
+              %th.number{title: 'Días consumidos'} Días Consum.
+              %th.number{title: 'Depreciación de la gestión'} Deprec. Gestión
+              %th.number{title: 'Actualización depreciación acumulada'} Actualización Depreciación Acumulada
+              %th.number{title: 'Depreciación Acumulada Total'} Depreciación Acumulada Total
+              %th.number{title: 'Valor Neto'} Valor Neto
+              %th.number{title: 'Dar revalúo o baja'} Dar Reval. o Baja
+          %tbody
+            - activos.each_with_index do |activo, index|
+              %tr
+                %td.text-right= index + 1
+                %td.text-center= activo.code
+                %td= activo.description
+                %td.text-center= l activo.ingreso_fecha if activo.ingreso_fecha
+                %td= activo.revaluo_inicial
+                %td.number= number_with_delimiter activo.indice_ufv, 5
+                %td.number= number_with_delimiter activo.costo_historico
+                %td.number= number_with_delimiter activo.costo_actualizado_inicial(fecha)
+                %td.number= number_with_delimiter activo.depreciacion_acumulada_inicial(fecha)
+                %td.number= activo.vida_util_residual_nominal
+                %td.number= number_with_delimiter activo.factor_actualizacion(fecha), 6
+                %td.number= number_with_delimiter activo.actualizacion_gestion(fecha)
+                %td.number= number_with_delimiter activo.costo_actualizado(fecha)
+                %td.number= number_with_delimiter activo.porcentaje_depreciacion_anual
+                %td.number
+                  %div= activo.dias_consumidos(fecha)
+                  %div= activo.dias_consumidos_ultimo(fecha)
+                %td.number= number_with_delimiter activo.depreciacion_gestion(fecha)
+                %td.number= number_with_delimiter activo.actualizacion_depreciacion_acumulada(fecha)
+                %td.number= number_with_delimiter activo.depreciacion_acumulada_total(fecha)
+                %td.number= number_with_delimiter activo.valor_neto(fecha)
+                %td.number= activo.dar_revaluo_o_baja
+            %tr
+              %th{colspan: 3} CANTIDAD: #{activos.length}
+              %th{colspan: 3} TOTAL DE GRUPO:
+              %th.number= number_with_delimiter activos.costo_historico
+              %th.number= number_with_delimiter activos.costo_actualizado_inicial(fecha)
+              %th.number= number_with_delimiter activos.depreciacion_acumulada_inicial(fecha)
+              %th
+              %th
+              %th.number= number_with_delimiter activos.actualizacion_gestion(fecha)
+              %th.number= number_with_delimiter activos.costo_actualizado(fecha)
+              %th
+              %th
+              %th.number= number_with_delimiter activos.depreciacion_gestion(fecha)
+              %th.number= number_with_delimiter activos.actualizacion_depreciacion_acumulada(fecha)
+              %th.number= number_with_delimiter activos.depreciacion_acumulada_total(fecha)
+              %th.number= number_with_delimiter activos.valor_neto(fecha)
+              %th
+
+            - if @cuentas.length == indice + 1
+              %tr.info
+                %th{colspan: 3} CANTIDAD DE ACTIVOS: #{@cuentas.cantidad_activos(desde, fecha)}
+                %th{colspan: 3} TOTALES:
+                %th.number= number_with_delimiter @cuentas.costo_historico(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.costo_actualizado_inicial(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.depreciacion_acumulada_inicial(desde, fecha)
+                %th
+                %th
+                %th.number= number_with_delimiter @cuentas.actualizacion_gestion(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.costo_actualizado(desde, fecha)
+                %th
+                %th
+                %th.number= number_with_delimiter @cuentas.depreciacion_gestion(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.actualizacion_depreciacion_acumulada(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.depreciacion_acumulada_total(desde, fecha)
+                %th.number= number_with_delimiter @cuentas.valor_neto(desde, fecha)
+                %th
+
+    = fecha_impresion if is_pdf?
+
+  - if @cuentas.length > 0 && !is_pdf? && imprime_pdf
+    .col-sm-12.text-center
+      = link_to depreciacion_reportes_path(format: :pdf, cuentas: params[:cuentas], desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-success btn-lg' do
+        %span.glyphicon.glyphicon-print
+        Imprimir
+      = link_to depreciacion_reportes_path(format: :ods, cuentas: params[:cuentas], desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-info btn-lg' do
+        %span.glyphicon.glyphicon-floppy-save
+        ODS

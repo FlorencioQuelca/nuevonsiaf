@@ -1,0 +1,17 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered
+  %thead
+    %tr
+      %th= Account.human_attribute_name('code')
+      %th= Account.human_attribute_name('name')
+      %th= Account.human_attribute_name('vida_util')
+      %th= Account.human_attribute_name('status')
+  %tbody
+    - @array.each do |account|
+      %tr
+        %td= account.code
+        %td= account.name
+        %td= account.vida_util
+        %td= type_status(account.status)

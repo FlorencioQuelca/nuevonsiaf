@@ -1,0 +1,142 @@
+- titulo = 'Reporte de Activos Fijos Dados de Baja'
+- desde = @desde
+- fecha = @hasta
+- imprime_pdf = false
+
+- unless is_pdf?
+  .page-header
+    .pull-right{data: {action: 'reportes-activos'}}
+      = form_tag bajas_reportes_path, method: :get, class: 'form-inline', id: 'buscador-form' do
+        .form-group
+          %label.sr-only{for: 'cuentas'} Cuentas
+          = select_tag :cuentas, options_for_select(get_accounts(true), params[:cuentas]), class: 'form-control', prompt: 'Seleccionar cuentas'
+        .form-group
+          %label.sr-only{for: 'fecha-desde'} Desde
+          = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+        .form-group
+          %label.sr-only{for: 'fecha-hasta'} Hasta
+          = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+        %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los artículos'}
+          %span.glyphicon.glyphicon-search
+
+    %h2= titulo
+- else
+  .row.reporte.reporte-10
+    .col-sm-12.text-center
+      %h2= titulo
+      %h4.fecha-al= titulo_a_la_fecha(fecha)
+
+:css
+  .page-break	{ display: block; page-break-before: always; }
+
+.row.reporte.reporte-10
+  .col-sm-12
+    - @cuentas.each_with_index do |account, indice|
+      - if indice > 0
+        .page-break
+      - activos = account.auxiliares_activos_bajas(desde, fecha)
+      - if activos.size > 0
+        - imprime_pdf = true
+        %table.table.table-condensed.table-bordered.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+          %thead
+            - if is_pdf?
+              %tr
+                %td{colspan: 20}
+                  = render 'encabezado_tabla', fecha: fecha, cuenta: account
+            - else
+              %tr
+                %th{colspan: 20}
+                  GRUPO CONTABLE: #{account.name}
+            %tr
+              %th.text-right{title: 'Numeración'} No
+              %th.text-center{title: 'Código'} Código
+              %th{title: 'Descripción'} Descripción
+              %th.text-center{title: 'Fecha Histórico'} Fecha Hist
+              %th.text-center{title: 'Costo Histórico'} Costo Hist
+              %th.number Costo Actual Inicial
+              %th.number{title: 'Depreciación Acumulada Inicial'} Depreciación Acum. Inicial
+              %th.number Valor Neto Inicial
+              %th.number{title: 'Vida Útil Residual Nominal'} Vida Útil
+              %th.text-center{title: 'Fecha de Baja'} Fecha de Baja
+              %th{title: 'Índice UFV'} Índice UFV
+              %th{title: 'UFV Baja o Vida Útil'} UFV Baja o V. Útil
+              %th.number{title: 'Facto de actualización'} Fact. Actualiz.
+              %th.number{title: 'Costo total actualizado'} Costo Total Actualiz.
+              %th.number{title: 'Porcentaje de depreciación anual'} % Depr. Anual
+              %th.number{title: 'Días consumidos'} Días Consum.
+              %th.number{title: 'Depreciación de la gestión'} Deprec. Gestión
+              %th.number{title: 'Depreciación Acumulada Total'} Depreciación Acumulada Total
+              %th.number{title: 'Valor Neto'} Valor Neto
+          %tbody
+            - activos.each_with_index do |activo, index|
+              - fecha_baja = activo.baja_fecha.to_date
+              %tr
+                %td.text-right= index + 1
+                %td.text-center= activo.code
+                %td= activo.description
+                %td.text-center= l activo.ingreso_fecha if activo.ingreso_fecha
+                %td.text-center= number_with_delimiter activo.precio
+                %td.number= number_with_delimiter activo.costo_actualizado_inicial(fecha_baja)
+                %td.number= number_with_delimiter activo.depreciacion_acumulada_inicial(fecha_baja)
+                %td.number= number_with_delimiter activo.valor_neto_inicial(fecha_baja)
+                %td.number= activo.vida_util_residual_nominal
+                %td.text-center= l fecha_baja
+                %td.number= number_with_delimiter activo.indice_ufv, 5
+                %td.number= number_with_delimiter Ufv.indice(fecha_baja), 5
+                %td.number= number_with_delimiter activo.factor_actualizacion(fecha_baja), 6
+                %td.number= number_with_delimiter activo.costo_actualizado(fecha_baja)
+                %td.number= number_with_delimiter activo.porcentaje_depreciacion_anual
+                %td.number= activo.dias_consumidos(fecha_baja)
+                %td.number= number_with_delimiter activo.depreciacion_gestion(fecha_baja)
+                %td.number= number_with_delimiter activo.depreciacion_acumulada_total(fecha_baja)
+                %td.number= number_with_delimiter activo.valor_neto(fecha_baja)
+            %tr
+              %th{colspan: 3} CANTIDAD: #{activos.length}
+              %th{colspan: 1} TOTAL GRUPO:
+              %th.number= number_with_delimiter activos.total_historico
+              %th.number= number_with_delimiter activos.costo_actualizado_inicial(fecha)
+              %th.number= number_with_delimiter activos.depreciacion_acumulada_inicial(fecha)
+              %th.number= number_with_delimiter activos.valor_neto_inicial(fecha)
+              %th
+              %th
+              %th
+              %th
+              %th
+              %th.number= number_with_delimiter activos.costo_actualizado(fecha)
+              %th
+              %th
+              %th.number= number_with_delimiter activos.depreciacion_gestion(fecha)
+              %th.number= number_with_delimiter activos.depreciacion_acumulada_total(fecha)
+              %th.number= number_with_delimiter activos.valor_neto(fecha)
+
+            - if @cuentas.length == indice + 1
+              - activos_bajas = @cuentas.activos.bajas.where(bajas: {fecha: desde..fecha})
+              %tr.info
+                %th{colspan: 3} CANTIDAD DE ACTIVOS: #{activos_bajas.length}
+                %th{colspan: 1} TOTALES:
+                %th.number= number_with_delimiter activos_bajas.total_historico
+                %th.number= number_with_delimiter activos_bajas.costo_actualizado_inicial(fecha)
+                %th.number= number_with_delimiter activos_bajas.depreciacion_acumulada_inicial(fecha)
+                %th.number= number_with_delimiter activos_bajas.valor_neto_inicial(fecha)
+                %th
+                %th
+                %th
+                %th
+                %th
+                %th.number= number_with_delimiter activos_bajas.costo_actualizado(fecha)
+                %th
+                %th
+                %th.number= number_with_delimiter activos_bajas.depreciacion_gestion(fecha)
+                %th.number= number_with_delimiter activos_bajas.depreciacion_acumulada_total(fecha)
+                %th.number= number_with_delimiter activos_bajas.valor_neto(fecha)
+
+    = fecha_impresion if is_pdf?
+
+  - if @cuentas.length > 0 && !is_pdf? && imprime_pdf
+    .col-sm-12.text-center
+      = link_to bajas_reportes_path(format: :pdf, cuentas: params[:cuentas], desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-success btn-lg' do
+        %span.glyphicon.glyphicon-print
+        Imprimir
+      = link_to bajas_reportes_path(format: :ods, cuentas: params[:cuentas], desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-info btn-lg' do
+        %span.glyphicon.glyphicon-floppy-save
+        ODS

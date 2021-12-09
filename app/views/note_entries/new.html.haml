@@ -1,0 +1,138 @@
+- disabled = params[:action] == 'new' ? false : true
+
+#request-urls{data: {'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY')}}
+#note_entry-urls{data: {'get-suppliers' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
+#obt_note_entry-urls{data: {'obt-note-entry' => obt_cod_ingreso_note_entries_path(format: :json), 'note_entry' => @note_entry.id}}
+
+.page-header{data: {action: 'request'}}
+  %h2= t("note_entries.title.#{params[:action]}")
+
+= simple_form_for @note_entry, html: { class: "form-horizontal #{params[:action]}_note_entry" } do |f|
+  = f.input :total, as: :hidden
+  = f.input :subtotal, as: :hidden
+  .form-group
+    %label.col-sm-2.control-label Tipo de ingreso
+    .col-sm-6.tipo-ingreso
+      = f.radio_button :tipo_ingreso, 'compra', checked: false
+      = label_tag 'compra', 'Compra', class: 'form-check-label mr-4'
+      = f.radio_button :tipo_ingreso, 'donacion_transferencia', checked:false
+      = label_tag 'donacion_transferencia', 'Donación y/o Transferencia', class: 'form-check-label'
+      = f.radio_button :tipo_ingreso, 'reingreso', checked: false
+      = label_tag 'reingreso', 'Reingreso', class: 'form-check-label'
+  #content-donante.form-group
+    %label.col-sm-2.control-label Entidad donante
+    .col-sm-3
+      = f.text_area :entidad_donante, placeholder: 'Entidad donante', class: 'form-control'
+
+  #content-proveedor.row{data: {action: 'note_entry'}}
+    .col-sm-12.col-md-8.col-lg-8
+      - supplier = params[:action] == 'new' ? f.object.supplier_id : @note_entry.supplier_name
+      = f.input :supplier_id, as: :string, required: true, disabled: disabled, input_html: { value: supplier }
+    -# .col-sm-12.col-md-4.col-lg-4
+    -#   .form-group.boolean.optional.note_entry_reingreso
+    -#     .controls.col-sm-9.col-md-9.col-lg-9
+    -#       %label.checkbox
+    -#         = f.check_box :reingreso
+    -#         ¿Reingreso?
+  #content-requerimiento.row
+    .col-sm-12.col-md-8.col-lg-8
+      = f.input :c31, placeholder: 'Nº requerimiento/Nº preventivo'
+    .col-sm-12.col-md-4.col-lg-4
+      = f.input :c31_fecha, as: :string, input_html: { value: format_date(f.object.c31_fecha) }, label: false, placeholder: 'Fecha Nº requerimiento/Nº preventivo'
+  #content-nota.row
+    .col-sm-12.col-md-8.col-lg-8
+      = f.input :delivery_note_number, placeholder: 'Número de nota de entrega'
+    .col-sm-12.col-md-4.col-lg-4
+      = f.input :delivery_note_date, as: :string, input_html: { value: format_date(f.object.delivery_note_date) }, label: false, placeholder: 'Fecha nota entrega'
+  #content-factura.row
+    .col-sm-12.col-md-8.col-lg-8
+      .form-group.string.optional.note_entry_invoice_number
+        %label.string.optional.col-sm-3.col-md-3.col-lg-3.control-label(for="note_entry_invoice_number") Factura/Respaldo
+        .controls.col-sm-4.col-md-4.col-lg-4
+          = f.text_field :invoice_number, class: 'form-control', placeholder: 'Número de factura/respaldo'
+        #content-factura-autorizacion.controls.col-sm-5.col-md-5.col-lg-5
+          = f.text_field :invoice_autorizacion, class: 'form-control', placeholder: 'Número de autorización'
+    .col-sm-12.col-md-4.col-lg-4
+      = f.input :invoice_date, as: :string, input_html: { value: format_date(f.object.invoice_date) }, label: false, placeholder: 'Fecha factura/respaldo'
+  .row
+    .col-sm-12.col-md-8.col-lg-8
+      .form-group
+        %label.col-sm-3.col-md-3.col-lg-3.control-label Observaciones
+        .col-xs-9.col-sm-9.col-md-9
+          = f.text_area :observacion, placeholder: 'Observaciones y/o información adicional', class: 'form-control'
+  .row
+    .col-sm-12.col-md-8.col-lg-8
+      .form-group
+        %label.col-sm-3.col-md-3.col-lg-3.control-label= t('activerecord.models.subarticle')
+        .col-xs-9.col-sm-9.col-md-9
+          = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control', placeholder: 'Código o Descripción del Artículo', disabled: disabled
+  %table.table.table-bordered
+    %thead
+      %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
+        %th.text-center CÓDIGO
+        %th.text-center UNIDAD
+        %th.text-center.description DETALLE
+        %th.text-center CANTIDAD
+        %th.text-center PRECIO UNITARIO
+        %th.text-center PRECIO TOTAL
+        - if params[:action] == 'new'
+          %th
+    %tbody#subarticles
+      - if params[:action] == 'edit'
+        - @note_entry.entry_subarticles.each do |entry|
+          = hidden_field_tag "note_entry[entry_subarticles_attributes][#{entry.id}][id]", entry.id
+          %tr.subarticle
+            %td.text-center= entry.subarticle_code
+            %td.text-center= entry.subarticle_unit
+            %td= entry.subarticle_name
+            %td.col-sm-1.col-md-1.note
+              = number_field_tag "note_entry[entry_subarticles_attributes][#{entry.id}][amount]", entry.amount, { class: 'form-control amount text-right', step: 1 }
+            %td.col-sm-1.col-md-1.note
+              = number_field_tag "note_entry[entry_subarticles_attributes][#{entry.id}][unit_cost]", entry.unit_cost, { class: 'form-control unit_cost text-right', step: 0.1 }
+            %td.col-sm-1.col-md-1.number
+              %span.total-parcial= number_with_delimiter entry.total_cost || 0
+              = hidden_field_tag "note_entry[entry_subarticles_attributes][#{entry.id}][total_cost]", entry.total_cost, class: 'total-cost'
+      %tr.subtotal-sum
+        %td{colspan: 4}
+        %th.text-right SUBTOTAL
+        %th.subtotal-suma.number
+          - numero = params[:action] == 'edit' ? @note_entry.subtotal || 0 : 0
+          = number_with_delimiter numero
+      %tr
+        %td{colspan: 4}
+        %th.text-right DESCUENTO
+        %th.col-xs-1.number.note
+          = f.text_field :descuento, class: 'form-control text-right descuento', placeholder: 'Descuento'
+      %tr
+        %td{colspan: 4}
+        %th.text-right TOTAL
+        %th.total-suma.number
+          - numero = params[:action] == 'edit' ? @note_entry.total || 0 : 0
+          = number_with_delimiter numero
+
+  - if params[:action] == 'edit'
+    #edit_save_note_entry
+      = render 'shared/form_buttons'
+
+- if params[:action] == 'new'
+  #save_note_entry
+    = render 'shared/form_buttons'
+
+%script{ type: 'text/html', id: 'new_request' }
+  %tr.subarticle{ id: '{{id}}' }
+    %td {{code}}
+    %td {{unit}}
+    %td.description {{description}}
+    %td.col-sm-1.col-md-1.note
+      %div= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][amount]", nil, { id:"amount_{{id}}", class: 'form-control amount text-right', step: 1 }
+    %td.col-sm-1.col-md-1.note
+      %div= number_field_tag "note_entry[entry_subarticles_attributes][{{id}}][unit_cost]", nil, { id:"unit_cost_{{id}}", class: 'form-control unit_cost text-right', step: 0.1 }
+    %td.col-sm-1.col-md-1.number
+      %span.total-parcial= number_with_delimiter 0
+      = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][total_cost]", nil, class: 'total-cost'
+      = hidden_field_tag "note_entry[entry_subarticles_attributes][{{id}}][subarticle_id]", '{{id}}'
+    %td.text-center
+      %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }
+
+#confirm-modal
+= render 'note_entry_modal'

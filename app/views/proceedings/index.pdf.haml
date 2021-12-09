@@ -1,0 +1,21 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered
+  %thead
+    %tr
+      - if Rails.application.secrets.interoperabilidad_plantillas.present?
+        %th= Proceeding.human_attribute_name('cite_plantillas')
+      %th= Proceeding.human_attribute_name('user_id')
+      %th= Proceeding.human_attribute_name('admin_id')
+      %th= Proceeding.human_attribute_name('proceeding_type')
+      %th= Proceeding.human_attribute_name('created_at')
+  %tbody
+    - @array.each do |proceeding|
+      %tr
+      - if Rails.application.secrets.interoperabilidad_plantillas.present?
+        %td= proceeding.cite_plantillas
+        %td= proceeding.user_name
+        %td= proceeding.admin_name
+        %td= t(proceeding.get_type, scope: 'proceedings.type')
+        %td= l(proceeding.created_at, format: :version)

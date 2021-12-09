@@ -1,0 +1,17 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered
+  %thead
+    %tr
+      %th= Supplier.human_attribute_name('name')
+      %th= Supplier.human_attribute_name('nit')
+      %th= Supplier.human_attribute_name('telefono')
+      %th= Supplier.human_attribute_name('contacto')
+  %tbody
+    - @array.each do |elemento|
+      %tr
+        %td= elemento.name
+        %td= elemento.nit
+        %td= elemento.telefono
+        %td= elemento.contacto

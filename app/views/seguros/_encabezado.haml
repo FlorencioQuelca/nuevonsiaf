@@ -1,0 +1,24 @@
+- if seguro.state == 'cotizado'
+  %h3 Listado de Activos Fijos
+- elsif seguro.state == 'asegurado'
+  %h3
+    Activos Fijos con Seguro
+    .pull-right.text-muted
+      = seguro.seguro ? 'INCORPORACIÓN' : 'CONTRATO'
+
+  - seguro_padre = seguro.seguro || seguro
+  - datos = seguros_datos(seguro)
+  - division = (datos.length / 2.0).round
+  
+  %table.table.table-condensed.valorado-sin-borde
+    %tbody
+      - (0...division).each do |i|
+        %tr
+          %th.text-right= datos[i].first
+          %td= datos[i].second
+          - if datos[i+division].present?
+            %th.text-right= datos[i+division].first
+            %td= datos[i+division].second
+          - else
+            %th
+            %td

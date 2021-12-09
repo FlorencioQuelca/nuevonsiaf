@@ -1,0 +1,57 @@
+= link_to 'Regresar', verificar_usuario_users_path
+%h2 Actualización de datos del Usuario
+
+%h4 Ingrese todos los datos del funcionario conforme a los datos de la hoja de calculo. Debe llenar los datos de forma exacta. Antes de guardar revise que los datos sean correctos.
+
+.col-sm-9.column.col-sm-offset-1
+  = form_for(@user_new, url: guardar_agrupacion_users_path, method: :post) do |form|
+    - if @user_new.errors.any?
+      #error_explanation
+        %h3 Se encontraron los siguientes errores, revise y corrija los mismos:
+        %ul.alert.alert-danger
+          - @user_new.errors.full_messages.uniq.each do |message|
+            %li= message
+    .form-group
+      = label_tag :name, "Nombre:", class: "col-sm-3 col-md-3 col-lg-3 control-label text-right", for:"name"
+      .controls.col-sm-9.col-md-9.col-lg-9
+        = form.text_field :name, required: true, class: "form-control"
+    .form-group
+      = label_tag :ci, "CI:", class: "col-sm-3 col-md-3 col-lg-3 control-label text-right", for:"ci"
+      .controls.col-sm-9.col-md-9.col-lg-9
+        = form.text_field :ci, required: true, class: "form-control"
+    .form-group
+      = label_tag :email, "Email:", class: "col-sm-3 col-md-3 col-lg-3 control-label text-right", for:"email"
+      .controls.col-sm-9.col-md-9.col-lg-9
+        = form.text_field :email, required: true, class: "form-control"
+    .form-group
+      = label_tag :title, "Cargo:", class: "col-sm-3 col-md-3 col-lg-3 control-label text-right", for:"title"
+      .controls.col-sm-9.col-md-9.col-lg-9
+        = form.text_field :title, required: true, class: "form-control"
+    .form-group
+      = label_tag :department_id, "Unidad:", class: "col-sm-3 col-md-3 col-lg-3 control-label mb-2 text-right", for:"department_id"
+      .controls.col-sm-9.col-md-9.col-lg-9
+        = form.collection_select :department_id, Department.select(:id, :name), :id, :name, {include_blank: true}, {class: 'form-control',  required: true}
+    = hidden_field_tag(:users_update, "#{@usr_ids.join(',')}")
+    .form-group.col-sm-offset-11.col-sm-9
+      = form.submit 'Guardar', class: "btn btn-primary", data: { confirm: 'Esta acción no se puede revertir, ¿Esta seguro de continuar?', disable_with: "Actualizando..." }
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th{:scope => "col"} #
+      %th{:scope => "col"} Id
+      %th{:scope => "col"} Nombre
+      %th{:scope => "col"} CI
+      %th{:scope => "col"} Email
+      %th{:scope => "col"} Cargo
+      %th{:scope => "col"} Unidad
+  %tbody
+    - @user.each_with_index do |user, index|
+      %tr
+        %th= index + 1
+        %td= user.id
+        %td= user.name
+        %td= user.ci
+        %td= user.email
+        %td= user.title
+        %td= user.dpto

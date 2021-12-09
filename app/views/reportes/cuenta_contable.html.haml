@@ -1,0 +1,57 @@
+- unless is_pdf?
+  .page-header
+    %h2
+      Entradas y salidas valorado
+      %small por cuenta contable
+
+      .pull-right
+        = form_tag cuenta_contable_reportes_path, method: :get, class: 'form-inline' do
+          .form-group
+            %label.sr-only{for: 'fecha-hasta'} Hasta
+            = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+          %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los artículos'}
+            %span.glyphicon.glyphicon-search
+- if is_pdf?
+  #report_subarticles
+    %h3.text-center
+      %div ENTRADAS Y SALIDAS VALORADO POR CUENTA CONTABLE
+      %small
+        LA PAZ, AL
+        = l(@hasta.to_date, format: :long).upcase
+
+%table.table.table-bordered.table-hover.table-striped.valorado
+  %thead
+    %tr
+      %th.text-center No
+      %th.text-center Código
+      %th Cuenta contable
+      %th.number Ingresos
+      %th.number Salidas
+      %th.number Saldo
+  %tbody
+    - @materials.each_with_index do |material, index|
+      %tr
+        %td.text-center= index + 1
+        %td.text-center= material['code']
+        %td= material['description']
+        %td.number
+          = number_with_delimiter material['ingresos_bs']
+        %td.number
+          = number_with_delimiter material['salidas_bs']
+        %td.number
+          = number_with_delimiter material['saldo_bs']
+    - if @totales.rows.count > 0
+      %tr
+        %th.text-right{colspan: 3} Totales
+        %th.number
+          = number_with_delimiter @totales.first['total_ingresos_bs']
+        %th.number
+          = number_with_delimiter @totales.first['total_salidas_bs']
+        %th.number
+          = number_with_delimiter @totales.first['total_saldo_bs']
+- unless is_pdf?
+  .text-center.action-buttons
+    = link_to cuenta_contable_reportes_path(format: :pdf, hasta: params[:hasta]),
+      class: 'btn btn-lg btn-primary', target: '_blank' do
+      %span.glyphicon.glyphicon-print
+      Imprimir

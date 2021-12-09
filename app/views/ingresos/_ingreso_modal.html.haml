@@ -1,0 +1,63 @@
+%script{ id: 'confirmar-ingreso-tpl', type: 'text/html' }
+  .modal-header{ style: 'margin-bottom: 5px;' }
+  .modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1", id: "modal-confirmar-ingreso"}
+    .modal-dialog
+      .modal-content
+        = form_for :note_entry, url: "", class: 'form-horizontal', data: "" do |f|
+          .modal-header
+            %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} &times;
+            %h4.modal-title {{{titulo}}}
+          .modal-body
+            .form-group
+              %p
+                Se está introduciendo un ingreso con fecha anterior al
+                %strong {{{ultima_fecha}}}
+                , la numeración asignada será la siguiente:
+              %h2.text-center
+                {{{numero}}}
+              %p
+                Es necesario especificar una observación:
+              .form-group
+                = text_area_tag "modal_observacion", '', class: 'form-control'
+          .modal-footer
+            %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}
+              %span.glyphicon.glyphicon-ban-circle
+              = t('general.btn.cancel')
+            %button.btn.btn-primary{type: 'submit'}
+              %span.glyphicon.glyphicon-ok
+              = t('general.btn.aceptar')
+
+%script{ id: 'alerta-ingreso-tpl', type: 'text/html' }
+  .modal-header{ style: 'margin-bottom: 5px;' }
+  .modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1", id: "modal-alerta-ingreso"}
+    .modal-dialog
+      .modal-content
+        = form_for :note_entry, url: "", class: 'form-horizontal', data: "" do |f|
+          .modal-header
+            %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} &times;
+            %h4.modal-title {{{titulo}}}
+          .modal-body
+            .form-group
+              %p
+                No se puede crear el ingreso con fecha {{{fecha}}}, porque el sistema no puede asignar automáticamente la numeración:
+            .form-group
+              %table.table.table-bordered
+                %thead
+                  %tr
+                    %th Número
+                    %th Fecha
+                %tbody
+                  %tr
+                    %td {{{numero_ingreso_anterior}}}
+                    %td {{{fecha_ingreso_anterior}}}
+                  %tr.danger
+                    %td
+                      %strong ?
+                    %td {{{fecha}}}
+                  %tr
+                    %td {{{numero_ingreso_posterior}}}
+                    %td {{{fecha_ingreso_posterior}}}
+          .modal-footer
+            %button.btn.btn-primary{type: 'submit'}
+              %span.glyphicon.glyphicon-ok
+              = t('general.btn.aceptar')

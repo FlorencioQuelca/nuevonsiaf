@@ -1,0 +1,76 @@
+.clearfix
+%h3.text-center
+  %div INVENTARIO FÍSICO VALORADO DE #{entidad_sigla}
+  %small
+    LA PAZ, AL
+    = l(@hasta, format: :long).upcase
+
+%table.table.table-bordered.table-hover.table-condensed.valorado
+  %thead
+    %tr.vertical-align.info
+      %th.text-center{rowspan: "2"} CÓDIGO
+      %th.text-center{rowspan: "2"} DESCRIPCIÓN
+      %th.text-center{rowspan: "2"} UNIDAD
+      %th.text-center{rowspan: "2"} SALDOS AL #{l(@desde, format: :default)}
+      %th.text-center{colspan: "2"} ENTRADAS
+      %th.text-center{colspan: "2"} CANTIDADES
+      %th.text-center{rowspan: "2"} COSTO UNITARIO Bs.
+      %th.text-center{rowspan: "2"} SALDO Bs. AL #{l(@hasta, format: :default)}
+    %tr.vertical-align.info
+      %th.text-center EXIST. ALMAC
+      %th.text-center COSTO UNIT.
+      %th.text-center SALIDAS EXIST. ALMAC
+      %th.text-center SALDOS EXIST. ALMAC
+  %tbody
+    - @materiales.each do |material|
+      %tr.double-thick
+        %th.text-center= material["codigo"]
+        %th{colspan: 8}= material["descripcion"]
+        %th.number
+          = @subtotales.select{|item| item["codigo"] == material["codigo"]}.first["subtotal"]
+      - @subarticulos.select{|s| s["codigo_material"] == material["codigo"]}.each do |subarticulo|
+        - if @mostrar_reg_cero
+          %tr
+            %td.text-center{rowspan: subarticulo["cantidad_items"]}= subarticulo["codigo"]
+            %td{rowspan: subarticulo["cantidad_items"]}= subarticulo["descripcion"]
+            %td{rowspan: subarticulo["cantidad_items"]}= subarticulo["unidad"].upcase
+            %td.number.contenedor{rowspan: subarticulo["cantidad_items"]}
+              %ul
+                - subarticulo["datos_ingreso"].each do |dato|
+                  %li{title: dato["costo_unitario"]}= mostrar_entero_float dato["cantidad_saldo"]
+            %td.number= mostrar_entero_float subarticulo["cantidad_entrada"]
+            %td.number= number_with_delimiter(subarticulo["costo_unitario_entrada"])
+            %td.number= mostrar_entero_float subarticulo["cantidad_salida"]
+            %td.number= mostrar_entero_float subarticulo["cantidad_saldo"]
+            %td.number= number_with_delimiter subarticulo["costo_unitario"]
+            %td.number= number_with_delimiter subarticulo["importe_saldo"]
+        - elsif !subarticulo["registro_en_cero"].present?
+          %tr
+            %td.text-center{rowspan: subarticulo["cantidad_items"]}= subarticulo["codigo"]
+            %td{rowspan: subarticulo["cantidad_items"]}= subarticulo["descripcion"]
+            %td{rowspan: subarticulo["cantidad_items"]}= subarticulo["unidad"].upcase
+            %td.number.contenedor{rowspan: subarticulo["cantidad_items"]}
+              %ul
+                - subarticulo["datos_ingreso"].each do |dato|
+                  %li{title: dato["costo_unitario"]}= mostrar_entero_float dato["cantidad_saldo"]
+            %td.number= mostrar_entero_float subarticulo["cantidad_entrada"]
+            %td.number= number_with_delimiter(subarticulo["costo_unitario_entrada"])
+            %td.number= mostrar_entero_float subarticulo["cantidad_salida"]
+            %td.number= mostrar_entero_float subarticulo["cantidad_saldo"]
+            %td.number= number_with_delimiter subarticulo["costo_unitario"]
+            %td.number= number_with_delimiter subarticulo["importe_saldo"]
+        - if subarticulo["mas_registros"].present?
+          - subarticulo["mas_registros"].each do |subarticulo_interno|
+            %tr
+              %td.number= mostrar_entero_float subarticulo_interno["cantidad_entrada"]
+              %td.number= number_with_delimiter(subarticulo_interno["costo_unitario_entrada"])
+              %td.number= mostrar_entero_float subarticulo_interno["cantidad_salida"]
+              %td.number= mostrar_entero_float subarticulo_interno["cantidad_saldo"]
+              %td.number= number_with_delimiter subarticulo_interno["costo_unitario"]
+              %td.number= number_with_delimiter subarticulo_interno["importe_saldo"]
+    %tr
+      %th{colspan: 2} TOTALES
+      %th{colspan: 7}
+      %th.number= number_with_delimiter @total
+
+.text-center La Paz, #{l(@hasta, format: :long)}

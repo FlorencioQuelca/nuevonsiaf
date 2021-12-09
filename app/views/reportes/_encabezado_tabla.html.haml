@@ -1,0 +1,18 @@
+- cuenta = cuenta || nil
+%table.table.valorado.valorado-sin
+  %tbody
+    %tr
+      %td ENTIDAD:
+      %td
+        = entidad_actual.code
+        = entidad_actual.name
+      %td UNIDAD:
+      %td 01 UNIDAD ADMINISTRATIVA FINANCIERA
+      %td INDICE UFV:
+      %td
+        = number_with_delimiter Ufv.indice(fecha), 5
+        Bs.
+    - if cuenta.present?
+      %tr
+        %td GRUPO CONTABLE:
+        %td{colspan: 5}= cuenta.name

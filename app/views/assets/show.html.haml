@@ -1,0 +1,170 @@
+.page-header{ data: {action: 'historical-reviews'} }
+  .pull-right
+    = link_to new_asset_path(activo_id: @asset.id), class: 'btn btn-warning' do
+      %span.glyphicon.glyphicon-asterisk
+      Duplicar
+    = link_to historical_asset_path(@asset), class: 'btn btn-default historical' do
+      %span.glyphicon.glyphicon-list-alt
+      Histórico
+    = link_to edit_asset_path(@asset), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+    = link_to request.referer || assets_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("assets.title.title")
+
+  %h2= @asset.description
+
+.col-xs-6
+  %dl.dl-horizontal
+    %dt= Asset.human_attribute_name('code')
+    %dd= @asset.code
+    %dt= Asset.human_attribute_name('code_old')
+    %dd= @asset.code_old
+    %dt= Asset.human_attribute_name('barcode')
+    %dd= @asset.barcode || "<em>No asignado</em>".html_safe
+    %dt= Asset.human_attribute_name('detalle')
+    %dd= @asset.detalle
+    - if @asset.medidas.present?
+      %dt= Asset.human_attribute_name('medidas')
+      %dd= @asset.medidas
+    - if @asset.material.present?
+      %dt= Asset.human_attribute_name('material')
+      %dd= @asset.material
+    - if @asset.color.present?
+      %dt= Asset.human_attribute_name('color')
+      %dd= @asset.color
+    - if @asset.marca.present?
+      %dt= Asset.human_attribute_name('marca')
+      %dd= @asset.marca
+    - if @asset.modelo.present?
+      %dt= Asset.human_attribute_name('modelo')
+      %dd= @asset.modelo
+    - if @asset.serie.present?
+      %dt= Asset.human_attribute_name('serie')
+      %dd= @asset.serie
+    %dt= Asset.human_attribute_name('precio')
+    %dd= number_with_delimiter @asset.precio
+    %dt= Asset.human_attribute_name('proceso')
+    %dd= @asset.proceso
+    %dt= Asset.human_attribute_name('observaciones')
+    %dd= simple_format @asset.observaciones
+    %dt= Asset.human_attribute_name('seguro')
+    %dd= @asset.seguro_vigente? ? 'SI' : 'NO'
+    %dt= Asset.human_attribute_name('ubicacion')
+    %dd= @asset.ubicacion_detalle
+    %dt= Asset.human_attribute_name('state')
+    %dd= @asset.get_state
+    %dt= Asset.human_attribute_name('user')
+    %dd= link_to_if @asset.user, @asset.user_name, @asset.user, title: @asset.user_code
+    %dt= Asset.human_attribute_name('account')
+    %dd= link_to_if @asset.account, @asset.account_name, @asset.account, title: @asset.account_code
+    %dt= Asset.human_attribute_name('auxiliary')
+    %dd= link_to_if @asset.auxiliary, @asset.auxiliary_name, @asset.auxiliary, title: @asset.auxiliary_code
+    %dt= Asset.human_attribute_name('created_at')
+    %dd= l @asset.created_at, format: :long
+    - if @asset.baja?
+      %h3 Activo dado de baja
+      %dt= Baja.human_attribute_name('fecha')
+      %dd= l(@asset.baja_fecha.to_date, format: :default) if @asset.baja_fecha.present?
+      %dt= Baja.human_attribute_name('motivo')
+      %dd= @asset.baja_motivo
+      %dt= Baja.human_attribute_name('observacion')
+      %dd= @asset.baja_observacion
+      %dt= Baja.human_attribute_name('documento')
+      %dd= @asset.baja_documento
+      %dt= Baja.human_attribute_name('fecha_documento')
+      %dd= l(@asset.baja_fecha_documento.to_date) if @asset.baja_fecha_documento
+.col-xs-4
+  -if @asset.ingreso.present?
+    %table.table.table-bordered.table-condensed.valorado.table-striped
+      %thead
+        %tr
+          %th.col-md-4.col-sm-4.col-xs-4 Datos de Nota de Ingreso
+      %tbody
+        %tr
+          %td
+            %table.table-condensed
+              %tbody
+                %dl.dl-horizontal
+                  - if @asset.ingreso.numero.present?
+                    %dt= Ingreso.human_attribute_name('numero')
+                    %dd= @asset.ingreso.numero
+                  - if @asset.ingreso.c31_fecha.present?
+                    %dt= Ingreso.human_attribute_name('supplier')
+                    %dd= @asset.ingreso.supplier.name
+                  - if @asset.ingreso.supplier.nit.present?
+                    %dt= Supplier.human_attribute_name('nit')
+                    %dd= @asset.ingreso.supplier.nit
+                  - if @asset.ingreso.factura_autorizacion.present?
+                    %dt= Supplier.human_attribute_name('factura_autorizacion')
+                    %dd= @asset.ingreso.factura_autorizacion
+                  - if @asset.ingreso.factura_numero.present?
+                    %dt= Asset.human_attribute_name('factura_numero')
+                    %dd= @asset.ingreso.factura_numero
+                  - if @asset.ingreso.factura_fecha.present?
+                    %dt= Asset.human_attribute_name('factura_fecha')
+                    %dd= I18n.l @asset.ingreso.factura_fecha
+                  - if  @asset.ingreso.nota_entrega_numero.present?
+                    %dt= Asset.human_attribute_name('nota_entrega_numero')
+                    %dd= @asset.ingreso.nota_entrega_numero
+                  - if @asset.ingreso.nota_entrega_fecha.present?
+                    %dt= Asset.human_attribute_name('nota_entrega_fecha')
+                    %dd= I18n.l @asset.ingreso.nota_entrega_fecha
+                  - if @asset.ingreso.c31_fecha.present?
+                    %dt= Asset.human_attribute_name('c31_numero')
+                    %dd= @asset.ingreso.c31_numero
+                  - if @asset.ingreso.c31_fecha.present?
+                    %dt= Asset.human_attribute_name('c31_fecha')
+                    %dd= I18n.l @asset.ingreso.c31_fecha
+
+.row
+  .col-sm-12
+    = render 'activo', activo: @asset, fecha: Date.today
+.row
+  .col-sm-12.historical-reviews
+
+  .col-sm-12.text-center.loading{style: 'display:none;'}
+    %center
+      %h4.page-title
+        = image_tag 'loader.gif'
+        %p.text-info Espere un momento por favor.
+
+%script{id: 'tpl-assets-historical', type: 'text/html'}
+  .page-header
+    %h3
+      Histórico
+      %small.text-muted
+        funcionarios a los cuales estuvo asignado el Activo
+  {{^error}}
+  %table.table.table-striped
+    %thead
+      %tr
+        %th
+        %th Funcionario
+        %th Fecha
+        %th Tipo
+    %tbody
+      {{#proceedings}}
+      %tr
+        %td {{index}}
+        %td
+          = link_to "{{user_name}}", "{{user_url}}"
+        %td {{created_at}}
+        {{^devolution}}
+        %td.text-success
+          %span.glyphicon.glyphicon-log-out
+          Asignación
+        {{/devolution}}
+        {{#devolution}}
+        %td.text-muted
+          %span.glyphicon.glyphicon-log-in
+          Devolución
+        {{/devolution}}
+      {{/proceedings}}
+  {{/error}}
+  {{#error}}
+  .alert.alert-danger{role: 'alert'}
+    %strong Ocurrió un error
+    al desplegar el histórico, vuelva a intentarlo dentro de unos minutos.
+  {{/error}}

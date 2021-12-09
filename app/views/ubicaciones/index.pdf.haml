@@ -1,0 +1,15 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th.text-center= Ubicacion.human_attribute_name('abreviacion')
+      %th= Ubicacion.human_attribute_name('descripcion')
+  %tbody
+    - @array.each_with_index do |ubicacion, index|
+      %tr
+        %td.text-center= index + 1
+        %td.text-center= ubicacion.abreviacion
+        %td= ubicacion.descripcion

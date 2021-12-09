@@ -1,0 +1,56 @@
+%h2 Verificación de datos de usuario
+.form-group
+  .col-sm-6.col-md-6.col-lg-6
+    = link_to 'Regresar', verificar_usuario_users_path
+  .col-sm-6.col-md-6.col-lg-6
+    =form_for(:busqueda, url: verificar_campo_users_path, method: :get) do |form|
+      .form-group
+        = label_tag :name, "Nombre", class: "col-sm-3 col-md-3 col-lg-3 control-label", for:"name"
+        =form.submit 'Buscar', class: "btn btn-primary", data: { disable_with: "Procesando..." }
+        .col-sm-4.col-md-4.col-lg-4
+          = form.text_field :nombre, required: true, class: "form-control"
+
+.pull-right
+  =form_for(:users, url: ver_duplicados_users_path, method: :get) do |form|
+    =form.submit 'Mostrar duplicados', class: "btn btn-warning"
+-if !@flag_busqueda
+  %h2 Verificación del campo "#{params[:campo] == 'department_id' ? 'Unidad' : params[:campo]}"
+=form_for(:users, url: agrupacion_usuario_users_path, method: :post) do |form|
+  -# =form.submit 'Actualizar', class: "btn btn-primary", data: { disable_with: "Procesando..." }
+  %table.table.table-hover
+    %thead
+      %tr
+        %th{:scope => "col"} #
+        %th{:scope => "col"} Agrupar
+        %th{:scope => "col"}
+          = link_to 'Id', verificar_campo_users_path({ campo: "id" })
+        %th{:scope => "col"}
+          = link_to 'Nombre', verificar_campo_users_path({ campo: "name" })
+        %th{:scope => "col"}
+          = link_to 'CI', verificar_campo_users_path({ campo: "ci" })
+        %th{:scope => "col"}
+          = link_to 'Email', verificar_campo_users_path({ campo: "email" })
+        %th{:scope => "col"}
+          = link_to 'Cargo', verificar_campo_users_path({ campo: "title" })
+        %th{:scope => "col"}
+          = link_to 'Unidad', verificar_campo_users_path({ campo: "department_id" })
+        %th{:scope => "col"}
+          Fecha Act.
+        -if !@flag_busqueda
+          %th{:scope => "col"}
+            = link_to 'Flag', verificar_campo_users_path({ campo: "all" })
+    %tbody
+      - @user.each_with_index do |user, index|
+        %tr
+          %th= index + 1
+          %th= check_box_tag(:"select_user_#{index.to_s}", user.id)
+          %td= user.id
+          %td= user.name
+          %td= user.ci
+          %td= user.email
+          %td= user.title
+          %td= user.department_name
+          %td= user.updated_at.present? ? I18n.l(user.updated_at, format: :version) : ''
+          -if !@flag_busqueda
+            %td
+              %i{ class: "#{@estilos[user.flag.to_i][:icon]}", style: "#{@estilos[user.flag.to_i][:size]};#{@estilos[user.flag.to_i][:color]}", title: "#{@estilos[user.flag.to_i][:title]}" }

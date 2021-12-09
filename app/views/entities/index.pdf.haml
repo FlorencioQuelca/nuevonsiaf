@@ -1,0 +1,15 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered
+  %thead
+    %tr
+      %th= Entity.human_attribute_name('code')
+      %th= Entity.human_attribute_name('name')
+      %th= Entity.human_attribute_name('acronym')
+  %tbody
+    - @array.each do |entity|
+      %tr
+        %td= entity.code
+        %td= entity.name
+        %td= entity.acronym

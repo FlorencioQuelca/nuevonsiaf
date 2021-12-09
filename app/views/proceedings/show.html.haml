@@ -1,0 +1,13 @@
+#proceeding-delivery{ data: proceeding_to_json(@proceeding).as_json.merge({type: 'proceeding'}) }
+
+- unless is_pdf?
+  %p.proceeding-pdf.text-center
+    = link_to proceeding_path(@proceeding, format: :pdf), class: 'btn btn-primary btn-lg' do
+      %span.glyphicon.glyphicon-print
+      Descargar PDF
+
+    = link_to proceedings_path, class: 'btn btn-danger btn-lg' do
+      %span.glyphicon.glyphicon-remove
+      Cerrar
+
+= render 'tpl_proceeding_delivery'

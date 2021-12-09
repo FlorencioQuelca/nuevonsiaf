@@ -1,0 +1,62 @@
+%script{ id: 'destroy-modal', type: 'text/html' }
+  .modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1", id: "modal-{{domId}}"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+          %h4.modal-title {{{title}}}
+        .modal-body
+          .title_message {{{confirmMessage}}}
+          - if controller_name == 'assets'
+            = form_tag "{{url}}", class: 'form-horizontal' do
+              .form-group
+                %label.col-sm-2.control-label= Asset.human_attribute_name('description_decline')
+                .col-sm-10
+                  = text_area_tag "asset[description_decline]", '', class: 'form-control'
+              .form-group
+                %label.col-sm-2.control-label= Asset.human_attribute_name('reason_decline')
+                .col-sm-10
+                  = text_area_tag "asset[reason_decline]", '', class: 'form-control'
+          {{#entry}}
+          = simple_form_for EntrySubarticle.new, url: first_entry_subarticles_path, html: { class: 'form-horizontal form_entry', id: "form_entry_{{id}}" } do |f|
+            = render 'subarticles/new_entry', id: 0, subarticle_id: "{{id}}", is_first: true
+            = link_to '#', class: "new_entry" do
+              %span.glyphicon.glyphicon-plus
+              Agregar Saldo
+          {{/entry}}
+        .modal-footer
+          %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('general.btn.cancel')
+          {{#entry}}
+          = button_tag t('general.btn.save'), class: 'btn btn-primary', id: 'new_entry'
+          {{/entry}}
+          {{#unassigned}}
+          - if controller_name == 'assets'
+            = button_tag t('general.btn.save'), class: 'btn btn-primary deregister'
+          - else
+            = link_to t('general.btn.save'), "{{url}}", class: 'btn btn-primary change_status', method: :post, remote: true
+          {{/unassigned}}
+
+- if controller_name == 'subarticles'
+  %script{ id: 'entry_subarticle', type: 'text/html', data: {action: 'subarticulos'} }
+    .modal-header{ style: 'margin-bottom: 5px;' }
+    = render 'subarticles/new_entry'
+
+- if controller_name == 'requests'
+  %script{ id: 'editar-solicitud-tpl', type: 'text/html' }
+    .modal-header{ style: 'margin-bottom: 5px;' }
+    = render 'requests/editar'
+
+- if controller_name == 'note_entries'
+  %script{ id: 'editar-nota-entrada-tpl', type: 'text/html' }
+    .modal-header{ style: 'margin-bottom: 5px;' }
+    = render 'note_entries/editar'
+
+- if controller_name == 'ingresos'
+  %script{ id: 'editar-nota-entrada-tpl', type: 'text/html' }
+    .modal-header{ style: 'margin-bottom: 5px;' }
+    = render 'ingresos/editar'
+
+- if controller_name == 'proceedings'
+  %script{ id: 'editar-acta-tpl', type: 'text/html' }
+    .modal-header{ style: 'margin-bottom: 5px;' }
+    = render 'proceedings/editar'

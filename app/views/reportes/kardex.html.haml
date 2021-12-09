@@ -1,0 +1,37 @@
+.page-header
+  %h2
+    Generación de kardexes
+    %small Descarga masiva de kardexes
+
+    .pull-right
+      = form_tag kardex_reportes_path, method: :get, class: 'form-inline' do
+        .form-group
+          %label.sr-only{for: 'fecha-desde'} Desde
+          = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+        .form-group
+          %label.sr-only{for: 'fecha-hasta'} Hasta
+          = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+        %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los Artículos'}
+          %span.glyphicon.glyphicon-search
+
+.row
+  .jumbotron{data: {action: 'reportes'}}
+    .container
+      %h3
+        %ul
+          %li
+            %strong #{@subarticles.length}
+            artículos seleccionados
+          %li
+            Desde el
+            %strong #{l @desde, format: :long}
+            hasta
+            %strong #{l @hasta, format: :long}
+      %br/
+      %em Puede cambiar el rango de fechas correspondiente en el formulario.
+      %br/
+      %br/
+      %p
+        = link_to kardex_reportes_path(format: :pdf, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-primary btn-lg descargar-kardex', data: { disable_with: 'Espere por favor hasta descargar' } do
+          %span.glyphicon.glyphicon-download-alt
+          Generar kardexes

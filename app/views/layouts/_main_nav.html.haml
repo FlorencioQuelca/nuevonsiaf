@@ -1,0 +1,152 @@
+.navbar-collapse.collapse
+  %ul.nav.navbar-nav.navbar-right.right_menu
+    - if current_user.has_roles?
+      %li.dropdown
+        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_admin' do
+          Administración
+          %b.caret
+        %ul.dropdown-menu.nav{ role: 'menu', 'aria-labelledby' => 'm_admin' }
+          - if can? :read, Gestion
+            %li{ role: 'presentation' }
+              = link_to t('gestiones.title.title'), gestiones_path, role: 'menuitem'
+            %li.divider
+          - if can? :read, Entity
+            %li{ role: 'presentation' }
+              = link_to t('entities.title.title'), entities_path, role: 'menuitem'
+          - if can? :read, Building
+            %li{ role: 'presentation' }
+              = link_to t('buildings.title.title'), buildings_path, role: 'menuitem'
+          - if can? :read, Department
+            %li{ role: 'presentation' }
+              = link_to t('departments.title.title'), departments_path, role: 'menuitem'
+          - if can? :read, User
+            %li{ role: 'presentation' }
+              = link_to t('users.title.title'), users_path, role: 'menuitem'
+          - if can? :read, Supplier
+            %li{ role: 'presentation' }
+              = link_to t('suppliers.title.title'), suppliers_path, role: 'menuitem'
+          - if can? :read, Ubicacion
+            %li{ role: 'presentation' }
+              = link_to t('ubicaciones.title.title'), ubicaciones_path, role: 'menuitem'
+          - if can? :read, Ufv
+            %li{ role: 'presentation' }
+              = link_to t('ufvs.title.title'), ufvs_path, role: 'menuitem'
+          - if can? :manage, ApiToken
+            %li{ role: 'presentation' }
+              = link_to 'Tokens', api_tokens_path, role: 'menuitem'
+    - if can? :read, Asset
+      %li.dropdown
+        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_assets' do
+          Activos Fijos
+          %b.caret
+        %ul.dropdown-menu.nav{ role: 'menu', 'aria-labelledby' => 'm_assets' }
+          - if can? :read, Account
+            %li{ role: 'presentation' }
+              = link_to 'Cuentas', accounts_path, role: 'menuitem'
+          - if can? :read, Auxiliary
+            %li{ role: 'presentation' }
+              = link_to 'Auxiliares', auxiliaries_path, role: 'menuitem'
+          - if can? :read, Asset
+            %li{ role: 'presentation' }
+              = link_to t('assets.title.title'), assets_path, role: 'menuitem'
+            %li.divider
+          - if can? :read, Ingreso
+            %li{ role: 'presentation' }
+              = link_to 'Ingreso de activos fijos', ingresos_path, role: 'menuitem'
+            %li.divider
+          - if can? :read, Seguro
+            %li{ role: 'presentation' }
+              = link_to 'Seguros', seguros_path, role: 'menuitem'
+            %li.divider
+          - if can? :read, Asset
+            %li{ role: 'presentation' }
+              = link_to 'Asignación/Devolución', assignation_assets_path, role: 'menuitem'
+          - if can? :read, Proceeding
+            %li{ role: 'presentation' }
+              = link_to 'Actas', proceedings_path, role: 'menuitem'
+          - if can? :read, Baja
+            %li{ role: 'presentation' }
+              = link_to 'Bajas', bajas_path, role: 'menuitem'
+    - if current_user.is_super_admin?
+      %li.dropdown
+        = link_to '#', role: 'button', class: 'dropdown-toggle', 'data-toggle' => 'dropdown', id: 'm_migration' do
+          Migración
+          %b.caret
+        %ul.dropdown-menu.nav{ role: 'menu', 'aria-labelledby' => 'm_migration' }
+          - import_models.each_with_index do |model, index|
+            %li= link_to t("#{model}.title.title"), dbf_path(model)
+            - if index == 2
+              %li.divider
+    - if can? :read, Subarticle
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Grupo Contable
+          %b.caret
+        %ul.dropdown-menu.nav
+          - if can? :read, Material
+            %li{ role: 'presentation' }
+              = link_to t('materials.title.title'), materials_path, role: 'menuitem'
+          - if can? :read, Subarticle
+            %li{ role: 'presentation' }
+              = link_to t('subarticles.title.title'), subarticles_path
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Almacenes
+          %b.caret
+        %ul.dropdown-menu.nav
+          - if can? :read, NoteEntry
+            %li{ role: 'presentation' }
+              = link_to t('note_entries.title.title'), note_entries_path
+          - if can? :read, Request
+            %li{ role: 'presentation' }
+              = link_to t("requests.title.title"), requests_path(status: 'initiation')
+    - if current_user.is_admin?
+      %li
+        = link_to 'Código de Barras', barcodes_path, role: 'menuitem'
+    - if can?(:read, Asset)
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Reportes
+          %b.caret
+        %ul.dropdown-menu.nav{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
+          %li= link_to 'Reporte de activos fijos', activos_reportes_path
+          %li.divider
+          %li= link_to 'Resumen de activos fijos - rep6', resumen_reportes_path
+          %li= link_to 'Inventario de activos fijos - rep10', depreciacion_reportes_path
+          %li= link_to 'Baja de activos fijos - rep9', bajas_reportes_path
+    - if can? :read, Subarticle
+      %li.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown' do
+          Reportes
+          %b.caret
+        %ul.dropdown-menu.nav{ role: 'menu', 'aria-labelledby' => 'm_assets_assig' }
+          - if can? :read, Material
+            %li{ role: 'presentation' }
+              = link_to 'Inventario Físico Valorado', reports_materials_path
+            %li{ role: 'presentation' }
+              = link_to 'Inventario Físico Valorado v2', inventario_fisico_valorado_v2_reportes_path
+          - if can? :read, Material
+            %li{ role: 'presentation' }
+              = link_to 'Entradas y salidas valorado', cuenta_contable_reportes_path
+            %li.divider
+          - if can? :read, Material
+            %li{ role: 'presentation' }
+              = link_to 'Reporte de kardexes', kardex_reportes_path
+          - if can? :read, Material
+            %li{ role: 'presentation' }
+              = link_to 'Estadísticas', estadisticas_reportes_path
+    - if current_user.has_roles?
+      %li
+        = link_to 'Histórico', versions_path
+    %li.dropdown
+      = link_to '#', role: 'button', class: 'dropdown-toggle  user-logged-content', 'data-toggle' => 'dropdown' do
+        %strong.user-logged= current_user.name || current_user.username
+        %b.caret
+      %ul.dropdown-menu.nav{ role: 'menu', 'aria-labelledby' => 'm_assets' }
+        - unless current_user.is_super_admin?
+          %li
+            = link_to 'Información Personal', user_path(current_user)
+        %li
+          = link_to 'Cambiar Contraseña', dashboard_path
+        %li
+          = link_to 'Cerrar Sesión', destroy_user_session_path, method: :delete

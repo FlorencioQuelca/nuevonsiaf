@@ -1,0 +1,14 @@
+.col-sm-6
+  %table.table.table-condensed.table-striped.table-bordered
+    %tbody
+      %tr
+        %td #{t('buildings.title.title')}
+        %td.number= number_with_delimiter Building.count
+      %tr
+        %td #{t('departments.title.title')}
+        %td.number
+          %span= number_with_delimiter Department.count
+      %tr
+        %td #{t('users.title.title')}
+        %td.number
+          %span= number_with_delimiter User.count

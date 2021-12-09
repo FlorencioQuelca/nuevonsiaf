@@ -1,0 +1,100 @@
+.nowrap { white-space: nowrap; }
+
+.action-buttons { margin: 30px 0 60px; }
+
+.firma-funcionario {
+  height: 100px;
+  vertical-align: bottom;
+  p {
+    margin: 0;
+  }
+}
+
+#proceeding-delivery, #request {
+  .proceeding-assets {
+    margin: 20px 0 0;
+    td:last-child { white-space: nowrap; }
+  }
+  .proceeding-date { margin-top: 30px; }
+}
+
+table#pdf-assets-print {
+  width: 795px;
+  box-sizing: initial;
+  -webkit-box-sizing: initial;
+  -moz-box-sizing: initial;
+  margin-left:-5px;
+  margin-right:-6px;
+  tbody {
+    tr {
+      margin: 0;
+      height: 96px !important;
+      max-height: 96px;
+      td {
+        border: 1px dotted white !important;
+        padding: 0;
+        vertical-align: middle;
+        display: inline-block;
+        max-width: 33.5%;
+        min-width: 33.5%;
+        &:first-child {
+          max-width: 33%;
+          min-width: 33%;
+        }
+        &:last-child {
+          max-width: 33%;
+          min-width: 33%;
+        }
+        .contenedor {
+          margin: 0px 0px 0px 0px;
+          border: 1px dotted transparent !important;
+          .detalle {
+            line-height: 1;
+            margin-bottom: 5px;
+          }
+          .barcode {
+            margin: 0 auto;
+            height: 55px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#header{
+  padding-bottom: 10px;
+  .image {
+    width: 685px;
+  }
+}
+
+#header-horizontal{
+  padding-bottom: 2px;
+  text-align: right;
+  .image {
+    width: 685px;
+  }
+}
+
+#footer{
+  .image {
+    width: 685px;
+  }
+  .page_Numbering{
+    text-align: center;
+  }
+}
+
+// Para partir las tablas largas en el PDF
+// http://stackoverflow.com/a/1763683/1174245
+table { page-break-inside:auto;  }
+tr    { page-break-inside:avoid; page-break-after:auto }
+thead { display:table-header-group }
+tfoot { display:table-footer-group }
+
+table.margen {
+  border: 1px solid #777;
+  border-style: double;
+  margin-bottom: 0;
+}

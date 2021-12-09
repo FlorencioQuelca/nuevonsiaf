@@ -1,0 +1,21 @@
+%script{ id: 'confirmar-baja-tpl', type: 'text/html' }
+  .modal-header{ style: 'margin-bottom: 5px;' }
+  .modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1", id: "modal-confirmar-baja"}
+    .modal-dialog
+      .modal-content
+        = form_for :note_entry, url: "", class: 'form-horizontal', data: "" do |f|
+          .modal-header
+            %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} &times;
+            %h4.modal-title
+              %strong Confirmación de Baja
+          .modal-body
+            .form-group
+              %p
+                ¿Está seguro de dar de baja estos Activos Fijos definitivamente?
+          .modal-footer
+            %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}
+              %span.glyphicon.glyphicon-ban-circle
+              = t('general.btn.cancel')
+            %button.btn.btn-primary{type: 'submit'}
+              %span.glyphicon.glyphicon-ok
+              = t('general.btn.aceptar')

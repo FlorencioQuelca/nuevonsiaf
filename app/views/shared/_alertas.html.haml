@@ -1,0 +1,16 @@
+- if @activos_sin_seguro.present? && @activos_sin_seguro > 0
+  %div{class: "pull-right"}
+    %div{ style: "margin-right: 20px;", class: "alert alert-danger blink" }
+      %button.close{"data-dismiss" => "alert", type: "button"}>
+        %span{"aria-hidden" => "true"} ×
+        %span.sr-only Close
+      Existen #{@activos_sin_seguro} activos sin seguro.
+
+- if @seguros .present?
+  - @seguros.each do |s|
+    - if (alerta = s.alerta_expiracion).present?
+      %div{ style: "margin-right: 20px;", class: "alert alert-#{alerta[:tipo]} pull-right #{alerta[:parpadeo] ? 'blink' : ''}" }
+        %button.close{"data-dismiss" => "alert", type: "button"}>
+          %span{"aria-hidden" => "true"} ×
+          %span.sr-only Close
+        #{ alerta[:mensaje] }

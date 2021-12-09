@@ -1,0 +1,35 @@
+- filas_cantidad = 1
+- mostrar = true
+- indice = 1
+- historial_subarticulo.each do |subarticulo|
+  - if filas_cantidad == 1
+    - filas_cantidad = historial_subarticulo.select { |r| r.subarticulo_id == subarticulo.subarticulo_id }.size
+    - mostrar = true
+  - else
+    - filas_cantidad -= 1
+  %tr
+    - if mostrar
+      %td.vert-align{ rowspan: filas_cantidad }
+        = indice
+      %td.col-md-1.text-center.vert-align{ rowspan: filas_cantidad }
+        - if is_pdf?
+          = subarticulo.subarticulo_codigo
+        - else
+          = link_to subarticulo.subarticulo_codigo, subarticle_path(subarticulo.subarticulo_id)
+      %td.col-md-5.vert-align{ rowspan: filas_cantidad }
+        = subarticulo.descripcion
+    %td.col-md-2
+      = l subarticulo.fecha_entrega, format: :long
+    %td.col-md-2.text-center
+      - if is_pdf?
+        = subarticulo.numero_solicitud
+      - else
+        = link_to subarticulo.numero_solicitud, request_path(subarticulo.request_id)
+    %td.col-md-1.text-right
+      = subarticulo.cantidad_entregado
+    - if mostrar
+      - mostrar = false
+      - indice += 1
+      %td.col-md-1.text-right.vert-align{ rowspan: filas_cantidad }
+        - sumatoria = @historial_subarticulo.select{|r| r.subarticulo_codigo == subarticulo.subarticulo_codigo}.inject(0){|sum, x| sum + x.cantidad_entregado}
+        = sumatoria

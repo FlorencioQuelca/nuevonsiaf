@@ -1,0 +1,42 @@
+.page-header
+  .pull-right
+    - if can? :edit, @department
+      = link_to edit_department_path(@department), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+    - if can? :read, Department
+      = link_to departments_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        = t("departments.title.title")
+
+  %h2 #{Department.model_name.human}
+
+.row
+  .col-lg-4.col-md-5.col-sm-12
+    %dl.dl-horizontal
+      %dt= Department.human_attribute_name('code')
+      %dd= @department.code
+      %dt= Department.human_attribute_name('name')
+      %dd= @department.name
+      %dt= Department.human_attribute_name('building')
+      %dd
+        = link_to_if @department.building, @department.building_code, @department.building, title: @department.building_name
+      %dt= t('general.status')
+      %dd= type_status(@department.status)
+
+  - if current_user.is_admin?
+    #current-assets.col-lg-8.col-md-7.col-sm-12
+      - if @assets.present?
+        .pull-right
+          Descargar:
+          .btn-group.btn-group-xs
+            = button_tag 'CSV', class: 'download-assets btn btn-default', data: { url: download_department_path(@department, format: :csv) }
+            = button_tag 'PDF', class: 'download-assets btn btn-default', data: { url: download_department_path(@department, format: :pdf) }
+        %h4 Activos Fijos Asignados
+
+        = render 'users/user_assets.pdf.haml'
+
+      - else
+        .alert.alert-info.alert-dismissable
+          %button.close{ type: 'button', 'data-dismiss'=>'alert', 'aria-hidden'=>'true' } &times;
+          No tiene activos asignados.

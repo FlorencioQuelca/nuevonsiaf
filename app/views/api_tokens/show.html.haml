@@ -1,0 +1,22 @@
+.page-header
+  .pull-right
+    - if can? :edit, @api_token
+      = link_to edit_api_token_path(@api_token), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+    - if can? :read, ApiToken
+      = link_to api_tokens_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        = t("api_tokens.title.title")
+
+  %h2 Api Token
+
+%dl.dl-horizontal
+  %dt= ApiToken.human_attribute_name('email')
+  %dd= @api_token.email
+  %dt= ApiToken.human_attribute_name('nombre')
+  %dd= @api_token.nombre
+  %dt= ApiToken.human_attribute_name('token')
+  %dd= @api_token.token
+  %dt= ApiToken.human_attribute_name('fecha_expiracion')
+  %dd= I18n.l(@api_token.fecha_expiracion)

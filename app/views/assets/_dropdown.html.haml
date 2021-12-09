@@ -1,0 +1,11 @@
+.clearfix
+.dropdown{style: 'float: right; margin-left: 3px;'}
+  %button#dropdownMenu.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button"}
+    Activos:
+    %span= title_asset(status)
+    %span.caret
+  %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu"}
+    %li= link_asset('sin_bajas')
+    %li= link_asset('con_bajas')
+    %li= link_asset('all')
+.clearfix

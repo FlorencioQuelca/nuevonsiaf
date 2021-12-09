@@ -1,0 +1,81 @@
+- unless is_pdf?
+  .page-header
+    .pull-right
+      = link_to baja_path(@baja, format: :pdf), class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-print
+        Imprimir PDF
+      = link_to bajas_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        Bajas de Activos fijos
+
+    %h2 Baja de Activos Fijos Nro. #{@baja.numero}
+
+-if @activos.present?
+  - lista_de_campos = listar_campos(@activos)
+
+- if is_pdf?
+  .row{data: {action: 'devolution'}}
+    .col-md-12
+      %h3
+        .text-left.proceeding-title Nro. #{@baja.numero}
+        .text-center Baja de Activos Fijos
+
+%table.table.table-bordered.table-striped.table-hover.table-condensed.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th.text-center Código
+      - if @activos.present?
+        - lista_de_campos.each do |campo|
+          %th= Ingreso.human_attribute_name(campo)
+      %th.number.nowrap Precio Unit.
+  %tbody
+    -if @activos.present?
+      - total = 0
+      - @activos.each_with_index do |activo, index|
+        %tr
+          %td.text-center= index + 1
+          %td.text-center{title: activo.barcode}= activo.barcode
+          - lista_de_campos.each do |campo|
+            %td= activo[campo]
+          %td.number= number_with_delimiter activo.precio
+          - total += activo.precio
+      %tr
+        %th{ colspan: lista_de_campos.length+1 }
+        %th.number TOTAL
+        %th.number= number_with_delimiter total
+
+%table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+  %thead
+    %tr
+      %th.col-md-6.col-sm-7.col-xs-8 Detalle de la baja
+  %tbody
+    %tr
+      %td
+        %table.table-condensed
+          %tbody
+            - if @baja.fecha.present?
+              %tr
+                %th.text-right Fecha de Baja
+                %td= l(@baja.fecha.to_date) if @baja.fecha
+
+            - if @baja.motivo.present?
+              %tr
+                %th.text-right Motivo
+                %td= @baja.motivo
+
+            - if @baja.observacion.present?
+              %tr
+                %th.text-right Observación
+                %td= @baja.observacion
+
+            - if @baja.documento.present?
+              %tr
+                %th.text-right Documento de Respaldo
+                %td= @baja.documento
+            - if Rails.application.secrets.interoperabilidad_plantillas.present?
+              %tr
+                %th.text-right CITE Plantillas
+                %td= @baja.documento_cite
+
+= fecha_impresion if is_pdf?

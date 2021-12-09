@@ -1,0 +1,9 @@
+- unless current_user.is_super_admin?
+  %th= User.human_attribute_name('title')
+- unless current_user.is_super_admin?
+  %th= User.human_attribute_name('department')
+- if current_user.is_super_admin?
+  %th= User.human_attribute_name('role')
+- if current_user.is_admin?
+  %th= User.human_attribute_name('assets_count')
+%th= t('general.status')

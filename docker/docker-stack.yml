@@ -1,0 +1,33 @@
+version: '3'
+services:
+  backend:
+    env_file: runtime.env
+    image: nsiaf:1.0.0
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8888:3000"
+    volumes:
+      - nsiaf-uploads:/app/public/uploads
+    networks:
+      - nsiaf
+    depends_on:
+      - db
+  db:
+    env_file: runtime.env
+    image: mariadb:10.2
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - nsiaf-db:/var/lib/mysql
+    networks:
+      - nsiaf
+networks:
+  nsiaf:
+volumes:
+  nsiaf-db:
+  nsiaf-uploads:

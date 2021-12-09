@@ -1,0 +1,9 @@
+.page-header
+  %h3 Stock Mínimo de Artículos
+- minimum_stock.each do |subarticle|
+  - color = subarticle.stock <= subarticle.minimum.to_i ? 'bg-danger' : 'bg-warning'
+  .message{ class: color }
+    %p
+      %b #{subarticle.code} - #{subarticle.description}
+    %p Stock: #{subarticle.stock} / #{subarticle.minimum.to_i}
+    = link_to 'Ver »', subarticle_path(subarticle), class: 'btn btn-default btn-xs'

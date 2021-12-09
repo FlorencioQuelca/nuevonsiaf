@@ -1,0 +1,10 @@
+.page-header
+  %h2
+    Activos Fijos
+    .dropdown{style: 'float: right;'}
+      %button#dropdownMenu.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", type: "button"}
+        %span= t("proceedings.type.#{params[:action]}")
+        %span.caret
+      %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu"}
+        %li= link_to 'Asignación', assignation_assets_path
+        %li= link_to 'Devolución', devolution_assets_path

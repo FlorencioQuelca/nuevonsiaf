@@ -1,0 +1,4 @@
+var $tr = $("##{dom_id(@ingreso)}").closest('tr');
+
+$tr.html("#{ j render @ingreso }");
+$tr.addClass('warning');

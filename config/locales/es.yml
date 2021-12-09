@@ -1,0 +1,583 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+es:
+  sessions:
+    log_in: 'Ingreso al Sistema'
+    new_password: '¿Olvidaste tu contraseña?'
+  general:
+    are_you_sure: '¿Estás seguro?'
+    destroy: "<strong>%{name}</strong> ha sido eliminado."
+    created: "%{model} ha sido creado correctamente."
+    updated: "%{model} ha sido actualizado correctamente."
+    status: 'Estado'
+    actions: 'Acciones'
+    active: 'ACTIVO'
+    inactive: 'INACTIVO'
+    print: 'Imprimir'
+    migrate: 'Migrar'
+    btn:
+      aceptar: "Aceptar"
+      cancel: "Cancelar"
+      save: "Guardar"
+      edit: "Editar"
+      show: "Ver"
+      destroy: "Eliminar"
+      active: 'Activar'
+      deactive: 'Desactivar'
+      sign_in: 'INGRESAR'
+      send: 'ENVIAR'
+  accounts:
+    title:
+      title: "Cuentas"
+      list: "Listado de Cuentas"
+      new: "Nueva Cuenta"
+      create: "Nueva Cuenta"
+      edit: "Editar Cuenta"
+      update: "Editar Cuenta"
+      modal: "Activación/Desactivación de Cuenta"
+      confirm-activate: "¿Está seguro de Activar la cuenta <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar la cuenta <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar la cuenta <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ACTIVO</strong>"
+  articles:
+    title:
+      title: "Artículos"
+      new: "Nuevo Artículo"
+      create: "Nuevo Artículo"
+      edit: "Editar Artículo"
+      update: "Editar Artículo"
+      modal: "Activación/Desactivación de Artículo"
+      confirm-activate: "¿Está seguro de Activar el artículo <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el artículo <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el artículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>SUB-ARTCÍULO activado</strong>"
+  assets:
+    title:
+      title: "Activos"
+      list: "Listado de Activos"
+      new: "Nuevo Activo"
+      create: "Nuevo Activo"
+      edit: "Editar Activo"
+      update: "Editar Activo"
+      modal: "Baja de Activo"
+      confirm-deactivate: "<strong>%{name}</strong>"
+      users: 'Devolución'
+      status:
+        sin_bajas: 'Sin bajas'
+        con_bajas: 'Con bajas'
+        all: 'Todos'
+  bajas:
+    title:
+      title: "Bajas"
+      list: "Listado de Bajas"
+      new: "Nueva Baja"
+      create: "Nueva Baja"
+      edit: "Editar Baja"
+      update: "Editar Baja"
+      modal: "Baja de Activo"
+      confirm-deactivate: "<strong>%{name}</strong>"
+      users: 'Devolución'
+  auxiliaries:
+    title:
+      title: "Auxiliares"
+      list: "Listado de Auxiliares"
+      new: "Nuevo Auxiliar"
+      create: "Nuevo Auxiliar"
+      edit: "Editar Auxiliar"
+      update: "Editar Auxiliar"
+      modal: "Activación/Desactivación de Auxiliar"
+      confirm-activate: "¿Está seguro de Activar el auxiliar <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el auxiliar <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el auxiliar <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ACTIVO</strong>"
+  buildings:
+    title:
+      title: "Entidades"
+      list: "Listado de Entidades"
+      new: "Nueva Entidad"
+      create: "Nueva Entidad"
+      edit: "Editar Entidad"
+      update: "Editar Entidad"
+      modal: "Activación/Desactivación de Entidad"
+      confirm-activate: "¿Está seguro de Activar la entidad <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar la entidad <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar la entidad <strong>%{name}</strong> porque está asignado por lo menos a una <strong>UNIDAD activa</strong>"
+  delivered:
+    title: 'Artículos Entregados'
+  departments:
+    title:
+      title: "Unidades"
+      list: "Listado de Unidades"
+      new: "Nueva Unidad"
+      create: "Nueva Unidad"
+      edit: "Editar Unidad"
+      update: "Editar Unidad"
+      modal: "Activación/Desactivación de Unidad"
+      confirm-activate: "¿Está seguro de Activar la unidad <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar la unidad <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar la unidad <strong>%{name}</strong> porque está asignado por lo menos a un <strong>FUNCIONARIO activado</strong>"
+  entities:
+    title:
+      title: "Instituciones"
+      list: "Listado de Instituciones"
+      new: "Nueva Institución"
+      create: "Nueva Institución"
+      edit: "Editar Institución"
+      update: "Editar Institución"
+  entry_subarticles:
+    title:
+      edit: "Editar Entrada"
+  gestiones:
+    title:
+      title: "Gestiones"
+      list: "Listado de gestiones"
+      new: "Nueva Gestión"
+      cerrar: "Cerrar Gestión"
+      create: "Nueva Gestión"
+      edit: "Editar Gestión"
+      update: "Editar Gestión"
+  ingresos:
+    title:
+      title: "Notas de Ingreso de activos fijos"
+      new: "Nueva Nota de Ingreso"
+      edit: "Editar Nota de Ingreso"
+  materials:
+    title:
+      title: "Grupo Contable"
+      new: "Nueva Cuenta Contable"
+      create: "Nueva Cuenta Contable"
+      edit: "Editar Cuenta Contable"
+      update: "Editar Cuenta Contable"
+      modal: "Activación/Desactivación de Cuenta Contable"
+      confirm-activate: "¿Está seguro de Activar la Cuenta Contable <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar la Cuenta Contable <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar la Cuenta Contable <strong>%{name}</strong> porque está asignado por lo menos a un <strong>ARTÍCULO activado</strong>"
+  api_tokens:
+    title:
+      title: "Api Tokens"
+      new: "Nuevo token"
+      create: "Nuevo token"
+      edit: "Editar"
+  migration:
+    alert_html: 'Especifique el archivo <b>%{model}</b> para migrar'
+    file: 'Adjuntar Archivo'
+    message_html: '<ul><li><b>%{inserted}</b> registros insertados</li><li><b>%{no_inserted}</b> registros no insertados</li></ul>'
+    title:
+      title: "Migración"
+  note_entries:
+    title:
+      title: "Notas de Ingreso de Almacén"
+      new: "Nueva Nota de Ingreso"
+      edit: "Editar Nota de Ingreso"
+  proceedings:
+    title:
+      title: "Actas"
+    type:
+      assignation: "Asignación"
+      devolution: "Devolución"
+  requests:
+    title:
+      title: "Solicitud de Artículos"
+      new: "Nueva Solicitud"
+      users: "Enviar"
+      status:
+        initiation: 'Nuevo'
+        pending: 'Pendiente'
+        delivered: 'Entregado'
+        canceled: 'Anulado'
+        all: 'Todo'
+  seguros:
+    title:
+      title: "Seguros"
+      nro_dias_expiracion: "Días para la expiración"
+      new: "Nuevo seguro"
+  subarticles:
+    title:
+      title: "Artículos"
+      new: "Nuevo Artículo"
+      create: "Nuevo Artículo"
+      edit: "Editar Artículo"
+      update: "Editar Artículo"
+      modal: "Activación/Desactivación de Artículo"
+      confirm-activate: "¿Está seguro de Activar el artículo <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el artículo <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el artículo <strong>%{name}</strong> porque está asignado por lo menos a un <strong>Funcionario</strong>"
+    entry:
+      btn: "Establecer Saldo Inicial"
+      first: "Establecer Saldo Inicial del Subartículo <strong>%{description}</strong>"
+  suppliers:
+    title:
+      title: "Proveedores"
+      new: "Nuevo Proveedor"
+      create: "Nuevo Proveedor"
+      edit: "Editar Proveedor"
+      update: "Editar Proveedor"
+      modal: "Activación/Desactivación de Proveedor"
+  ubicaciones:
+    title:
+      title: "Ubicaciones"
+      list: "Listado de ubicaciones"
+      new: "Nueva ubicación"
+      create: "Nueva ubicación"
+      edit: "Editar ubicación"
+      update: "Editar ubicación"
+  ufvs:
+    title:
+      title: "UFVs"
+      list: "Listado de UFV"
+      new: "Nueva UFV"
+      create: "Nueva UFV"
+      edit: "Editar UFV"
+      update: "Editar UFV"
+  users:
+    roles:
+      super_admin: "Super Administrador"
+      admin: "Administrador de Activos"
+      admin_store: "Administrador de Almacenes"
+      observador_almacen: "Observador de almacén"
+    title:
+      title: "Funcionarios"
+      list: "Listado de Funcionarios"
+      new: "Nuevo Funcionario"
+      create: "Nuevo Funcionario"
+      edit: "Editar Funcionario"
+      update: "Editar Funcionario"
+      modal: "Activación/Desactivación de Funcionario"
+      confirm-activate: "¿Está seguro de Activar el funcionario <strong>%{name}</strong>?"
+      confirm-deactivate: "¿Está seguro de Desactivar el funcionario <strong>%{name}</strong>?"
+      confirm-cannot_disable: "No se puede desactivar el funcionario <strong>%{name}</strong> porque está asignado(a) por lo menos a un <strong>ACTIVO</strong>"
+  versions:
+    title:
+      title: "Histórico"
+      new: "Historial seleccionado"
+    active: 'Activo'
+    assignation: 'Asignación'
+    create: 'Creado'
+    destroy: 'Eliminación'
+    devolution: 'Devolución'
+    inactive: 'Inactivo'
+    login: 'Iniciar Sesión'
+    logout: 'Cerrar Sesión'
+    migrated: 'Migración'
+    password_changed: 'Contraseña actualizada'
+    update: 'Modificación'
+    entry_create: "Entrada de Artículo"
+    request: "Requerimiento"
+
+  unauthorized:
+    manage:
+      all: "No estás autorizado para acceder a ésta página."
+      user_inactive: "Lo sentimos, esta cuenta ha sido desactivada."
+
+  activerecord:
+    errors:
+      models:
+        account:
+          attributes:
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
+        asset:
+          attributes:
+            auxiliary_id:
+              blank: "es obligatorio"
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            description:
+              blank: "es obligatorio"
+            user_id:
+              blank: "es obligatorio"
+        auxiliary:
+          attributes:
+            account_id:
+              blank: "es obligatorio"
+            code:
+              taken: "ya existe"
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
+        building:
+          attributes:
+            code:
+              blank: "es obligatorio"
+              taken: "ya existe"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+            entity_id:
+              blank: "es obligatorio"
+        department:
+          attributes:
+            code:
+              blank: "es obligatorio"
+              taken: "ya existe"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+        entity:
+          attributes:
+            code:
+              blank: "es obligatorio"
+              taken: "ya existe"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+            acronym:
+              blank: "es obligatorio"
+        user:
+          attributes:
+            code:
+              blank: "es obligatorio"
+              taken: "ya existe"
+            department_id:
+              blank: "es obligatorio"
+            name:
+              blank: "es obligatorio"
+              invalid: "inválido"
+            title:
+              blank: "es obligatorio"
+              invalid: "inválido"
+            ci:
+              blank: "es obligatorio"
+              not_a_number: "no es un número"
+              taken: "ya existe"
+            email:
+              blank: "es obligatorio"
+              invalid: "inválido"
+              taken: "ya existe"
+            username:
+              blank: "es obligatorio"
+              invalid: "inválido"
+              taken: "ya existe"
+            password:
+              blank: "es obligatorio"
+              too_short: "mínimo 7 caracteres"
+            password_confirmation:
+              confirmation: "deben ser iguales"
+            phone:
+              not_a_number: "no es un número"
+            mobile:
+              not_a_number: "no es un número"
+
+    models:
+      account: "Cuenta"
+      article: "Artículo"
+      asset: "Activo"
+      auxiliary: "Auxiliar"
+      baja: "Baja"
+      building: "Entidad"
+      department: "Unidad"
+      entity: "Institución"
+      gestion: "Gestión"
+      kardex: "Kardex"
+      material: "Cuenta Contable"
+      note_entry: "Nota de Ingreso Almacén"
+      subarticle: "Artículo"
+      supplier: "Proveedor"
+      proceeding: "Acta"
+      ubicacion: "Ubicación"
+      user: "Funcionario"
+      apitoken: "Api Token"
+      api_token: "Api Token"
+      ingreso: "Nota de Ingreso Activos"
+
+    attributes:
+      account:
+        auxiliaries: "Auxiliares"
+        code: "Código"
+        name: "Nombre"
+        vida_util: "Vida útil"
+        depreciar: "Depreciar"
+        actualizar: "Actualizar"
+      article:
+        code: "Código"
+        description: "Descripción"
+        status: "Estado"
+      asset:
+        barcode: "Código Barras"
+        code: "Código"
+        code_old: "Código Anterior"
+        description: "Descripción"
+        auxiliary: "Auxiliar"
+        account: "Cuenta"
+        user: "Funcionario"
+        state: "Estado"
+        created_at: "Creado el"
+        incorporacion: "Incorporación"
+        supplier: "Proveedor"
+        ubicacion: "Ubicación"
+        invoice: "Número Factura"
+        all: "Todas"
+      auxiliary:
+        code: "Código"
+        name: "Nombre"
+        account: "Cuenta"
+        status: "Estado"
+      baja:
+        numero: "Código"
+        documento: "Número Documento"
+        fecha: "Fecha de Baja"
+        motivo: "Motivo"
+        observacion: "Observación"
+        documento_cite: "CITE Plantillas"
+      building:
+        code: "Código"
+        entity: "Institución"
+        name: "Nombre"
+        status: "Estado"
+      department:
+        code: "Código"
+        name: "Nombre"
+        building: "Entidad"
+        status: "Estado"
+      entity:
+        acronym: "Sigla"
+        code: "Código"
+        name: "Nombre"
+      entry_subarticle:
+        amount: "Cantidad"
+        unit_cost: "Costo Unitario"
+        total_cost: "Costo Total"
+        invoice: "Factura"
+        date: "Fecha"
+        created_at: "Creado el"
+      gestion:
+        anio: "Gestión"
+        cerrado: "Cerrado"
+        estado: "Estado"
+        usuario: "Usuario"
+        fecha_cierre: "Fecha cierre"
+        cargo: "Cargo"
+        reporte6: "Resumen de activos fijos - reporte 6"
+        reporte10: "Detalle de activos - reporte 10"
+      ingreso:
+        factura_fecha: "Fecha Factura/Doc. Respaldo"
+        factura_numero: "Número Factura/Doc. Respaldo"
+        factura_autorizacion: 'Autorización'
+        numero: 'Número de Ingreso'
+        supplier: "Proveedor"
+        telefono: "Teléfono"
+        users: "Usuario"
+        total: "Total compra"
+        nota_entrega_fecha: 'Fecha nota de entrega'
+        nota_entrega_numero: 'Número nota de entrega'
+        c31_numero: 'Nº requerimiento/Nº preventivo'
+        c31_fecha: 'Fecha Nº requerimiento/Nº preventivo'
+        documento_cite: 'CITE Plantillas'
+        compra: 'Compra'
+        reposicion: 'Reposición'
+        donacion_transferencia: 'Donación y/o Transferencia'
+      kardex:
+        kardex_date: "Fecha"
+        invoice_number: "Nº de Factura"
+        order_number: "Nº de Pedido Mat"
+        detail: "Detalle"
+      material:
+        code: "Código"
+        description: "Descripción"
+        status: "Estado"
+      note_entry:
+        id: "Nº"
+        c31: "Nº requerimiento/Nº preventivo"
+        delivery_note_number: "Nota de Entrega"
+        delivery_note_date: "Nota de Entrega"
+        invoice_number: "Factura/Respaldo"
+        note_entry_date: "Fecha"
+        supplier_id: "Proveedor"
+        suppliers: "Proveedor"
+        total: "Costo total"
+        users: "Encargado(a)"
+        documento_cite: "CITE Plantillas"
+        compra: 'Compra'
+        reposicion: 'Reposición'
+        reingreso: 'Reingreso'
+      kardex:
+      proceeding:
+        user_id: "Funcionario"
+        admin_id: "Administrador"
+        created_at: "Creado el"
+        proceeding_type: "Tipo"
+      request:
+        id: "Número"
+        created_at: "Fecha"
+        name: "Nombre"
+        title: "Cargo"
+        status: "Estado"
+        cite_ems: "CITE Plantillas"
+      subarticle:
+        code: "Código"
+        code_old: "Código anterior"
+        description: "Descripción"
+        unit: "Unidad de Medida"
+        article: "Artículo"
+        status: "Estado"
+        amount: "Stock"
+        stock: "Stock"
+        minimum: "Stock mínimo"
+        barcode: "Código de Barra"
+        material: "Cuenta contable"
+      supplier:
+        name: "Nombre"
+        nit: "NIT"
+        telefono: "Teléfono"
+        contacto: "Contacto"
+        created_at: "Creado el"
+      ubicacion:
+        abreviacion: "Abreviación"
+        descripcion: "Descripción"
+        created_at: "Creado el"
+      user:
+        assets_count: "Nro. Activos"
+        code: "Código"
+        name: "Nombre"
+        title: "Cargo"
+        ci: "C.I."
+        username: "Usuario"
+        email: "Email"
+        password: "Contraseña"
+        password_confirmation: "Confirmar Contraseña"
+        phone: "Teléfono"
+        mobile: "Celular"
+        department: "Unidad"
+        role: "Rol"
+        current_password: "Contraseña Actual"
+        status: "Estado"
+        no: "Nro."
+      seguro:
+        suppliers: "Proveedor"
+        user: "Usuario"
+        numero_contrato: "Número de contrato"
+        factura_numero: "Número de factura"
+        factura_autorizacion: "Número de autorización"
+        factura_fecha: "Fecha de factura"
+        fecha_inicio_vigencia: "Fecha inicio de vigencia"
+        fecha_fin_vigencia: "Fecha fin de vigencia"
+        estado: "Estado"
+        nro_assets: "Cantidad activos"
+        numero_poliza: "Póliza"
+        tipo: 'Tipo Póliza'
+      version:
+        item_id: "Código"
+        created_at: "Fecha"
+        event: "Acción"
+        whodunnit: "Administrador"
+        item_spanish: "Tipo"

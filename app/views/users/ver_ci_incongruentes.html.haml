@@ -1,0 +1,17 @@
+%h2 Usuarios observados
+.pull-right
+  .row
+    .col-sm-6.col-md-6.col-lg-6
+      = link_to 'Regresar', verificar_usuario_users_path
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th #
+      %th CI
+
+  %tbody
+    - @documentos_observados.each_with_index do |ci, index|
+      %tr
+        %th= index + 1
+        %td= ci

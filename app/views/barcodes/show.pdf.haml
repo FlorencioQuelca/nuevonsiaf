@@ -1,0 +1,25 @@
+- cols = 3
+%table#pdf-assets-print.table
+  %tbody
+    - rows = (@assets.length / cols.to_f).ceil
+    - (1..rows).each_with_index do |e, index|
+      - limit = index * cols
+      %tr
+        - @assets[limit, cols].each do |asset|
+          %td
+            .contenedor
+              - if asset[:barcode].present?
+                .text-center.detalle
+                  = asset[:detalle]
+                .barcode{data: { code: "#{asset[:barcode]}" } }
+                  = asset[:barcode]
+              - else
+                .text-center.hide-item
+                  none
+                .barcode.hide-item{ data: { code: 'none' } }
+                  none
+
+:coffeescript
+  $('#pdf-assets-print tr td .barcode').each (i, e) ->
+    code = $(e).data('code').toString()
+    $(e).barcode code, 'code128', { barWidth: 1, barHeight: 40 }

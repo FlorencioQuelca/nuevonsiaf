@@ -1,0 +1,92 @@
+- titulo = 'Resumen de Activos Fijos Ordenado por Grupo Contable'
+- desde = @desde.to_date
+- hasta = @hasta.to_date
+- unless is_pdf?
+  .page-header
+    .pull-right{data: {action: 'reportes-activos'}}
+      = form_tag resumen_reportes_path, method: :get, class: 'form-inline', id: 'buscador-form' do
+        .form-group
+          %label{for: 'fecha-desde'} Fechas
+          = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+        .form-group
+          %label.sr-only{for: 'fecha-hasta'} Hasta
+          = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+        %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los artículos'}
+          %span.glyphicon.glyphicon-search
+
+    %h2= titulo
+- else
+  .row.reporte.reporte-10
+    .col-sm-12.text-center
+      %h2= titulo
+      %h4.fecha-al= titulo_a_la_fecha(hasta)
+    .col-sm-12
+      = render 'encabezado_tabla', fecha: hasta
+
+.row.reporte.reporte-10
+  .col-sm-12
+    %table.table.table-condensed.table-bordered.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+      %thead
+        %tr
+          %th.text-right{title: 'Numeración'} No
+          %th{title: 'Grupo Contable'} Grupo Contable
+          %th.text-center{title: 'Cantidad'} Cantidad
+          %th.text-center{title: 'Vida Útil'} Vida Útil
+          %th.number{title: 'Costo Histórico'} Costo Histórico
+          %th.number{title: 'Costo Actualizado Inicial'} Costo Actualiz. Inicial
+          %th.number{title: 'Depreciación Acumulada Total de Grupo'} Depreciación Acum. Total de Grupo
+          %th.number{title: 'Valor Neto Inicial'} Valor Neto Inicial
+          %th.number{title: 'Actualización Gestión'} Actualización Gestión
+          %th.number{title: 'Costo Total Actualizado'} Costo Total Actualizado
+          %th.number{title: 'Depreciación Gestión'} Depreciación Gestión
+          %th.number{title: 'Actualizaión Depreciación Acumulada'} Actualización Dep. Acum.
+          %th.number{title: 'Depreciación Acumulada'} Depreciación Acumulada
+          %th.number{title: 'Valor Neto'} Valor Neto
+      %tbody
+        - @accounts.each_with_index do |cuenta, index|
+          %tr
+            %td.number= index + 1
+            %td.nowrap= cuenta.name
+            %td.text-center= cuenta.cantidad_activos(desde, hasta)
+            %td.text-center= cuenta.vida_util
+            %td.number= number_with_delimiter cuenta.costo_historico(desde, hasta)
+            %td.number= number_with_delimiter cuenta.costo_actualizado_inicial(desde, hasta)
+            %td.number= number_with_delimiter cuenta.depreciacion_acumulada_inicial(desde, hasta)
+            %td.number= number_with_delimiter cuenta.valor_neto_inicial(desde, hasta)
+            %td.number= number_with_delimiter cuenta.actualizacion_gestion(desde, hasta)
+            %td.number= number_with_delimiter cuenta.costo_actualizado(desde, hasta)
+            %td.number= number_with_delimiter cuenta.depreciacion_gestion(desde, hasta)
+            %td.number= number_with_delimiter cuenta.actualizacion_depreciacion_acumulada(desde, hasta)
+            %td.number= number_with_delimiter cuenta.depreciacion_acumulada_total(desde, hasta)
+            %td.number= number_with_delimiter cuenta.valor_neto(desde, hasta)
+
+        - if @accounts.present?
+          %tr
+            %th{colspan: 2} TOTALES
+            %th.text-center= @accounts.cantidad_activos(desde, hasta)
+            %th
+            %th.number= number_with_delimiter @accounts.costo_historico(desde, hasta)
+            %th.number= number_with_delimiter @accounts.costo_actualizado_inicial(desde, hasta)
+            %th.number= number_with_delimiter @accounts.depreciacion_acumulada_inicial(desde, hasta)
+            %th.number= number_with_delimiter @accounts.valor_neto_inicial(desde, hasta)
+            %th.number= number_with_delimiter @accounts.actualizacion_gestion(desde, hasta)
+            %th.number= number_with_delimiter @accounts.costo_actualizado(desde, hasta)
+            %th.number= number_with_delimiter @accounts.depreciacion_gestion(desde, hasta)
+            %th.number= number_with_delimiter @accounts.actualizacion_depreciacion_acumulada(desde, hasta)
+            %th.number= number_with_delimiter @accounts.depreciacion_acumulada_total(desde, hasta)
+            %th.number= number_with_delimiter @accounts.valor_neto(desde, hasta)
+        - if @accounts.empty?
+          %tr
+            %td.text-center{colspan: 14}
+              No hay cuentas para mostrar.
+
+    = fecha_impresion if is_pdf?
+
+  - if @accounts.length > 0 && !is_pdf?
+    .col-sm-12.text-center
+      = link_to resumen_reportes_path(format: :pdf, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-success btn-lg' do
+        %span.glyphicon.glyphicon-print
+        Imprimir
+      = link_to resumen_reportes_path(format: :ods, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-info btn-lg' do
+        %span.glyphicon.glyphicon-floppy-save
+        ODS

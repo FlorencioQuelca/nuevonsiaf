@@ -1,0 +1,95 @@
+- titulo = 'KARDEX DE EXISTENCIAS'
+- year = @year
+- desde = @desde
+- hasta = @hasta
+- unless is_pdf?
+  .page-header
+    .pull-right
+      = link_to @subarticle, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-arrow-left
+        Atrás
+      - if @transacciones.length > 0
+        = link_to subarticle_kardexes_path(@subarticle, format: :pdf, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-info' do
+          %span.glyphicon.glyphicon-print
+          Imprimir
+      = link_to subarticles_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        Artículos
+
+    %h3= titulo
+
+    #request-urls{data: {'request-id' => request_path('{id}'), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
+- else
+  .row
+    .col-sm-12
+      .text-center
+        %h3= titulo
+        %h5.fecha-al= titulo_rango_de_fechas(desde, hasta)
+
+      %table.kardex-table
+        %tbody
+          %tr
+            %td.etiqueta= Subarticle.human_attribute_name('code')
+            %td.valor= @subarticle.code
+          - if @subarticle.code_old.present?
+            %tr
+              %td.etiqueta= Subarticle.human_attribute_name('code_old')
+              %td.valor= @subarticle.code_old
+          %tr
+            %td.etiqueta= Subarticle.human_attribute_name('description')
+            %td.valor= @subarticle.description
+          %tr
+            %td.etiqueta= Subarticle.human_attribute_name('unit')
+            %td.valor= @subarticle.unit
+          %tr
+            %td.etiqueta= Subarticle.human_attribute_name('material')
+            %td.valor= @subarticle.material_description
+
+- unless is_pdf?
+  %dl.dl-horizontal
+    %dt= Subarticle.human_attribute_name('code')
+    %dd= @subarticle.code
+    - if @subarticle.code_old.present?
+      %dt= Subarticle.human_attribute_name('code_old')
+      %dd= @subarticle.code_old
+    %dt= Subarticle.human_attribute_name('description')
+    %dd= @subarticle.description
+    %dt= Subarticle.human_attribute_name('unit')
+    %dd= @subarticle.unit
+    %dt= Subarticle.human_attribute_name('material')
+    %dd
+      = link_to_if(@subarticle.material, @subarticle.material_description, @subarticle.material, title: @subarticle.material_code)
+
+%table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+  %thead
+    %tr.vertical-align
+      %th.text-center{rowspan: 2} Fecha
+      %th.text-center{rowspan: 2} Factura
+      -# - if Rails.application.secrets.interoperabilidad_plantillas.present?
+      %th.text-center{rowspan: 2} CITE Plantillas
+      %th.text-center{rowspan: 2} Nro pedido
+      %th.text-center.col-sm-3{rowspan: 2} Detalle
+      %th.text-center{colspan: 3} Cantidades
+      %th.text-center{rowspan: 2} Precio unitario
+      %th.text-center{colspan: 3} Importes
+    %tr
+      %th.text-center Entrada
+      %th.text-center Salida
+      %th.text-center Saldo
+      %th.text-right Entrada
+      %th.text-right Salida
+      %th.text-right Saldo
+  %tbody
+    = render @transacciones
+
+= fecha_impresion if is_pdf?
+
+- if is_pdf?
+  %table{ style: 'width: 100%' }
+    %tr
+      %td.text-center.firma-funcionario
+        %p _______________________
+        %p Elaborado por
+      %td.text-center.firma-funcionario
+        %p _______________________
+        %p V.° B.°

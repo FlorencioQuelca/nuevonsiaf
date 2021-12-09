@@ -1,0 +1,87 @@
+%script{ type: 'text/html', id: 'request_buttons' }
+  .row
+    .text-center
+      = button_tag class: 'btn btn-success', id: "btn_save_request" do
+        %span.glyphicon.glyphicon-ok
+        Entregar
+      = button_tag class: 'btn btn-danger', id: 'btn_cancel_request' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar
+
+%script{ type: 'text/html', id: 'request_accept' }
+  %button#btn-show-request.btn.btn-primary
+    %span.glyphicon.glyphicon-ok
+    Aceptar
+
+%script{ type: 'text/html', id: 'request_input' }
+  %td.col-md-1.note
+    = text_field_tag :amount, '',id:'amount',  class: 'form-control input-sm text-right', type: 'number', min:'0', max:"{{stock}}"
+
+%script{ type: 'text/html', id: 'request_barcode' }
+  .row
+    .col-md-12.col-sm-12
+      %form.asset-code{role: 'form'}
+        .row
+          .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
+            = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Artículo'
+          .col-md-3.col-sm-3.col-xs-3
+            = button_tag class: 'btn btn-success col-md-12 btn-lg', id: "btn_send_request" do
+              %span.glyphicon.glyphicon-ok
+              Entregar
+
+%script{ type: 'text/html', id: 'new_request' }
+  %tr{ id: '{{id}}' }
+    %td.text-center {{code}}
+    %td {{description}}
+    %td.text-center {{unit}}
+    %td.text-center
+      %strong.badge{title: 'Stock'}
+        {{stock}}
+    %td.amount.text-center.note.col-md-1
+      {{#existencia}}
+      = number_field_tag "quantity", '1',  id: 'amount', class: 'form-control input-sm  text-right', disabled: false, type: 'number', min: 0 , max:"{{stock}} +1"
+      {{/existencia}}
+      {{^existencia}}
+      INEXISTENCIA
+      {{/existencia}}
+    %td.actions-request.vert-align.text-center
+      %span.glyphicon.glyphicon-remove.pointer{ title: 'Eliminar' }
+
+%script{ type: 'text/html', id: 'cancel_new_request' }
+  .row
+    .text-center
+      = button_tag class: 'btn btn-primary', id: "btn_save_new_request" do
+        %span.glyphicon.glyphicon-ok
+        Guardar Solicitud
+      = button_tag class: 'btn btn-danger', id: 'btn_cancel_new_request' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar
+
+%script{ type: 'text/html', id: 'show_user_info' }
+  .row
+    .col-md-12
+      %h4
+        %span.text-muted Fecha:
+        {{date}}
+      %h4
+        %span.text-muted Administrador:
+        = current_user.name
+      %h4
+        %span.text-muted Solicitante:
+        {{name}}
+      %h4
+        %span.text-muted Cargo:
+        {{title}}
+  %br
+
+%script{ type: 'text/html', id: 'selected-user-tpl' }
+  %dl.dl-horizontal.funcionario-seleccionado
+    %dt.text-muted Funcionario
+    %dd {{name}}
+    %dt.text-muted Cargo
+    %dd {{title}}
+
+%script{type: 'text/html', id:'busy_indicator' }
+  .text-center
+    = image_tag 'loader.gif'
+    %p.text-info Espere un momento por favor.

@@ -1,0 +1,88 @@
+- case controller_name
+- when 'entities' then new_url = new_entity_path if @entities.blank?
+- when 'users' then new_url = new_user_path
+- when 'departments' then new_url = new_department_path
+- when 'buildings' then new_url = new_building_path
+- when 'auxiliaries' then new_url = new_auxiliary_path
+- when 'accounts' then new_url = new_account_path
+- when 'assets' then new_url = new_asset_path
+- when 'versions' then new_url = '#'
+- when 'materials' then new_url = new_material_path
+- when 'articles' then new_url = new_article_path
+- when 'subarticles' then new_url = new_subarticle_path
+- when 'suppliers' then new_url = new_supplier_path
+- when 'requests' then Rails.application.secrets.interoperabilidad_plantillas.present? ? new_url = nil : new_url = new_request_path
+- when 'note_entries' then Rails.application.secrets.interoperabilidad_plantillas.present? ? new_url = nil : new_url = new_note_entry_path
+- when 'ingresos' then Rails.application.secrets.interoperabilidad_plantillas.present? ? new_url = nil : new_url = new_ingreso_path
+- when 'ubicaciones' then new_url = new_ubicacion_path
+- when 'seguros' then new_url = new_seguro_path
+- when 'ufvs' then new_url = new_ufv_path
+- when 'gestiones' then new_url = new_gestion_path
+- when 'proceedings' then accion = 'actas'
+- when 'api_tokens' then new_url = new_api_token_path
+- control = controller_name == 'bajas' ? 'bajas' : controller_name
+
+
+= title t("#{control}.title.title")
+- if controller_name == 'assets'
+  .alertas.pull-right
+    = render "shared/alertas"
+.page-header{data: {action: "#{accion if accion.present?}"}}
+  %h2
+    - if action_name == 'delivered'
+      = t("delivered.title")
+    - else
+      #{t("#{control}.title.title")} #{' de Activos Fijos' if controller_name == 'bajas'}
+      - if control == 'requests'
+        = render 'dropdown', status: params[:status]
+      - if control == 'assets'
+        = render 'dropdown', status: params[:status]
+.col-xs-2.button_new
+  %span.controller_name= controller_name
+  - if can? :create, controller_name.classify.constantize
+    - if new_url.present?
+      - is_versions = control == 'versions'
+      - disabled = is_versions ? true : false
+      = link_to new_url, class: "btn #{ is_versions ? 'btn-danger remove_version' : 'btn-primary' }" , title: "#{ 'Eliminar historial seleccionado' if is_versions }", disabled: disabled do
+        %span{ class: "glyphicon glyphicon-#{ is_versions ? 'remove' : 'plus' }" }
+        = t("#{control}.title.new")
+      - if is_versions
+        #versions-export{ 'data-url' => export_versions_path }
+    - if controller_name == 'bajas' && Rails.application.secrets.interoperabilidad_plantillas.present? == false
+      = link_to new_baja_path, class: "btn btn-primary" do
+        %span{ class: 'glyphicon glyphicon-plus' }
+        Nueva Baja
+
+#datatable-spanish{ 'data-url' => spanish_datatables_path() }
+
+%table.table.table-striped.table-hover.datatable
+  %thead
+    %tr
+      - unless %w(versions proceedings requests note_entries suppliers ingresos ubicaciones ufvs gestiones seguros bajas api_tokens).include?(control)
+        -# - unless current_user.is_super_admin? && control == 'users'
+        -#   %th= User.human_attribute_name('code')
+        - unless control == 'users'
+          %th= User.human_attribute_name('code')
+        - if control == 'users' # && !current_user.is_super_admin?
+          %th= t('activerecord.attributes.user.ci')
+        - if %w(subarticles).include?(control)
+          %th= Subarticle.human_attribute_name('code_old')
+        - if 'assets' == control
+          %th= Asset.human_attribute_name('code_old')
+        %th= %w(assets materials articles subarticles).include?(control) ? Asset.human_attribute_name('description') : User.human_attribute_name('name')
+      = render "#{control}/#{control}"
+      - unless %w(versions).include?(control)
+        %th= t('general.actions')
+  %tbody
+
+#confirm-modal
+= render 'shared/confirm_modal'
+
+- columns = control.classify.constantize
+- if current_user.is_super_admin? && control == 'users'
+  - columns = columns.set_columns(current_user.is_super_admin?)
+- elsif control == 'requests'
+  - columns = columns.set_columns(params[:status] != 'initiation' && Rails.application.secrets.interoperabilidad_plantillas.present?)
+- else
+  - columns = columns.set_columns
+= select_tag "column", options_for_select(columns), id: 'select_column', class: 'form-control col-md-2', prompt: "Todos"

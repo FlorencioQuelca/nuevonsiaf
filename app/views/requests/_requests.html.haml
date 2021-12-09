@@ -1,0 +1,7 @@
+%th= Request.human_attribute_name('created_at')
+- if params[:status].present? && params[:status] != 'initiation' && Rails.application.secrets.interoperabilidad_plantillas.present?
+  %th CITE Plantillas
+%th= Request.human_attribute_name('nro_solicitud')
+%th= Request.human_attribute_name('name')
+%th= Request.human_attribute_name('title')
+%th= Request.human_attribute_name('status')

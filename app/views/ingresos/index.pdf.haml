@@ -1,0 +1,33 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th= t("activerecord.attributes.ingreso.numero")
+      %th.text-center= t("activerecord.attributes.ingreso.factura_fecha")
+      %th.text-center= t("activerecord.attributes.ingreso.factura_numero")
+      %th= t("activerecord.attributes.ingreso.supplier")
+      %th= t("activerecord.attributes.ingreso.telefono")
+      %th= t("activerecord.attributes.ingreso.users")
+      %th.text-right= t("activerecord.attributes.ingreso.total")
+      %th.text-center= t("activerecord.attributes.ingreso.nota_entrega_fecha")
+  %tbody
+    - @array.each_with_index do |ingreso, index|
+      %tr
+        %td.text-center= index + 1
+        %td= ingreso.numero
+        %td.text-center= ingreso.factura_fecha.present? ? I18n.l(ingreso.factura_fecha) : ''
+        %td= ingreso.factura_numero
+        %td= ingreso.supplier_name
+        %td= ingreso.telefono_proveedor
+        %td= ingreso.user_name
+        %td.text-right= number_with_delimiter(ingreso.total)
+        %td.text-center= ingreso.nota_entrega_fecha.present? ? I18n.l(ingreso.nota_entrega_fecha) : ''
+    - if @array.present?
+      %tr
+        %th.text-right{colspan: 5} TOTAL
+        %th.text-right
+          = number_with_delimiter(@array.inject(0) { |s, ingreso| s + ingreso.total})
+        %th

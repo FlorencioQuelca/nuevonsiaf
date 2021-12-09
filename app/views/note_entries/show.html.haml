@@ -1,0 +1,128 @@
+- unless is_pdf?
+  .page-header
+    .pull-right
+      - if can?(:edit, @note_entry) && !Rails.application.secrets.interoperabilidad_plantillas.present?
+        = link_to edit_note_entry_path(@note_entry), class: 'btn btn-primary' do
+          %span.glyphicon.glyphicon-edit
+          = t("general.btn.edit")
+      - if can? :read, @note_entry
+        = link_to note_entry_path(@note_entry, format: :pdf), class: 'btn btn-info' do
+          %span.glyphicon.glyphicon-print
+          Imprimir PDF
+      - if can? :read, NoteEntry
+        = link_to note_entries_path, class: 'btn btn-default' do
+          %span.glyphicon.glyphicon-list
+          = t("note_entries.title.title")
+
+    %h2 Nota de Ingreso Almacén Nro. #{@note_entry.obtiene_nro_nota_ingreso}
+
+- if is_pdf?
+  %h3
+    .text-left.proceeding-title Nro. #{@note_entry.obtiene_nro_nota_ingreso}
+    .text-center.proceeding-title Nota de Ingreso Almacén
+
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr.vertical-align{ class: "#{ 'info' unless is_pdf? }" }
+      %th.text-center{rowspan: "2"} Nro
+      %th.text-center{rowspan: "2"} Grupo Contable
+      %th.text-center{rowspan: "2"} Código
+      %th.text-center{rowspan: "2"} Unidad
+      %th.text-center{rowspan: "2"} Detalle
+      %th.text-center{rowspan: "2"} Cantidad
+      %th.text-center{colspan: "2"} Importe
+    %tr
+      %th.text-center{ class: "#{ 'info' unless is_pdf? }" } Unitario
+      %th.text-center{ class: "#{ 'info' unless is_pdf? }" } Total
+  %tbody
+    - @note_entry.entry_subarticles.each_with_index do |entry, index|
+      %tr
+        %td.text-center= index + 1
+        %td.text-center= entry.material_description
+        %td.text-center= entry.subarticle_code
+        %td.text-center= entry.subarticle_unit
+        %td= entry.subarticle_name
+        %td.text-center= mostrar_entero_float(entry.amount)
+        %td.number= entry.unit_cost
+        %td.number= number_with_delimiter entry.total_cost
+    - if @note_entry.descuento > 0
+      %tr
+        %th.text-right{colspan: 7} SUBTOTAL
+        %th.number= number_with_delimiter @note_entry.subtotal
+      %tr
+        %th.text-right{colspan: 7} DESCUENTO
+        %th.number= number_with_delimiter @note_entry.descuento
+    %tr
+      %th.text-right{colspan: 7} TOTAL
+      %th.number= number_with_delimiter @note_entry.total
+
+%table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+  %thead
+    %tr
+      %th.col-md-6.col-sm-7.col-xs-8 Datos proveedor
+      %th.col-md-6.col-sm-5.col-xs-4 Firma encargado
+  %tbody
+    %tr
+      %td
+        %table.table-condensed
+          %tbody
+            - if @note_entry.tipo_ingreso.present?
+              %tr
+                %th.text-right Tipo de ingreso
+                %td= t("activerecord.attributes.ingreso.#{@note_entry.tipo_ingreso}")
+
+            - if @note_entry.supplier_name.present?
+              %tr
+                %th.text-right Proveedor
+                %td= @note_entry.supplier_name
+            - if @note_entry.supplier_nit.present?
+              %tr
+                %th.text-right NIT
+                %td= @note_entry.supplier_nit
+            - if @note_entry.invoice_number.present?
+              %tr
+                %th.text-right Número factura/respaldo
+                %td= @note_entry.invoice_number
+            - if @note_entry.invoice_autorizacion.present?
+              %tr
+                %th.text-right Autorización
+                %td= @note_entry.invoice_autorizacion
+            - if @note_entry.invoice_date.present?
+              %tr
+                %th.text-right Fecha de factura/respaldo
+                %td= I18n.l @note_entry.invoice_date
+            - if @note_entry.delivery_note_number.present?
+              %tr
+                %th.text-right Número nota de entrega
+                %td= @note_entry.delivery_note_number
+            - if @note_entry.delivery_note_date.present?
+              %tr
+                %th.text-right Fecha nota de entrega
+                %td= I18n.l @note_entry.delivery_note_date
+            - if @note_entry.c31.present?
+              %tr
+                %th.text-right Nº requerimiento/Nº preventivo
+                %td= @note_entry.c31
+            - if @note_entry.c31_fecha.present?
+              %tr
+                %th.text-right Fecha Nº requerimiento/Nº preventivo
+                %td= I18n.l @note_entry.c31_fecha
+            - if @note_entry.entidad_donante.present?
+              %tr
+                %th.text-right Entidad donante
+                %td= @note_entry.entidad_donante
+            - if @note_entry.observacion.present?
+              %tr
+                %th.text-right Observación
+                %td= @note_entry.observacion
+            - if @note_entry.reingreso? && !@note_entry.tipo_ingreso.present?
+              %tr
+                %th.text-right Tipo:
+                %td REINGRESO
+            - if Rails.application.secrets.interoperabilidad_plantillas.present?
+              %tr
+                %th.text-right CITE Plantillas:
+                %td= @note_entry.documento_cite
+      %td
+
+= fecha_impresion if is_pdf?

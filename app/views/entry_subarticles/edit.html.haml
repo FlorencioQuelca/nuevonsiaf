@@ -1,0 +1,13 @@
+.page-header
+  %h2= t("entry_subarticles.title.#{params[:action]}")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @entry_subarticle, html: { class: 'form-horizontal' } do |f|
+    = f.input :amount
+    = f.input :unit_cost
+    = f.input :total_cost
+    = f.input :date, as: :string, input_html: { value: format_date(f.object.date), class: 'date' }
+    = f.input :stock
+    = f.input :created_at, as: :string
+
+    = render 'shared/form_buttons'

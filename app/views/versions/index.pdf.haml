@@ -1,0 +1,21 @@
+.title_pdf
+  %h3 Histórico
+
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th= Version.human_attribute_name('id')
+      %th= Version.human_attribute_name('item_id')
+      %th= Version.human_attribute_name('created_at')
+      %th= Version.human_attribute_name('event')
+      %th= Version.human_attribute_name('whodunnit')
+      %th= Version.human_attribute_name('item_spanish')
+  %tbody
+    - @array.each do |version|
+      %tr
+        %td= version.id
+        %td= content_tag(:span, version.item_code, title: version.item_name)
+        %td= I18n.l(version.created_at, format: :version)
+        %td= version.event
+        %td= version.whodunnit_name
+        %td= version.item_spanish

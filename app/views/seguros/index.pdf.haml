@@ -1,0 +1,23 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th= Seguro.human_attribute_name("numero_poliza")
+      %th= Seguro.human_attribute_name("numero_contrato")
+      %th= Seguro.human_attribute_name("suppliers")
+      %th.text-center= Seguro.human_attribute_name("fecha_inicio_vigencia")
+      %th.text-center= Seguro.human_attribute_name("fecha_fin_vigencia")
+      %th= Seguro.human_attribute_name("estado")
+      %th.text-right= Seguro.human_attribute_name("nro_activos")
+  %tbody
+    - @array.each_with_index do |seguro, index|
+      %tr
+        %td= seguro.numero_contrato
+        %td= seguro.proveedor_nombre
+        %td= seguro.factura_numero
+        %td.text-center= seguro.fecha_inicio_vigencia.present? ? I18n.l(seguro.fecha_inicio_vigencia) : ''
+        %td.text-center= seguro.fecha_fin_vigencia.present? ? I18n.l(seguro.fecha_fin_vigencia) : ''
+        %td= seguro.estado
+        %td.text-right= seguro.cantidad_activos

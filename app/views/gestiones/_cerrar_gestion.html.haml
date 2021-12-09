@@ -1,0 +1,21 @@
+.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1", id: "modal-cerrar-gestion"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} &times;
+        %h4.modal-title Cierre de gestión #{Gestion.actual}
+      .modal-body
+        .alert.alert-danger{role: 'alert'}
+          %p
+            La gestión actual es
+            %strong= Gestion.actual
+            si ACEPTA cerrar la gestión ya no se podrá hacer modificaciones a dicha gestión, caso contrario haga click en CANCELAR.
+          %p
+            %strong ¿Está seguro de cerrar la gestión #{Gestion.actual}?
+      .modal-footer
+        %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}
+          %span.glyphicon.glyphicon-ban-circle
+          = t('general.btn.cancel')
+        %button.btn.btn-danger.aceptar{type: 'submit'}
+          %span.glyphicon.glyphicon-floppy-disk
+          = t('general.btn.aceptar')

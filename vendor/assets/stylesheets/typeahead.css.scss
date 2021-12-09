@@ -1,0 +1,217 @@
+.typeahead,
+.tt-query,
+.tt-hint {
+  width: 100%;
+  outline: none;
+}
+
+.typeahead {
+  background-color: #fff;
+}
+
+.typeahead:focus {
+  border: 2px solid #0097cf;
+}
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  line-height: 1.428571429;
+  color: #999
+}
+
+.tt-dropdown-menu {
+  width: 100%;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor {
+  color: #fff;
+  background-color: #0097cf;
+  cursor: pointer;
+  .text-muted {
+    color: #fff;
+  }
+}
+
+.tt-suggestion:hover {
+  color: #fff;
+  background-color: #0097cf;
+  cursor: pointer;
+  .text-muted {
+    color: #fff;
+  }
+}
+.tt-dropdown-menu {
+  .active {
+    background-color: #0097cf;
+  }
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.twitter-typeahead {
+  width: 100%;
+}
+
+#show-map {
+  height: 200px;
+}
+
+.physical_progress_value, .total_disbursed_value {
+  font-size: 15px;
+  margin-right: 15px;
+  width: 100px;
+}
+
+tr.hover {
+   cursor: pointer;
+}
+
+.scrollable-projects {
+  height: 309px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.form-control[type="checkbox"] {
+  height: auto;
+  width: auto;
+}
+
+.project-show-page-header {
+  margin: 40px 0 2px;
+}
+
+.project-form-body {
+  background-color: #E2E2E2;
+  padding: 15px
+}
+
+.project-form-body .highcharts-tooltip span {
+  font-size: 130% !important;
+}
+
+
+
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.btn-file > input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  font-size: 23px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  transform: translate(-300px, 0) scale(4);
+  direction: ltr;
+}
+
+.fileinput {
+  display: inline-block;
+  margin-bottom: 0px;
+}
+
+.fileinput .uneditable-input {
+  display: inline-block;
+  margin-bottom: 0;
+  vertical-align: middle;
+  cursor: text;
+}
+
+.fileinput .thumbnail {
+  display: inline-block;
+  margin-bottom: 5px;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.fileinput .thumbnail > img {
+  max-height: 100%;
+}
+
+.fileinput .btn {
+  vertical-align: middle;
+}
+
+.fileinput-exists .fileinput-new,
+.fileinput-new .fileinput-exists {
+  display: none;
+}
+
+.fileinput-inline .fileinput-controls {
+  display: inline;
+}
+
+.fileinput .uneditable-input {
+  white-space: normal;
+}
+
+.fileinput-new .input-group .btn-file {
+  border-radius: 0 4px 4px 0;
+}
+
+.fileinput-new .input-group .btn-file.btn-xs,
+.fileinput-new .input-group .btn-file.btn-sm {
+  border-radius: 0 3px 3px 0;
+}
+
+.fileinput-new .input-group .btn-file.btn-lg {
+  border-radius: 0 6px 6px 0;
+}
+
+.adding-images {
+  position: relative;
+  &:hover {
+    a.fileinput-exists {
+      opacity: 1;
+    }
+  }
+  a.fileinput-exists {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+
+.total-disbursed {
+  input.show-value {
+    float: left;
+    margin-right: 19px;
+  }
+  .slider.slider-horizontal {
+    margin-top: 7px;
+  }
+}

@@ -1,0 +1,17 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered
+  %thead
+    %tr
+      %th= Building.human_attribute_name('code')
+      %th= Building.human_attribute_name('name')
+      %th= Building.human_attribute_name('entity')
+      %th= Building.human_attribute_name('status')
+  %tbody
+    - @array.each do |building|
+      %tr
+        %td= building.code
+        %td= building.name
+        %td= building.entity_name
+        %td= type_status(building.status)

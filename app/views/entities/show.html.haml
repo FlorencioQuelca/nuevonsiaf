@@ -1,0 +1,33 @@
+.page-header
+  .pull-right
+    = link_to edit_entity_path(@entity), class: 'btn btn-primary' do
+      %span.glyphicon.glyphicon-edit
+      = t("general.btn.edit")
+    = link_to entities_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("entities.title.title")
+
+  %h2 #{Entity.model_name.human}
+
+%p
+  %b #{Entity.human_attribute_name('code')}:
+  = @entity.code
+%p
+  %b #{Entity.human_attribute_name('name')}:
+  = @entity.name
+%p
+  %b #{Entity.human_attribute_name('acronym')}:
+  = @entity.acronym
+- if @entity.header.present? || @entity.footer.present?
+  .form-group
+    #images_pdf Imágenes PDF
+    %hr
+    .row
+      - if @entity.header.present?
+        .col-sm-offset-1.col-md-offset-1.col-xs-12.col-sm-10.col-md-10
+          %label Cabecera
+          .thumbnail= image_tag @entity.get_header
+      - if @entity.footer.present?
+        .col-sm-offset-1.col-md-offset-1.col-xs-12.col-sm-10.col-md-10
+          %label Pie de página
+          .thumbnail= image_tag @entity.get_footer

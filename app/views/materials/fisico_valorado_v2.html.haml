@@ -1,0 +1,75 @@
+%h3.text-center
+  - if @tipo == 'detalle'
+    %div INVENTARIO GENERAL DE ALMACENES FÍSICO VALORADO #{ entidad_sigla }
+  - else
+    %div RESUMEN INVENTARIO DE ALMACENES FÍSICO VALORADO #{ entidad_sigla }
+%h4.text-center
+  %span Del
+  %span
+    %b #{ @fecha_desde }
+  %span Al
+  %span
+    %b #{ @fecha_hasta }
+%h4.text-center (Expresado en Bolivianos)
+%table.table.table-bordered.table-hover.table-condensed.valorado
+  %thead
+    %tr.vertical-align.info
+      %th.text-center{rowspan: "2"} CÓDIGO
+      %th.text-center{rowspan: "2"} GRUPO CONTABLE
+      %th.text-center{rowspan: "2"} UNIDAD
+      %th.text-center{colspan: "4"} FÍSICO
+      %th.text-center{colspan: "4"} VALORADO
+
+    %tr.vertical-align.info
+      %th.text-center Inicio
+      %th.text-center Ingreso
+      %th.text-center Egreso
+      %th.text-center Final
+      %th.text-center Inicio
+      %th.text-center Ingreso
+      %th.text-center Egreso
+      %th.text-center Final 
+  %tbody
+    - if @reporte[:detalle].present?
+      - @reporte[:detalle].each do |fila|
+        - if fila[:grupo]
+          %tr.double-thick
+            %th.text-center= fila[:code_material]
+            %th= fila[:description]
+            %th
+            %th.number= mostrar_entero_float fila[:fisico_inicial].to_f
+            %th.number= mostrar_entero_float fila[:fisico_ingreso].to_f
+            %th.number= mostrar_entero_float fila[:fisico_egreso].to_f
+            %th.number= mostrar_entero_float fila[:fisico_final].to_f
+            %th.number= number_with_delimiter fila[:valorado_inicial].to_f
+            %th.number= number_with_delimiter fila[:valorado_ingreso].to_f
+            %th.number= number_with_delimiter fila[:valorado_egreso].to_f
+            %th.number= number_with_delimiter fila[:valorado_final].to_f
+        - elsif @tipo == 'detalle'
+          %tr
+            %td.text-center= fila[:code_subarticle]
+            %td= fila[:description]
+            %td= fila[:unit].upcase
+            %td.number= mostrar_entero_float fila[:fisico_inicial].to_f
+            %td.number= mostrar_entero_float fila[:fisico_ingreso].to_f
+            %td.number= mostrar_entero_float fila[:fisico_egreso].to_f
+            %td.number= mostrar_entero_float fila[:fisico_final].to_f
+            %td.number= number_with_delimiter fila[:valorado_inicial].to_f
+            %td.number= number_with_delimiter fila[:valorado_ingreso].to_f
+            %td.number= number_with_delimiter fila[:valorado_egreso].to_f
+            %td.number= number_with_delimiter fila[:valorado_final].to_f
+      %tr
+        %th{colspan: 7} TOTALES
+        %th.number= number_with_delimiter @reporte[:total_valorado_inicial]
+        %th.number= number_with_delimiter @reporte[:total_valorado_ingreso]
+        %th.number= number_with_delimiter @reporte[:total_valorado_egreso]
+        %th.number= number_with_delimiter @reporte[:total_valorado_final]
+%h5.text-right
+  %span Desde
+  %span
+    %b #{ @fecha_desde } 00:00:00
+  %span hasta
+  %span
+    %b #{ @fecha_hasta } 23:59:59
+
+.text-center La Paz, #{l(Time.now, format: :long)}

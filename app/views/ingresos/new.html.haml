@@ -1,0 +1,120 @@
+#ingresos-urls{data: {'activos' => ingresos_path, 'proveedores' => get_suppliers_note_entries_path(format: :json, q: '%QUERY')}}
+#obt_ingreso-urls{data: {'obt-ingreso' => obt_cod_ingreso_ingresos_path(format: :json), 'ingreso' => @ingreso.id}}
+
+.row{data: {action: 'ingresos'}}
+  .col-md-12
+    %h3.text-center Ingreso de Activos Fijos
+
+%form#factura-form.form-horizontal{role: 'form'}
+  .form-group
+    %label.col-sm-2.control-label Tipo de ingreso
+    .col-sm-6.tipo-ingreso
+      = radio_button_tag :tipo_ingreso, 'compra', false, class: "form-check-input"
+      = label_tag 'compra', 'Compra', class: 'form-check-label mr-4'
+      = radio_button_tag :tipo_ingreso, 'donacion_transferencia', false, class: "form-check-input"
+      = label_tag 'donacion_transferencia', 'Donación y/o Transferencia', class: 'form-check-label'
+      = radio_button_tag :tipo_ingreso, 'reposicion', false, class: "form-check-input"
+      = label_tag 'reposicion', 'Reposición', class: 'form-check-label'
+  #content-donante.form-group
+    %label.col-sm-2.control-label Entidad donante
+    .col-sm-3
+      = text_field_tag 'entidad_donante', @ingreso.entidad_donante, class: 'form-control', placeholder: 'Entidad donante'
+  #content-proveedor.form-group
+    %label.col-sm-2.control-label Proveedor
+    .col-sm-3
+      = text_field_tag 'proveedor', @ingreso.supplier_name, class: 'form-control proveedor-auto', placeholder: 'Proveedor'
+    .col-sm-3
+      = text_field_tag 'nit', @ingreso.supplier_nit, class: 'form-control', placeholder: 'NIT proveedor', disabled: true
+    .col-sm-3
+      = hidden_field_tag 'telefono', @ingreso.supplier_telefono
+  #content-factura.form-group
+    %label.col-sm-2.control-label Factura/Doc. Respaldo
+    .col-sm-3
+      = text_field_tag 'factura_numero', @ingreso.factura_numero, class: 'form-control', placeholder: 'Número de factura/respaldo'
+    #content-factura-autorizacion.col-sm-3
+      = text_field_tag 'factura_autorizacion', @ingreso.factura_autorizacion, class: 'form-control', placeholder: 'Número autorización'
+    .col-sm-3
+      .input-group
+        = text_field_tag 'factura_fecha', format_date(@ingreso.factura_fecha), class: 'form-control date', placeholder: 'Fecha factura/respaldo'
+        .input-group-addon
+          %span.glyphicon.glyphicon-calendar
+  #content-nota.form-group
+    %label.col-sm-2.control-label Nota de entrega
+    .col-sm-3
+      = text_field_tag 'nota_entrega_numero', @ingreso.nota_entrega_numero, class: 'form-control', placeholder: 'Número de nota de entrega'
+    .col-sm-3
+      .input-group
+        = text_field_tag 'nota_entrega_fecha', format_date(@ingreso.nota_entrega_fecha), class: 'form-control date', placeholder: 'Fecha nota de entrega'
+        .input-group-addon
+          %span.glyphicon.glyphicon-calendar
+  #content-requerimiento.form-group
+    %label.col-sm-2.control-label Nº requerimiento/Nº preventivo
+    .col-sm-3
+      = text_field_tag 'c31_numero', @ingreso.c31_numero, class: 'form-control', placeholder: 'Nº requerimiento/Nº preventivo'
+    .col-sm-3
+      .input-group
+        = text_field_tag 'c31_fecha', format_date(@ingreso.c31_fecha), class: 'form-control date', placeholder: 'Fecha Nº requerimiento/Nº preventivo'
+        .input-group-addon
+          %span.glyphicon.glyphicon-calendar
+  .form-group
+    %label.col-sm-2.control-label Observaciones
+    .col-sm-6
+      = text_area_tag :observacion, @ingreso.observacion, class: 'form-control', placeholder: 'Ingrese las observaciones y/o información adicional'
+
+.row
+  .col-md-12.col-sm-12
+    %form#ingresos-form{role: 'form'}
+      .row.has-success
+        .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
+          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos (ej. 1-10, 12-15, 17, 20, ...)', autofocus: true
+        .col-md-3.col-sm-3.col-xs-3
+          = button_tag class: 'btn btn-success btn-lg' do
+            %span.glyphicon.glyphicon-search
+            Buscar
+          = button_tag type: 'button', class: 'btn btn-warning btn-lg', id: 'btn-clear' do
+            %span.glyphicon.glyphicon-refresh
+            Limpiar
+
+%br/
+
+%table#ingresos-tbl.table.table-bordered.table-striped.table-hover.table-condensed
+
+%table#proveedor-tbl.table.table-bordered.table-striped.table-hover.table-condensed
+
+-# TODO aún no está completo la funcionalidad de editar la nota de ingreso
+-# de activos fijos
+- if action_name != 'edit'
+  .row
+    .col-md-12.col-sm-12.text-center
+      = link_to ingresos_path, class: 'btn btn-danger cancelar-btn' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar
+
+      = button_tag class: 'btn btn-primary guardar-btn', data: {disable_with: 'Guardando...'} do
+        %span.glyphicon.glyphicon-floppy-save
+        Guardar
+
+#confirm-modal
+= render 'ingreso_modal'
+
+%script{type: 'text/html', id: 'tpl-activo-seleccionado'}
+  %thead
+    %tr
+      %th.text-center
+        %strong.badge{title: 'Total'} {{cantidad}}
+      %th.text-center Código
+      %th Descripción
+      %th.number Precio Unit.
+  %tbody
+    {{#activos}}
+    %tr
+      %td.text-center {{indice}}
+      %td.text-center {{barcode}}
+      %td {{description}}
+      %td.number {{precio_formato}}
+    {{/activos}}
+  %tfoot
+    %tr
+      %th{colspan: 2}
+      %th.number TOTAL
+      %th.number {{total}}

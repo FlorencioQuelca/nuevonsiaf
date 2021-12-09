@@ -1,0 +1,24 @@
+= render 'encabezado', seguro: @seguro
+
+%table.table.table-striped.table-condensed.table-bordered.alineacion-media.valorado
+  %thead
+    %tr
+      %th
+      %th Cuenta
+      %th.text-right Cantidad
+      %th.text-right Monto
+  %tbody
+    - if @resumen.present?
+      - sumatoria_cantidad = 0
+      - @resumen.each_with_index do |cuenta, index|
+        %tr
+          %td= index + 1
+          %td= cuenta.nombre
+          %td.number= cuenta.cantidad
+          %td.number= number_with_delimiter cuenta.sumatoria
+        - sumatoria_cantidad += cuenta.cantidad
+      %tr
+        %th
+        %th.text-right Total
+        %th.number= sumatoria_cantidad
+        %th.number= number_with_delimiter @sumatoria_resumen

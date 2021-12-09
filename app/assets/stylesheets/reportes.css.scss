@@ -1,0 +1,42 @@
+.reporte {
+  &.reporte-10 {
+    h2 {
+      font-size: 1.6em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+    h4 {
+      font-size: 1.2em;
+      text-transform: uppercase;
+      margin: 0 0 5px;
+    }
+    table.valorado{
+      font-size: 0.8rem;
+    }
+    table.valorado-sin{
+      border: none;
+      font-size: 0.8rem;
+      margin-bottom: 5px;
+      td {
+        border-top: none;
+      }
+    }
+  }
+}
+
+.anulado{
+  display: flex;
+  height: 400px;
+  width: 400px;
+  left: 220px;
+  position: absolute;
+  vertical-align: center;
+  top: 100px;
+  z-index: 300;
+  -webkit-transform: rotate(-30deg);
+  -moz-transform: rotate(-30deg);
+  h1 {
+    font-size: 800%;
+    color: rgba(0, 0, 0, 0.3);
+  }
+}

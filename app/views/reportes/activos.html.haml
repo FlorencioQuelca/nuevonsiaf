@@ -1,0 +1,39 @@
+= react_component 'ReporteActivos', url: activos_api_reportes_path, cuentas: @cuentas, columnas: @columnas
+
+- if is_pdf?
+  .row
+    .col-sm-12.text-center
+      %h2= 'Reporte de activos fijos'
+  .row
+    .col-sm-12
+      %table.table.table-condensed.table-striped.table-bordered.valorado
+        %thead
+          %tr
+            %th.text-right{title: 'Numeración'} No
+            %th.text-center{title: 'Código'} Código
+            %th.text-center{title: 'Número de Factura'} Factura
+            %th.text-center{title: 'Fecha de incorporación'} Fecha
+            %th{title: 'Descripción'} Descripción
+            %th{title: 'Asiento contable'} Cuenta
+            %th{title: 'Ubicación'} Ubicación
+            %th.number{title: 'Precio histórico'} Precio
+        %tbody
+          - @activos.each_with_index do |activo, index|
+            %tr
+              %td.text-right= index + 1
+              %td.text-center= activo.codigo
+              %td.text-center= activo.factura
+              %td.text-center= l activo.fecha_ingreso if activo.fecha_ingreso
+              %td= activo.descripcion
+              %td= activo.cuenta
+              %td= activo.lugar
+              %td.number= number_with_delimiter activo.precio
+          - if @activos.present?
+            %tr
+              %th{ colspan: 6 }
+              %th.number TOTAL
+              %th.number= number_with_delimiter @total
+          - if @activos.empty?
+            %tr
+              %td.text-center{colspan: 7}
+                No hay activos para mostrar.

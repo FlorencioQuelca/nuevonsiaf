@@ -1,0 +1,21 @@
+.page-header
+  %h2= t("assets.title.#{params[:action]}")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @asset, html: { class: 'form-horizontal' } do |f|
+    - unless @asset.new_record?
+      = f.input :code, disabled: true, required: true
+    = f.input :detalle, required: true, as: :string
+    = f.input :code_old
+    = f.input :medidas
+    = f.input :material
+    = f.input :color
+    = f.input :marca
+    = f.input :modelo
+    = f.input :serie, input_html: { class: "serie_activo" }
+    = f.input :precio, placeholder: 'Precio Unitario'
+    = f.association :ubicacion, collection: get_ubicaciones, label_method: :detalle, value_method: :id
+    = f.association :auxiliary, collection: status_active(Auxiliary), include_blank: false, required: true
+    = f.input :state, collection: Asset::STATE, include_blank: false
+
+    = render 'shared/form_buttons'

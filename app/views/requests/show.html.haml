@@ -1,0 +1,140 @@
+- unless is_pdf?
+  .page-header{data: {action: 'request'}}
+    .pull-right
+      - if @request.status == 'initiation' && can?(:edit, @request)
+        = button_tag class: 'btn btn-success buttonRequest', id: "btn_edit_request" do
+          %span.glyphicon.glyphicon-shopping-cart
+          Entregar producto
+      - if can? :read, @request
+        = link_to request_path(status: 'initiation', format: :pdf), class: 'btn btn-info' do
+          %span.glyphicon.glyphicon-print
+          Imprimir Solicitud
+      - if @request.status == 'delivered' && can?(:read, @request)
+        = link_to request_path(status: 'delivered', format: :pdf), class: 'btn btn-success' do
+          %span.glyphicon.glyphicon-print
+          Imprimir Entrega
+
+      = render 'dropdown', status: @request.status
+
+    %h2
+      Solicitud de Artículos
+      %span#request_id{data: {id: @request.id}}
+        - if @request.nro_solicitud != 0 && @request.nro_solicitud.present?
+          Nro. #{@request.obtiene_numero_solicitud}
+
+    #request-urls{data: {'request-id' => request_path('{id}'), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'validar-stocks' => validar_cantidades_api_request_path('{id}'), 'users-id' => user_path('{id}', format: :json)}}
+- if is_pdf? && @request.status == 'canceled'
+  .anulado
+    %h1 ANULADO
+
+#request.row
+  .col-md-12
+    - if is_pdf?
+      %h4
+        %span.text-muted Nro de solicitud:
+        = @request.obtiene_numero_solicitud
+    - unless is_pdf?
+      %h4
+        %span.text-muted Estado:
+        = content_tag(:span, I18n.t("requests.title.status.#{@request.status}"), class: "label label-#{ @request.tipo_estado }")
+    %h4
+      %span.text-muted Entregado por:
+      = @request.admin_name
+    %h4
+      %span.text-muted Solicitado por:
+      = @request.user_name
+    %h4
+      %span.text-muted Cargo:
+      = @request.user_title
+    %h4
+      %span.text-muted Fecha de solicitud:
+      = I18n.l(@request.created_at, format: :version)
+    - @status_pdf = @request.status unless is_pdf?
+    - if @status_pdf == 'delivered'
+      %h4
+        %span.text-muted Fecha de entrega:
+        = I18n.l(@request.delivery_date, format: :version)
+      - if Rails.application.secrets.interoperabilidad_plantillas.present?
+        %h4
+          %span.text-muted Cite SMS:
+          = @request.cite_sms
+        %h4
+          %span.text-muted Cite EMS:
+          = @request.cite_ems
+
+    #barcode
+
+    .selected-assets
+      #table_request
+        - if is_pdf?
+          - title = 'SOLICITUD DE ARTÍCULOS'
+          - if @status_pdf == 'delivered'
+            - title = 'PEDIDO DE ARTÍCULOS'
+          %h3.text-center.proceeding-title= title
+        %table.table.table-bordered.table-condensed{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+          %thead
+            %tr
+              %th Código
+              %th Unidad
+              %th Descripción
+              - if is_pdf?
+                %th.text-center Cantidad
+              - else
+                - if @request.status == 'initiation'
+                  %th.text-center Stock
+                %th.text-center#td-cantidad-header Cantidad solicitada
+                - if @request.status == 'pending'
+                  %th Cantidad a entregar
+                - if %w(delivered canceled).include?(@request.status)
+                  %th.amount_delivered.text-center Cantidad entregada
+                - if @request.status == 'pending'
+                  %th.delivered
+          %tbody
+            - @request.subarticle_requests.each do |s_request|
+              - if is_pdf?
+                - if @status_pdf == 'canceled' || @status_pdf == 'initiation'
+                  %tr{ id: s_request.id }
+                    %td= s_request.subarticle_code
+                    %td= s_request.subarticle_unit
+                    %td= s_request.subarticle_description
+                    %td.text-center
+                      = s_request.amount || 'INEXISTENCIA'
+                - elsif s_request.amount_delivered != 0
+                  %tr{ id: s_request.id }
+                    %td= s_request.subarticle_code
+                    %td= s_request.subarticle_unit
+                    %td= s_request.subarticle_description
+                    %td.text-center
+                      - if @status_pdf == 'initiation'
+                        = s_request.amount || 'INEXISTENCIA'
+                      - elsif @status_pdf == 'delivered'
+                        = s_request.total_delivered
+              - else
+                %tr{ id: s_request.id }
+                  %td= s_request.subarticle_code
+                  %td{id: 'subarticle_unit'}= s_request.subarticle_unit
+                  %td= s_request.subarticle_description
+                  - if @request.status == 'initiation'
+                    %td.text-center
+                      %strong.badge{title: 'Stock'}
+                        = mostrar_entero_float(s_request.subarticle_stock)
+                  %td.text-center.td-cantidad{id: "tdcant"}= s_request.amount || 'INEXISTENCIA'
+                  - if %w(delivered canceled).include?(@request.status)
+                    %td.amount_delivered.text-center= s_request.total_delivered
+        = fecha_impresion if is_pdf?
+        .buttons-actions.text-center
+
+    - if is_pdf?
+      - cantidad_firmas = 3 # Cantidad de firmas por fila
+      - firmas = firmas_salidas(@status_pdf)
+      - cantidad = (firmas.length / cantidad_firmas) + (firmas.length % cantidad_firmas == 0 ? 0 : 1)
+      %table{ style: 'width: 100%' }
+        - (0...cantidad).each_with_index do |fila, index|
+          %tr
+            - firmas[index * cantidad_firmas, cantidad_firmas].each do |firma|
+              %td.text-center.firma-funcionario
+                - if firma.present?
+                  _______________________
+                  %p= firma
+
+= render 'material'

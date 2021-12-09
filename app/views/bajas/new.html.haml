@@ -1,0 +1,76 @@
+#bajas-urls{ data: { 'bajas' => bajas_path } }
+
+.row{data: {action: 'bajas'}}
+  .col-md-12
+    %h3.text-center Baja de Activos Fijos
+
+%form#baja-form.form-horizontal{role: 'form'}
+  .form-group
+    %label.col-sm-3.control-label Baja
+    .col-sm-3
+      = select_tag 'motivo', options_for_select(@motivos, selected: @baja.motivo), class: 'form-control proveedor-auto required', include_blank: 'Motivo'
+    .col-sm-3
+      .input-group
+        = text_field_tag 'fecha', format_date(@baja.fecha), class: 'form-control date required', placeholder: 'Fecha de baja'
+        .input-group-addon
+          %span.glyphicon.glyphicon-calendar
+  .form-group
+    %label.col-sm-3.control-label Respaldo
+    .col-sm-3
+      = text_field_tag 'documento', @baja.documento, class: 'form-control proveedor-auto required', placeholder: 'Numero de documento'
+  .form-group
+    %label.col-sm-3.control-label Observación
+    .col-sm-6
+      = text_area 'observacion', @baja.observacion, class: 'form-control required', placeholder: 'Observaciones y/o información adicional'
+
+.row
+  .col-md-12.col-sm-12
+    %form#activos-form{role: 'form'}
+      .row.has-success
+        .col-md-offset-3.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
+          = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activos Fijos (ej. 1-10, 12-15, 17, 20, ...)', autofocus: true
+        .col-md-3.col-sm-3.col-xs-3
+          = button_tag class: 'btn btn-success btn-lg' do
+            %span.glyphicon.glyphicon-search
+            Buscar
+%br/
+
+%table#bajas-tbl.table.table-bordered.table-striped.table-hover.table-condensed
+
+-# TODO aún no está completo la funcionalidad de editar la nota de baja
+-# de activos fijos
+- if action_name != 'edit'
+  .row
+    .col-md-12.col-sm-12.text-center
+      = link_to bajas_path, class: 'btn btn-danger cancelar-btn' do
+        %span.glyphicon.glyphicon-ban-circle
+        Cancelar
+
+      = button_tag class: 'btn btn-primary guardar-btn', data: {disable_with: 'Guardando...'} do
+        %span.glyphicon.glyphicon-floppy-save
+        Dar de Baja
+
+#confirm-modal
+= render 'baja_modal'
+
+%script{type: 'text/html', id: 'tpl-activo-seleccionado'}
+  %thead
+    %tr
+      %th.text-center
+        %strong.badge{title: 'Total'} {{cantidad}}
+      %th.text-center Código
+      %th Descripción
+      %th.number Precio Unit.
+  %tbody
+    {{#activos}}
+    %tr
+      %td.text-center {{indice}}
+      %td.text-center {{barcode}}
+      %td {{description}}
+      %td.number {{precio_formato}}
+    {{/activos}}
+  %tfoot
+    %tr
+      %th{colspan: 2}
+      %th.number TOTAL
+      %th.number {{total}}

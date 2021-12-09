@@ -1,0 +1,10 @@
+- r = ingreso
+%td(class="nowrap sorting_1")= r.factura_fecha.present? ? I18n.l(r.factura_fecha) : ''
+%td(class="")= r.numero
+%td(class="")= r.supplier_name
+%td(class="")= r.user_name
+%td(class="")= number_with_delimiter(r.total)
+%td(class="")= r.nota_entrega_fecha.present? ? I18n.l(r.nota_entrega_fecha) : ''
+%td(class="nowrap")
+  = raw(links_actions(r, 'ingreso'))
+  = link_to(content_tag(:span, "", class: 'glyphicon glyphicon-sort-by-order'), '#editar', class: 'btn btn-info btn-xs editar-nota-entrada', title: 'Establecer número de nota de entrada', data: {"nota-entrada" => r.as_json}, id: dom_id(r))

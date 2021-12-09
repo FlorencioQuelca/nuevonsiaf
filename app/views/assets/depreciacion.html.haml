@@ -1,0 +1,59 @@
+- titulo = 'Depreciación del Activo Fijo'
+- activo = @asset
+
+.page-header{ data: {action: 'historical-reviews'} }
+  %h2
+    = @asset.description
+    .pull-right.text-muted= titulo
+
+
+.row.reporte.reporte-10
+  .col-sm-12
+    %table.table.table-condensed.table-bordered
+      %thead
+        %tr
+          %th.text-right{title: 'Numeración'} No
+          %th.text-center{title: 'A la fecha'} A la fecha
+          %th.text-center{title: 'UFV a la fecha'} Índice UFV
+          %th.text-center{title: 'Fecha Histórico'} Fecha Hist
+          %th.text-center{title: 'Revalúo Inicial'} Rev Inc
+          %th{title: 'Índice UFV'} Índice UFV
+          %th.number{title: 'Costo Histórico'} Costo Histórico
+          %th.number{title: 'Costo Actualizado Inicial'} Costo Actual Inicial
+          %th.number{title: 'Depreciación Acumulada Inicial'} Depreciación Acum. Inicial
+          %th.number{title: 'Vida Útil Residual Nominal'} Vida Útil Residual Nominal
+          %th.number{title: 'Facto de actualización'} Fact. Actualiz.
+          %th.number{title: 'Actualización de gestión'} Actualización de Gestión
+          %th.number{title: 'Costo actualizado'} Costo Actualizado
+          %th.number{title: 'Porcentaje de depreciación anual'} % Depr. Anual
+          %th.number{title: 'Días consumidos'} Días Consum.
+          %th.number{title: 'Depreciación de la gestión'} Deprec. Gestión
+          %th.number{title: 'Actualización depreciación acumulada'} Actualización Depreciación Acumulada
+          %th.number{title: 'Depreciación Acumulada Total'} Depreciación Acumulada Total
+          %th.number{title: 'Valor Neto'} Valor Neto
+          %th.number{title: 'Dar revalúo o baja'} Dar Reval. o Baja
+      %tbody
+        - (@asset.ingreso_fecha.to_date..Date.today).each_with_index do |fecha, index|
+          %tr
+            %td.text-right= index + 1
+            %td.text-center= l fecha if fecha
+            %td.number= number_with_delimiter Ufv.indice(fecha), 5
+            %td.text-center= l activo.ingreso_fecha if activo.ingreso_fecha
+            %td= activo.revaluo_inicial
+            %td.number= number_with_delimiter activo.indice_ufv, 5
+            %td.number= number_with_delimiter activo.costo_historico
+            %td.number= number_with_delimiter activo.costo_actualizado_inicial(fecha)
+            %td.number= number_with_delimiter activo.depreciacion_acumulada_inicial(fecha)
+            %td.number= activo.vida_util_residual_nominal
+            %td.number= number_with_delimiter activo.factor_actualizacion(fecha), 6
+            %td.number= number_with_delimiter activo.actualizacion_gestion(fecha)
+            %td.number= number_with_delimiter activo.costo_actualizado(fecha)
+            %td.number= number_with_delimiter activo.porcentaje_depreciacion_anual
+            %td.number
+              %div= activo.dias_consumidos(fecha)
+              %div= activo.dias_consumidos_ultimo(fecha)
+            %td.number= number_with_delimiter activo.depreciacion_gestion(fecha)
+            %td.number= number_with_delimiter activo.actualizacion_depreciacion_acumulada(fecha)
+            %td.number= number_with_delimiter activo.depreciacion_acumulada_total(fecha)
+            %td.number= number_with_delimiter activo.valor_neto(fecha)
+            %td.number= activo.dar_revaluo_o_baja

@@ -1,0 +1,24 @@
+- cantidad = transaccion.items.length
+- if transaccion.detalle != 'SALDO FINAL'
+  - transaccion.items.each_with_index do |item, index|
+    - if index > 0
+      %tr= render 'transaccions/items', item: item
+    - else
+      %tr
+        %td.text-center{rowspan: cantidad}
+          = l transaccion.fecha.to_date, format: :default
+        %td.text-center{rowspan: cantidad}= transaccion.factura
+        %td.text-center{rowspan: cantidad}= transaccion.cite_ems_plantillas
+        %td.text-center{rowspan: cantidad}= transaccion.nro_solicitud
+        %td{rowspan: cantidad}= transaccion.detalle
+        = render 'transaccions/items', item: item
+- else
+  %tr
+    %th.text-center{rowspan: cantidad}
+      = l transaccion.fecha.to_date, format: :default
+    %th.text-center{rowspan: cantidad}= transaccion.factura
+    %th.text-center{rowspan: cantidad}= transaccion.cite_ems_plantillas
+    %th.text-center{rowspan: cantidad}= transaccion.nro_solicitud
+    %th{rowspan: cantidad}= transaccion.detalle
+    - transaccion.items.each_with_index do |item, index|
+      = render 'transaccions/items_th', item: item

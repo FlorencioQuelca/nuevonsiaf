@@ -1,0 +1,49 @@
+.page-header{data: { action: 'gestiones' }}
+  .pull-right
+    - if can? :edit, @gestion
+      = link_to edit_gestion_path(@gestion), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+    - if !@gestion.cerrado? && @gestion.gestion_actual?
+      = link_to '#cerrar-gestion', class: 'btn btn-danger', id: 'cerrar-gestion-link', data: {url: cerrar_gestion_path(@gestion)} do
+        %span.glyphicon.glyphicon-save
+        = t("gestiones.title.cerrar")
+    = link_to gestiones_path, class: 'btn btn-default' do
+      %span.glyphicon.glyphicon-list
+      = t("gestiones.title.title")
+
+  %h2
+    %span.text-muted Gestión
+    = @gestion.anio
+    %small
+      - if @gestion.cerrado? || @gestion.gestion_actual?
+        - if @gestion.cerrado?
+          .label.label-danger{title: 'Gestión cerrada'} CERRADO
+        - if @gestion.gestion_actual?
+          .label.label-success{title: 'Gestión actual'} ACTUAL
+      - else
+        - unless @gestion.cerrado?
+          .label.label-info{title: 'Gestión próxima'} PRÓXIMA
+
+%dl.dl-horizontal
+  %dt= Gestion.human_attribute_name('estado')
+  %dd= @gestion.cerrado ? 'Cerrado' : 'Abierto'
+  - if @gestion.cerrado
+    - if @gestion.fecha_cierre.present?
+      %dt= Gestion.human_attribute_name('fecha_cierre')
+      %dd= l @gestion.fecha_cierre, format: :version
+    - if @gestion.user.present?
+      %dt= t "activerecord.attributes.gestion.usuario"
+      %dd= @gestion.nombre_usuario
+      %dt= t "activerecord.attributes.gestion.cargo"
+      %dd= @gestion.cargo_usuario
+    %dd
+      = link_to t("activerecord.attributes.gestion.reporte6"), resumen_reportes_path({format: "pdf", desde: @gestion.inicio_de_los_tiempos, hasta: @gestion.ultimo_dia_gestion}), class: "btn btn-success"
+      = link_to t("activerecord.attributes.gestion.reporte10"), depreciacion_reportes_path({format: "pdf", desde: @gestion.inicio_de_los_tiempos , hasta: @gestion.ultimo_dia_gestion}), class: "btn btn-success"
+
+#confirm-modal
+
+- if controller_name == 'gestiones'
+  %script{ id: 'cerrar-gestion-tpl', type: 'text/html' }
+    .modal-header{ style: 'margin-bottom: 5px;' }
+    = render 'gestiones/cerrar_gestion'

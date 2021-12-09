@@ -1,0 +1,24 @@
+- id = id.present? ? id : "{{id}}"
+- subarticle_id = subarticle_id.present? ? subarticle_id : "{{subarticle_id}}"
+- is_first = is_first ? is_first : false
+
+.entry_subarticle{ id: id }
+  - unless is_first
+    %span.glyphicon.glyphicon-remove.remove_entry{ title: "Eliminar entrada" }
+  = hidden_field_tag "entry_subarticle[#{id}][subarticle_id]", subarticle_id
+  .form-group
+    %label.col-sm-3.col-md-3.col-lg-3.control-label Cantidad
+    .col-sm-9.col-md-9.col-lg-9
+      = number_field_tag "entry_subarticle[#{id}][amount]", nil, { value: 0, id: "amount_#{id}", class: 'form-control amount' }
+  .form-group
+    %label.col-sm-3.col-md-3.col-lg-3.control-label Costo Unitario
+    .col-sm-9.col-md-9.col-lg-9
+      = number_field_tag "entry_subarticle[#{id}][unit_cost]", nil, { value: 0, id: "unit_cost_#{id}", class: 'form-control unit_cost' }
+  .form-group
+    %label.col-sm-3.col-md-3.col-lg-3.control-label Costo Total
+    %label.col-sm-3.col-md-3.col-lg-3.control-label.entry_cost 0
+    %div= hidden_field_tag "entry_subarticle[#{id}][total_cost]", nil, { value: 0, id: "total_cost_#{id}", class: 'total_cost' }
+  .form-group
+    %label.col-sm-3.col-md-3.col-lg-3.control-label Fecha
+    .col-sm-9.col-md-9.col-lg-9
+      = text_field_tag "entry_subarticle[#{id}][date]", nil, { value: I18n.l(Time.now.to_date), class: 'form-control', id: "date_#{id}" }

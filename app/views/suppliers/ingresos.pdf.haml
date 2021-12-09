@@ -1,0 +1,20 @@
+.title_pdf
+  %h3 Notas de Ingreso de Activos
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th Nro
+      %th Empresa
+      %th Encargado
+      %th.text-center Nro. de Factura
+      %th.text-center Nro. Nota de Ingreso
+      %th.text-center Fecha Nota de Ingreso
+  %tbody
+    - @ingresos.each_with_index do |ingreso, i|
+      %tr
+        %td.text-center= i + 1
+        %td= @supplier.name
+        %td= ingreso.user.name
+        %td.text-center= ingreso.factura_numero
+        %td.text-center= ingreso.numero
+        %td.text-center= I18n.l ingreso.created_at.to_date if ingreso.created_at.present?

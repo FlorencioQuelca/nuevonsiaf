@@ -1,0 +1,9 @@
+.page-header
+  %h2= t("ufvs.title.#{params[:action]}")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @ufv, html: { class: 'form-horizontal' } do |f|
+    = f.input :fecha, as: :string, input_html: { value: format_date(f.object.fecha), class: 'date' }
+    = f.input :valor
+
+    = render 'shared/form_buttons'

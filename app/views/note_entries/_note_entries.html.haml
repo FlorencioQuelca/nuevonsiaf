@@ -1,0 +1,8 @@
+%th= NoteEntry.human_attribute_name('note_entry_date')
+- if Rails.application.secrets.interoperabilidad_plantillas.present?
+  %th= NoteEntry.human_attribute_name('documento_cite')
+%th= NoteEntry.human_attribute_name('id')
+%th= NoteEntry.human_attribute_name('suppliers')
+%th= NoteEntry.human_attribute_name('users')
+%th= NoteEntry.human_attribute_name('total')
+%th= NoteEntry.human_attribute_name('delivery_note_number')

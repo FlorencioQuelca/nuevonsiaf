@@ -1,0 +1,25 @@
+%h1 Api Tokens
+
+%table
+  %tr
+    %th Email
+    %th Nombre
+    %th Token
+    %th Fecha expiracion
+    %th
+    %th
+    %th
+
+  - @api_tokens.each do |api_token|
+    %tr
+      %td= api_token.email
+      %td= api_token.nombre
+      %td= api_token.token
+      %td= api_token.fecha_expiracion
+      %td= link_to 'Show', api_token
+      %td= link_to 'Edit', edit_api_token_path(api_token)
+      %td= link_to 'Destroy', api_token, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Api token', new_api_token_path

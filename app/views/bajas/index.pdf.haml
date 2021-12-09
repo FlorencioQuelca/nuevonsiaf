@@ -1,0 +1,19 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th= t("activerecord.attributes.baja.numero")
+      %th= t("activerecord.attributes.baja.motivo")
+      %th= t("activerecord.attributes.baja.documento")
+      %th.text-center= t("activerecord.attributes.baja.fecha")
+  %tbody
+    - @array.each_with_index do |baja, index|
+      %tr
+        %td.text-center= index + 1
+        %td= baja.numero
+        %td= baja.motivo
+        %td= baja.documento
+        %td.text-center= baja.fecha.present? ? I18n.l(baja.fecha) : ''

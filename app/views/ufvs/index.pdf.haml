@@ -1,0 +1,15 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th.text-center= Ufv.human_attribute_name('fecha')
+      %th= Ufv.human_attribute_name('valor')
+  %tbody
+    - @array.each_with_index do |ufv, index|
+      %tr
+        %td.text-center= index + 1
+        %td.text-center= ufv.fecha
+        %td= ufv.valor

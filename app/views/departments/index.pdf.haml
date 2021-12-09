@@ -1,0 +1,17 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered
+  %thead
+    %tr
+      %th= Department.human_attribute_name('code')
+      %th= Department.human_attribute_name('name')
+      %th= Department.human_attribute_name('building')
+      %th= Department.human_attribute_name('status')
+  %tbody
+    - @array.each do |department|
+      %tr
+        %td= department.code
+        %td= department.name
+        %td= department.building_name
+        %td= type_status(department.status)

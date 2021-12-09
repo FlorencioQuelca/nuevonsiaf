@@ -1,0 +1,19 @@
+.col-sm-6
+  %table.table.table-condensed.table-striped.table-bordered
+    %tbody
+      %tr
+        %td Activos
+        %td.number= number_with_delimiter Asset.count, 0
+      %tr
+        %td Total histórico
+        %td.number= number_with_delimiter Asset.total_historico
+      - if Asset.without_user.count > 0
+        %tr
+          %td Activos sin funcionario
+          %td.number
+            %span.text-danger= number_with_delimiter Asset.without_user.count
+      - if Asset.without_barcode.count > 0
+        %tr
+          %td Activos sin código de barras
+          %td.number
+            %span.text-danger= number_with_delimiter Asset.without_barcode.count

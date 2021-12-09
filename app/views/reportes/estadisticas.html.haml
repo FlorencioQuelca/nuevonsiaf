@@ -1,0 +1,68 @@
+- titulo = "Salida de Artículos por unidad"
+- unless is_pdf?
+  .page-header
+    %h2
+      = titulo
+
+      .pull-right
+        = form_tag estadisticas_reportes_path, method: :get, class: 'form-inline' do
+          .form-group
+            %label.sr-only{for: 'fecha-desde'} Desde
+            = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+          .form-group
+            %label.sr-only{for: 'fecha-hasta'} Hasta
+            = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+          %button{type: 'submit', class: 'btn btn-primary', title: 'Generar kardexes de todos los artículos'}
+            %span.glyphicon.glyphicon-search
+- else
+  %h2
+    = titulo
+
+    %span.text-muted desde
+    %span #{params[:desde]}
+    %span.text-muted hasta
+    %span #{params[:hasta]}
+
+- auxiliar = {}
+- c1 = c2 = 0
+%table.table.table-condensed.table-hover.table-bordered.valorado
+  %tbody
+    - @resultados.each do |fila|
+      - if auxiliar['material'] != fila['material']
+        - c2 = 0
+        %tr.info
+          %th.number= c1 += 1
+          %th.number= link_to(fila['codigo'], subarticle_url(fila['subarticulo_id'], desde: params[:desde], hasta: params[:hasta]))
+          %th{colspan: 5}
+            = fila['material']
+            %div.pull-right.number TOTAL SALIDA
+          %th.number.text-danger= mostrar_entero_float sumar_total_salidas(@resultados, fila)
+          %th
+        %tr
+          %th.text-muted.number Nro
+          %th.text-muted.text-center Mes
+          %th.text-muted Unidad
+          %th.text-muted Detalle
+          %th.text-muted.text-center Fecha
+          %th.text-muted.text-center Nro Solicitud
+          %th.text-muted Unidad de medida
+          %th.text-muted.number Salida
+          %th.text-muted.number Saldo
+      %tr
+        %td.number= c2 += 1
+        %td.text-center= fila['fecha'].strftime('%m/%Y')
+        %td= fila['unidad']
+        %td= fila['detalle']
+        %td.text-center= l(fila['fecha'].to_date, format: :default)
+        %td.text-center= link_to("##{fila['nro_solicitud']}", request_url(id: fila['modelo_id']))
+        %td= fila['unidad_medida']
+        %td.number= mostrar_entero_float(fila['cantidad'])
+        %td.number= mostrar_entero_float(fila['saldo'])
+      - auxiliar = fila
+
+- if !is_pdf? && @resultados.any?
+  .row
+    .action-buttons.col-md-12.col-sm-12.text-center
+      = link_to estadisticas_reportes_path(format: :pdf, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-lg btn-primary' do
+        %span.glyphicon.glyphicon-print
+        Imprimir

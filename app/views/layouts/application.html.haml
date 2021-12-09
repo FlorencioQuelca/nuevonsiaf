@@ -1,0 +1,43 @@
+!!!
+%html{lang: "en"}
+  %head
+    %meta{charset: "utf-8"}/
+    %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{content: "width=device-width, initial-scale=1", name: "viewport"}/
+    %meta{content: "#{@base_url}", name: "url" }
+
+    = favicon_link_tag 'favicon.ico'
+
+    %title #{ yield_or_default(:title, title_system) }
+    = stylesheet_link_tag "application", media: "all"
+    = csrf_meta_tags
+  %body
+    .navbar{role: "navigation", class: color_menu}
+      .container-fluid
+        .navbar-header
+          %button.navbar-toggle.collapsed{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", type: "button"}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          = link_to title_system, root_path, class: 'navbar-brand'
+        = render 'layouts/main_nav'
+    .col-sm-12.col-md-12.main
+      - if notice.present?
+        .alert.alert-success
+          %button(type="button" class="close" data-dismiss="alert" aria-hidden="true") &times;
+          = notice.html_safe
+      - if alert.present?
+        .alert.alert-danger
+          %button(type="button" class="close" data-dismiss="alert" aria-hidden="true") &times;
+          = alert.html_safe
+      - unless current_user.password_changed?
+        #announcements.alert.alert-info.alert-dismissable{ data: { url: hide_announcement_path } }
+          %button(type="button" class="close" data-dismiss="alert" aria-hidden="true") &times;
+          %strong Alerta!
+          Por seguridad es necesario que cambie su contraseña, puede hacer click en el enlace #{link_to "Cambiar Contraseña", dashboard_path }
+      .row
+        .col-md-12
+          = yield
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = javascript_pack_tag "application"

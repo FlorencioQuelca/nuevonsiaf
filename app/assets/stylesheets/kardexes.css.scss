@@ -1,0 +1,35 @@
+
+table.kardex-table {
+  margin: 0 0 10px 10px;
+  tr {
+    td.etiqueta {
+      font-weight: bold;
+      text-align: right;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+    td.valor {
+      padding-left: 10px;
+      vertical-align: top;
+    }
+  }
+}
+
+.number {
+  text-align: right;
+}
+
+table {
+  tr {
+    &.vertical-align {
+      th {
+        vertical-align: middle;
+      }
+    }
+    &.double-thick {
+      th, td {
+        border: 2px solid #dddddd;
+      }
+    }
+  }
+}

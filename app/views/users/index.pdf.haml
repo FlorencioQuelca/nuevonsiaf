@@ -1,0 +1,23 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered
+  %thead
+    %tr
+      %th= t('activerecord.attributes.user.no')
+      %th= t('activerecord.attributes.user.ci')
+      %th= User.human_attribute_name('name')
+      %th= User.human_attribute_name('title')
+      %th= User.human_attribute_name('department')
+      %th= User.human_attribute_name('status')
+  %tbody
+    - i = 1
+    - @array.each do |user|
+      %tr
+        %td= i
+        %td= user.ci
+        %td= user.name
+        %td= user.title
+        %td= user.department_name
+        %td= type_status(user.status)
+      - i += 1

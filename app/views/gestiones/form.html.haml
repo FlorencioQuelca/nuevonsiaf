@@ -1,0 +1,8 @@
+.page-header
+  %h2= t("gestiones.title.#{params[:action]}")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @gestion, html: { class: 'form-horizontal' } do |f|
+    = f.input :anio
+
+    = render 'shared/form_buttons'

@@ -1,0 +1,7 @@
+- if action_name == 'update'
+  window.location = "#{ note_entry_path(@note_entry) }";
+- else
+  var $tr = $("##{dom_id(@note_entry)}").closest('tr');
+
+  $tr.html("#{ j render @note_entry }");
+  $tr.addClass('warning');

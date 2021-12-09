@@ -1,0 +1,20 @@
+.page-header
+  .pull-right
+    - if can? :edit, @building
+      = link_to edit_building_path(@building), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+    - if can? :read, Building
+      = link_to buildings_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        = t("buildings.title.title")
+
+  %h2 #{Building.model_name.human}
+
+%dl.dl-horizontal
+  %dt= Building.human_attribute_name('code')
+  %dd= @building.code
+  %dt= Building.human_attribute_name('name')
+  %dd= @building.name
+  %dt= Building.human_attribute_name('entity')
+  %dd= @building.entity_code

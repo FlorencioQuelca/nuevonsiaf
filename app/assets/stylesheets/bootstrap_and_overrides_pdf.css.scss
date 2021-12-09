@@ -1,0 +1,15 @@
+@import 'open_sans';
+
+$font-size-base: 10px;
+$font-font-base: 'Open Sans';
+
+@import "bootstrap";
+
+.help-block {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.hide-item {
+  opacity: 0;
+}

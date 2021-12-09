@@ -1,0 +1,12 @@
+= title 'Cambiar Contraseña'
+.page-header
+  %h2 Cambiar Contraseña
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @user, url: update_password_dashboard_path, html: { class: 'form-horizontal' } do |f|
+    = f.input :current_password, as: :password, required: true
+    = f.input :password, as: :password
+    = f.input :password_confirmation, as: :password
+    .form-group
+      .col-sm-offset-5.col-sm-9
+        = submit_and_cancel(root_path)

@@ -1,0 +1,137 @@
+.page-header
+  .pull-right
+    - if can? :edit, @subarticle
+      = link_to edit_subarticle_path(@subarticle), class: 'btn btn-primary' do
+        %span.glyphicon.glyphicon-edit
+        = t("general.btn.edit")
+    - if can? :read, @subarticle
+      = link_to subarticle_kardexes_path(@subarticle, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-list-alt
+        Kardex
+    - if can? :read, @subarticle
+      = link_to kardex_v2_subarticle_path(@subarticle, desde: params[:desde], hasta: params[:hasta]), class: 'btn btn-success' do
+        %span.glyphicon.glyphicon-list-alt
+        Kardex v2
+    - if can? :read, Subarticle
+      = link_to subarticles_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        = t("subarticles.title.title")
+
+  %h2
+    %span.text-muted= @subarticle.code
+    = @subarticle.description
+    %small
+      - if @subarticle.esta_activo?
+        .label.label-success= type_status(@subarticle.status)
+      - else
+        .label.label-warning= type_status(@subarticle.status)
+
+
+%dl.dl-horizontal
+  - if @subarticle.code_old.present?
+    %dt= Subarticle.human_attribute_name('code_old')
+    %dd= @subarticle.code_old
+  %dt= Subarticle.human_attribute_name('unit')
+  %dd= @subarticle.unit
+  %dt= Subarticle.human_attribute_name('stock')
+  %dd= number_with_delimiter @subarticle.stock, 0
+  - if @subarticle.minimum.present?
+    %dt= Subarticle.human_attribute_name('minimum')
+    %dd= @subarticle.minimum
+  - if @subarticle.material.present?
+    %dt= Subarticle.human_attribute_name('material')
+    %dd= link_to_if @subarticle.material, @subarticle.material_description, @subarticle.material, title: @subarticle.material_code
+
+%h3
+  Histórico
+  %span.text-muted desde
+  %strong #{params[:desde]}
+  %span.text-muted hasta
+  %strong #{params[:hasta]}
+  .pull-right
+    %form.form-inline
+      .form-group
+        %label.sr-only{for: 'fecha-desde'} Desde
+        = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+      .form-group
+        %label.sr-only{for: 'fecha-hasta'} Hasta
+        = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+      %button{type: 'submit', class: 'btn btn-primary'}
+        %span.glyphicon.glyphicon-search
+
+- saldo = 0
+%table.table.table-hover.table-striped.table-condensed.table-bordered
+  %thead
+    %tr
+      %th #
+      %th.text-center Fecha
+      %th.text-center Factura
+      %th.text-center Nota Entrega
+      %th.text-center CITE Plantillas
+      %th.text-center Nro Pedido
+      %th.col-md-4 Detalle
+      %th.number Cantidad
+      %th.number Saldo
+      %th.number Costo unitario
+      %th.text-center Tipo
+      %th.text-center.col-md-1 Creado el
+      %th
+  %tbody
+    - if @transacciones.empty?
+      %tr
+        %td.text-center{colspan: 13}
+          .text-primary No hay ningún registro para mostrar.
+          .text-info Intente seleccionando otro rango de fechas.
+    - @transacciones.each_with_index do |transaccion, index|
+      %tr
+        %td{title: transaccion.id}= index
+        %td.text-center= l transaccion.fecha, format: :default if transaccion.fecha
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = transaccion.factura
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = l transaccion.nota_entrega, format: :default if transaccion.nota_entrega.present?
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = transaccion.cite_ems_plantillas
+        %td.text-center
+          - unless transaccion.cantidad.zero?
+            = transaccion.nro_solicitud
+        %td
+          - if transaccion.cantidad.zero?
+            SALDO INICIAL
+          - else
+            = transaccion.detalle
+        %td.number
+          = mostrar_entero_float transaccion.cantidad
+        %td.number
+          - if transaccion.cantidad.zero?
+            = mostrar_entero_float transaccion.cantidad_saldo
+            - saldo += transaccion.cantidad_saldo
+          - else
+            = mostrar_entero_float(saldo + transaccion.cantidad)
+            - saldo += transaccion.cantidad
+        %td.number
+          - if transaccion.tipo == 'entrada'
+            = number_with_delimiter(transaccion.costo_unitario.to_f)
+          - else
+            = number_with_delimiter(transaccion.precio_unitario.to_f)
+        %td.text-center
+          - if transaccion.saldo_inicial?
+            %em -
+          - elsif transaccion.tipo == 'entrada'
+            = link_to transaccion.tipo.capitalize, note_entry_path(transaccion.modelo_id)
+          - else
+            = link_to transaccion.tipo.capitalize, request_path(transaccion.modelo_id)
+        %td.text-center= l transaccion.created_at, format: :version if transaccion.created_at
+        %td
+          - if transaccion.tipo == 'entrada' && can?(:edit, transaccion)
+            = link_to edit_entry_subarticle_path(transaccion.id), class: 'btn btn-primary btn-xs', title: 'Editar' do
+              %span.glyphicon.glyphicon-edit
+  %tfoot
+    %tr
+      %th
+      %th.number{colspan: 5} STOCK
+      %th.number{colspan: 2}= mostrar_entero_float saldo
+      %th{colspan: 5}

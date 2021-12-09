@@ -1,0 +1,17 @@
+.col-sm-6
+  %table.table.table-condensed.table-striped.table-bordered
+    %tbody
+      %tr
+        %td Actas
+        %td.number= number_with_delimiter Proceeding.count
+      %tr
+        %td Actas de Asignación
+        %td.number= number_with_delimiter Proceeding.assignation.count
+      %tr
+        %td Actas de Devolución
+        %td.number
+          %span= number_with_delimiter Proceeding.devolution.count
+      %tr
+        %td Activos dados de baja
+        %td.number
+          %span= number_with_delimiter Asset.bajas.count

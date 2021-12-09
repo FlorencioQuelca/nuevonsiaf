@@ -1,0 +1,12 @@
+.page-header{ data: {action: 'request'} }
+  %h2= t("subarticles.title.#{params[:action]}")
+
+.col-sm-9.column.col-sm-offset-1
+  = simple_form_for @subarticle, html: { class: 'form-horizontal' } do |f|
+    = f.association :material, required: true, label_method: :detalle, value_method: :id, collection: Material.order(:code), prompt: '--'
+    = f.input :code_old
+    = f.input :description, required: true
+    = f.input :unit
+    = f.input :minimum
+
+    = render 'shared/form_buttons'

@@ -1,0 +1,12 @@
+- is_user = controller_name == 'users'
+.separator-assets
+  %h3.text-center Activos Fijos Asignados
+  %h4
+    %span.text-muted #{is_user ? 'Funcionario' : 'Unidad'} :
+    = is_user ? @user.name : @department.name
+  - if is_user
+    %h4
+      %span.text-muted Cargo:
+      = @user.title
+
+= render 'users/user_assets'

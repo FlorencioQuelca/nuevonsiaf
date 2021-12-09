@@ -1,0 +1,19 @@
+.title_pdf
+  %h3 #{t("#{controller_name}.title.title")}
+
+%table.table.table-condensed.table-bordered
+  %thead
+    %tr
+      %th= NoteEntry.human_attribute_name('id')
+      %th= NoteEntry.human_attribute_name('suppliers')
+      %th= NoteEntry.human_attribute_name('users')
+      %th= NoteEntry.human_attribute_name('total')
+      %th= NoteEntry.human_attribute_name('delivery_note_number')
+  %tbody
+    - @array.each do |r|
+      %tr
+        %td= r.id
+        %td= r.supplier_name
+        %td= r.user_name
+        %td= r.total
+        %td= r.note_date(r.delivery_note_date)

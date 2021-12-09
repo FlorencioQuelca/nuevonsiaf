@@ -1,0 +1,19 @@
+= simple_form_for user, html: { class: 'form-horizontal', id: 'admin-new-user', 'data-url-users' => users_path, 'data-url-user' => user_path('{id}') } do |f|
+  .panel.panel-info
+    .panel-heading DATOS GENERALES
+    .panel-body
+      = f.input :ci, required: true
+      = f.input :name, required: true
+      = f.association :department, collection: status_active(Department), include_blank: false, required: true
+      = f.input :title, required: true
+      = f.input :email, required: true
+      = f.input :phone
+      = f.input :mobile
+  .panel.panel-success
+    .panel-heading DATOS DE AUTENTICACIÓN
+    .panel-body
+      = f.input :role, as: :select, collection: get_i18n_roles, include_blank: true, required: true
+      = f.input :password, as: :password
+      = f.input :password_confirmation, as: :password
+
+  = render 'shared/form_buttons', user: user

@@ -1,0 +1,36 @@
+%script{type: 'text/html', id: 'tpl-success-message'}
+  .row
+    .col-sm-offset-2.col-sm-8
+      .container
+        .jumbotron.text-center
+          %h3.text-info
+            {{#devolution}}
+            %strong La Devolución de Activos Fijos se realizó correctamente
+            {{/devolution}}
+            {{^devolution}}
+            %strong La Asignación de Activos Fijos se realizó correctamente
+            {{/devolution}}
+          %br/
+          %p
+            {{#devolution}}
+            Se Devolvieron {{total_assets}} Activos del funcionario
+            {{/devolution}}
+            {{^devolution}}
+            Se Asignaron {{total_assets}} Activos al funcionario
+            {{/devolution}}
+            %strong {{user_name}}
+            con cargo
+            %strong {{user_title}}
+          %h4.text-muted
+            A continuación se descargará el Acta en formato PDF, espere por favor...
+          %br/
+          %br/
+          %p
+            {{#devolution}}
+            = link_to "Ver Acta de Devolución", "{{proceeding_path}}", class: 'btn btn-default btn-lg', role: 'button'
+            = link_to "Volver a Devolución", devolution_assets_path, class: 'btn btn-primary btn-lg', role: 'button'
+            {{/devolution}}
+            {{^devolution}}
+            = link_to "Ver Acta de Asignación", "{{proceeding_path}}", class: 'btn btn-default btn-lg', role: 'button'
+            = link_to "Volver a Asignación", assignation_assets_path, class: 'btn btn-primary btn-lg', role: 'button'
+            {{/devolution}}

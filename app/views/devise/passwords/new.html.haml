@@ -1,0 +1,8 @@
+.content-wrap
+  %h4= t('sessions.new_password')
+  = form_for(resource, as: resource_name, url: password_path(resource_name))  do |f|
+    .form-group
+      = f.text_field :email, autofocus: true, class: 'span12 form-control', placeholder: User.human_attribute_name('email')
+
+    %div= f.submit t('general.btn.send'), class: 'btn btn-primary login'
+  = render "devise/shared/links"

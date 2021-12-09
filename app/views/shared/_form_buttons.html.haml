@@ -1,0 +1,17 @@
+- case controller_name
+- when 'users' then list_url = user.id == current_user.id ? user : users_path
+- when 'departments' then list_url = departments_path
+- when 'buildings' then list_url = buildings_path
+- when 'entities' then list_url = entities_path
+- when 'accounts' then list_url = accounts_path
+- when 'auxiliaries' then list_url = auxiliaries_path
+- when 'assets' then list_url = URI(request.referer || assets_path).path
+- when 'materials' then list_url = materials_path
+- when 'articles' then list_url = articles_path
+- when 'subarticles' then list_url = subarticles_path
+- when 'suppliers' then list_url = suppliers_path
+- when 'note_entries' then list_url = note_entries_path
+
+.form-group
+  .col-sm-offset-5.col-sm-9
+    = submit_and_cancel(list_url || :back)

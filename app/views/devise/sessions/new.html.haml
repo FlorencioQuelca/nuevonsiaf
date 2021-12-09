@@ -1,0 +1,17 @@
+.content-wrap
+  .subttitle-login= t('sessions.log_in')
+  = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal', role: 'form' })  do |f|
+    .form-group
+      .col-md-12
+        .input-group
+          %span.input-group-addon
+            %span.glyphicon.glyphicon-user
+          = f.text_field :username, autofocus: true, class: 'form-control', placeholder: User.human_attribute_name('username')
+    .form-group
+      .col-md-12
+        .input-group
+          %span.input-group-addon
+            %span.glyphicon.glyphicon-lock
+          = f.password_field :password, class: 'form-control', placeholder: User.human_attribute_name('password')
+
+    %div= f.submit 'Ingresar', class: 'btn btn-success login'

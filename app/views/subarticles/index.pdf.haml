@@ -1,0 +1,23 @@
+.title_pdf
+  %h3= t("#{controller_name}.title.title")
+
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th.text-center= Subarticle.human_attribute_name('code')
+      %th.text-center= Subarticle.human_attribute_name('code_old')
+      %th= Subarticle.human_attribute_name('description')
+      %th.text-center= Subarticle.human_attribute_name('unit')
+      %th= Subarticle.human_attribute_name('material')
+      %th.text-center= Auxiliary.human_attribute_name('status')
+  %tbody
+    - @array.each_with_index do |subarticle, index|
+      %tr
+        %td.text-center= index + 1
+        %td.text-center= subarticle.code
+        %td.text-center= subarticle.code_old
+        %td.col-xs-5= subarticle.description
+        %td.text-center= subarticle.unit
+        %td= subarticle.material_description
+        %td.text-center= type_status(subarticle.status)

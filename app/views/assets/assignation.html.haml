@@ -1,0 +1,91 @@
+= render 'header_assets'
+
+#assignation-urls{data: {'admin-assets' => admin_assets_assets_path, 'proceedings' => proceedings_path, 'users-id' => user_path('{id}', format: :json), 'assets-departments' => departments_assets_path(format: :json), 'assets-users' => users_assets_path(format: :json)}}
+
+#container-select-user.row{ data: {action: 'assignation'} }
+  .col-md-offset-2.col-md-8.col-sm-12
+    %h3.col-md-offset-2.col-md-9.text-center Selección de Funcionario
+    %form.form-horizontal{ role: 'form' }
+      .form-group
+        %label.col-md-2.col-sm-2.control-label #{Building.model_name.human}
+        .col-md-9.col-sm-9
+          = select_tag :building, options_for_select(get_buildings), class: 'form-control', prompt: '--', autofocus: true
+      .form-group
+        %label.col-md-2.col-sm-2.control-label #{Department.model_name.human}
+        .col-md-9.col-sm-9
+          = select_tag :department, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
+      .form-group
+        %label.col-md-2.col-sm-2.control-label #{User.model_name.human}
+        .col-md-9.col-sm-9
+          = select_tag :user, options_for_select([]), class: 'form-control', prompt: '--', disabled: true
+      .form-group
+        .col-md-offset-2.col-sm-offset-2.col-md-9.col-sm-9.text-center
+          .row.text-center
+            .col-sm-6
+              = button_tag class: 'btn btn-default btn-block', id: 'btn_assignation' do
+                %span.glyphicon.glyphicon-plus
+                Asignación
+            .col-sm-6
+              = button_tag class: 'btn btn-danger btn-block', id: 'btn_cancel' do
+                %span.glyphicon.glyphicon-ban-circle
+                Cancelar
+
+#container-tpl-selected-user
+%script{type: 'text/html', id: 'tpl-selected-user'}
+  .row
+    .col-md-12
+      %h3.text-center Asignación de Activos Fijos
+
+  .row
+    .col-md-12.col-sm-12
+      %form.asset-code{ role: 'form', data: {action: 'assignation'} }
+        .row
+          .col-md-offset-2.col-sm-offset-2.col-xs-offset-2.col-md-6.col-sm-6.col-xs-6
+            = text_field_tag :code, '', class: 'form-control input-lg', placeholder: 'Código de Barras de Activo', autofocus: true
+          .col-md-3.col-sm-3.col-xs-3
+            = button_tag class: 'btn btn-success col-md-12 btn-lg' do
+              %span.glyphicon.glyphicon-search
+              Buscar
+  %br/
+  .row
+    .col-md-6.col-sm-6
+      %h4
+        %span.text-muted Funcionario:
+        %strong {{name}}
+    .col-md-6.col-sm-6
+      %h4
+        %span.text-muted Cargo:
+        %strong {{title}}
+
+#container-tpl-selected-assets
+%script{type: 'text/html', id: 'tpl-selected-assets'}
+  .row
+    %table.table.table-striped.table-hover.table-condensed
+      %thead
+        %tr
+          %th.col-sm-1
+            %span.badge{title: 'Total'} {{total}}
+          %th.col-sm-9 Descripción
+          %th.col-sm-2 Código
+          %th
+      %tbody
+        {{#assets}}
+        %tr{ id: 'asset_{{id}}' }
+          %td {{index}}
+          %td {{description}}
+          %td {{code}}
+        {{/assets}}
+    .col-md-12.col-sm-12.text-center
+      = button_tag class: 'btn btn-default', data: {type: 'back'} do
+        %span.glyphicon.glyphicon-arrow-left
+        Atrás
+
+      = button_tag class: 'btn btn-primary', data: {type: 'next'} do
+        %span.glyphicon.glyphicon-arrow-right
+        Siguiente
+
+#proceeding-delivery
+= render 'proceedings/tpl_proceeding_delivery', display_buttons: true
+
+#success-message
+= render 'assets/tpl_success_message'

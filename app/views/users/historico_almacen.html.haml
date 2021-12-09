@@ -1,0 +1,150 @@
+- titulo = 'Historial Artículo Entregados'
+
+- unless is_pdf?
+  .page-header
+    .pull-right
+      = link_to @user, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-arrow-left
+        Atrás
+      = link_to historico_almacen_user_path(@user, format: :pdf), class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-print
+        Imprimir
+      = link_to historico_almacen_user_path(@user, format: :csv), class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-file
+        Exportar CSV
+
+    %h2= titulo
+.row
+  - if is_pdf?
+    .col-md-12
+      %h3 DATOS DEL BENEFICIARIO:
+      .pl-5
+        %h4
+          %span.text-muted C.I.:
+          = @user.ci
+        %h4
+          %span.text-muted Nombre:
+          = @user.name
+        -# %h4
+        -#   %span.text-muted Código:
+        -#   = @user.code
+        %h4
+          %span.text-muted Unidad:
+          = @user.department_name
+        %h4
+          %span.text-muted Cargo:
+          = @user.title
+        %h4
+          %span.text-muted Email:
+          = @user.email
+        -# %h4
+        -#   %span.text-muted Usuario:
+        -#   = @user.username
+        %h4
+          %span.text-muted Teléfono:
+          = @user.phone
+        %h4
+          %span.text-muted Celular:
+          = @user.mobile
+        -# %h4
+        -#   %span.text-muted Rol:
+        -#   = @user.role.present? ? I18n.t(@user.role, scope: 'users.roles') : ''
+        %h4
+          %span.text-muted Estado:
+          = @user.status == "1" ? 'ACTIVO' : 'INACTIVO'
+
+        %h2.text-center= titulo
+  - else
+    .col-lg-4.col-md-5.col-sm-12
+      %strong.text-primary DATOS DEL BENEFICIARIO:
+      %dl.dl-horizontal
+        %dt C.I.
+        %dd
+          = @user.ci
+        %dt Nombre
+        %dd
+          = @user.name
+        -# %dt Código
+        -# %dd
+        -#   = @user.code
+        %dt Unidad
+        %dd
+          = @user.department_name
+        %dt Cargo
+        %dd
+          = @user.title
+        %dt Email
+        %dd
+          = @user.email
+        -# %dt Usuario
+        -# %dd
+        -#   = @user.username
+        %dt Teléfono
+        %dd
+          = @user.phone
+        %dt Celular
+        %dd
+          = @user.mobile
+        -# %dt Rol
+        -# %dd
+        -#   = @user.role.present? ? I18n.t(@user.role, scope: 'users.roles') : ''
+        %dt Estado
+        %dd
+          = @user.status == "1" ? 'ACTIVO' : 'INACTIVO'
+  .col-md-8
+    - if @historial_solicitud.present?
+      - unless is_pdf?
+        %div.pull-right
+          %input.form-control#filtro{ :placeholder => "Buscar", :type => "text" }
+          = radio_button_tag 'opciones', true, nil, { onclick: "desaparece_tabla('solicitud')" }
+          = label_tag 'Por subartículo'
+          &nbsp
+          = radio_button_tag 'opciones', true, true, { onclick: "desaparece_tabla('subarticulo')" }
+          = label_tag 'Por solicitud'
+      %table.table.table-bordered.table-condensed.valorado#tabla-por-solicitud{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+        %thead
+          %tr.vertical-align
+            %th.text-center
+            %th.text-center Solicitud
+            %th.text-center Fecha entrega
+            %th.text-center Código
+            %th.text-center Descripción
+            %th.text-center Cantidad
+        %tbody#body-solicitud
+          = render 'tabla_por_solicitud', historial_solicitud: @historial_solicitud
+      %table.table.table-bordered.table-condensed.valorado#tabla-por-subarticulo{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+        %thead
+          %tr.vertical-align
+            %th.text-center
+            %th.text-center Código
+            %th.text-center Descripción
+            %th.text-center Fecha entrega
+            %th.text-center Solicitud
+            %th.text-center Cantidad
+            %th.text-center Total
+        %tbody#body-subarticulo
+          = render 'tabla_por_subarticulo', historial_subarticulo: @historial_subarticulo
+    - else
+      %h3.text-center No hay movimientos de subarticulos para este usuario.
+:javascript
+  desaparece_tabla('subarticulo')
+  document.getElementById('filtro').onkeyup = function (e) {
+    var xhr = new XMLHttpRequest();
+    url = window.location.href.split('?')[0] + '?q=' + document.getElementById('filtro').value;
+    jQuery.ajax({
+      url: url,
+      dataType: 'script',
+      type: 'GET'
+    })
+    return false;
+  }
+
+  function desaparece_tabla(tipo) {
+    if (tipo === 'subarticulo') {
+      document.getElementById('tabla-por-subarticulo').hidden = true
+      document.getElementById('tabla-por-solicitud').hidden = false
+    } else {
+      document.getElementById('tabla-por-subarticulo').hidden = false
+      document.getElementById('tabla-por-solicitud').hidden = true
+    }
+  }

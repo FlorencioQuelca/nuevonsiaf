@@ -1,0 +1,162 @@
+#spinner-front
+  .spinner-image
+#spinner-back
+
+.pull-right
+  = form_tag '#', method: :get, class: "navbar-form navbar-left search-form" do
+    %form.form-inline
+      .form-group
+        #input-cero-existencias
+      .form-group
+        %label.sr-only{for: 'fecha-desde'} Desde
+        = text_field_tag :desde, params[:desde], class: 'form-control fecha-buscador', id: 'fecha-desde', placeholder: 'Desde fecha'
+      .form-group
+        %label.sr-only{for: 'fecha-hasta'} Hasta
+        = text_field_tag :hasta, params[:hasta], class: 'form-control fecha-buscador', id: 'fecha-hasta', placeholder: 'Hasta fecha'
+      %button#generar-fisico-valorado{type: 'submit', class: 'btn btn-primary'}
+        %span.glyphicon.glyphicon-search
+        Generar
+#cabecera-reporte
+.clearfix
+
+#materiales-data.page-header{data: {action: 'materiales', url_materiales: api_materiales_path(), url_subarticulos: subarticulos_api_materiale_path('codigo'), url_reporte_pdf: fisico_valorado_materials_path(format: 'pdf')}}
+
+#reporte-fisico-valorado
+
+#boton-reporte-abajo
+
+%script{type: 'text/html', id: 'tpl-reporte-fisico-valorado'}
+  .clearfix
+  %h3.text-center
+    %div INVENTARIO FÍSICO VALORADO DE #{entidad_sigla}
+    %small
+      LA PAZ, AL {{hastaLong}}
+
+  %table.table.table-bordered.table-hover.table-condensed.valorado
+    %thead
+      %tr.vertical-align.info
+        %th.text-center{rowspan: "2"} CÓDIGO
+        %th.text-center{rowspan: "2"} DESCRIPCIÓN
+        %th.text-center{rowspan: "2"} UNIDAD
+        %th.text-center{rowspan: "2"} SALDOS AL {{desde}}
+        %th.text-center{colspan: "2"} ENTRADAS
+        %th.text-center{colspan: "2"} CANTIDADES
+        %th.text-center{rowspan: "2"} COSTO UNITARIO Bs.
+        %th.text-center{rowspan: "2"} SALDO Bs. AL {{hasta}}
+      %tr.vertical-align.info
+        %th.text-center EXIST. ALMAC
+        %th.text-center COSTO UNIT.
+        %th.text-center SALIDAS EXIST. ALMAC
+        %th.text-center SALDOS EXIST. ALMAC
+    %tbody
+      {{#materiales}}
+      %tr.double-thick{id: 'th-material-{{codigo}}'}
+        %th.text-center
+          {{codigo}}
+        %th{colspan: 8}
+          {{descripcion}}
+        %th.number
+          %span.subtotal-materiales{id: 'subtotal-{{codigo}}'}
+      {{/materiales}}
+      %tr
+        %th{colspan: 2} TOTALES
+        %th{colspan: 7}
+        %th.number
+          %span{id: 'total-materiales'}
+
+%script{type: 'text/html', id: 'tpl-td-reporte-fisico-valorado'}
+  {{#subarticulos}}
+  {{#registro_en_cero}}
+  %tr.registro-cero
+    %td.text-center{rowspan: '{{cantidad_items}}'}
+      {{codigo}}
+    %td{rowspan: '{{cantidad_items}}'}
+      {{descripcion}}
+    %td{rowspan: '{{cantidad_items}}'}
+      {{unidad}}
+    %td.number.contenedor{rowspan: '{{cantidad_items}}'}
+      {{#datos_ingreso}}
+      %ul
+        %li{title: '{{costo_unitario}}'}
+          {{cantidad_saldo}}
+      {{/datos_ingreso}}
+    %td.number
+      {{cantidad_entrada}}
+    %td.number
+      {{costo_unitario_entrada}}
+    %td.number
+      {{cantidad_salida}}
+    %td.number
+      {{cantidad_saldo}}
+    %td.number
+      {{costo_unitario}}
+    %td.number
+      {{importe_saldo}}
+  {{/registro_en_cero}}
+  {{^registro_en_cero}}
+  %tr
+    %td.text-center{rowspan: '{{cantidad_items}}'}
+      {{codigo}}
+    %td{rowspan: '{{cantidad_items}}'}
+      {{descripcion}}
+    %td{rowspan: '{{cantidad_items}}'}
+      {{unidad}}
+    %td.number.contenedor{rowspan: '{{cantidad_items}}'}
+      {{#datos_ingreso}}
+      %ul
+        %li{title: '{{costo_unitario}}'}
+          {{cantidad_saldo}}
+      {{/datos_ingreso}}
+    %td.number
+      {{cantidad_entrada}}
+    %td.number
+      {{costo_unitario_entrada}}
+    %td.number
+      {{cantidad_salida}}
+    %td.number
+      {{cantidad_saldo}}
+    %td.number
+      {{costo_unitario}}
+    %td.number
+      {{importe_saldo}}
+  {{/registro_en_cero}}
+  {{#mas_registros}}
+  %tr
+    %td.number
+      {{cantidad_entrada}}
+    %td.number
+      {{costo_unitario_entrada}}
+    %td.number
+      {{cantidad_salida}}
+    %td.number
+      {{cantidad_saldo}}
+    %td.number
+      {{costo_unitario}}
+    %td.number
+      {{importe_saldo}}
+  {{/mas_registros}}
+  {{/subarticulos}}
+
+%script{type: 'text/html', id: 'tpl-cabecera-reporte'}
+  %h3
+    Inventario
+    %span.text-muted desde
+    %strong {{desde}}
+    %span.text-muted hasta
+    %strong {{hasta}}
+    %a#generar-reporte-pdf-1.btn.btn-primary{:href => "#"}
+      %span.glyphicon.glyphicon-print
+      Imprimir
+
+%script{type: 'text/html', id: 'tpl-boton-reporte-abajo'}
+  .text-center.action-buttons
+    %form#formReportePDF{:action => "{{urlReportePdf}}", :method => 'POST'}
+      #inputs-report
+      %button#generar-reporte-pdf-2.btn.btn-primary{:type => "submit"}
+        %span.glyphicon.glyphicon-print
+        Imprimir
+
+%script{type: 'text/html', id: 'tpl-input-cero-existencias'}
+  %label.texto-reporte-checkbox
+    %input#checkbox-cero-existencias{:name => "cero-existencias", :type => "checkbox", :value => "1"}
+    Sin registros en cero

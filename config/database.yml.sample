@@ -1,0 +1,25 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: nsiaf_development
+  pool: 5
+  username: root
+  password: root
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: nsiaf_test
+  pool: 5
+  username: root
+  password: root
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  pool: <%= ENV["MYSQL_POOL"] %>
+  database: <%= ENV["MYSQL_DATABASE"] %>
+  username: <%= ENV["MYSQL_USER"] %>
+  password: <%= ENV["MYSQL_PASSWORD"] %>
+  host: <%= ENV["MYSQL_HOST"] %>
+  port: <%= ENV["MYSQL_PORT"] %>

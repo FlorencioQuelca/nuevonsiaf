@@ -1,0 +1,25 @@
+.title_pdf
+  %h3.text-center Reporte de Activos por Cuenta
+  %br
+  %h4= 'Cuenta : '+ @account.name
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th.text-center Código
+      %th Activo
+      %th Auxiliar
+      %th.text-right Precio
+  %tbody
+    - @data.each_with_index do |activo, i|
+      %tr
+        %td.text-center= i + 1
+        %td.text-center= activo.code
+        %td= activo.description
+        %td= activo.name
+        %td.number= activo.precio
+    %tr
+      %td.text-right{colspan: 4}
+        %strong TOTAL :
+      %td.number=  @monto_activos
+      

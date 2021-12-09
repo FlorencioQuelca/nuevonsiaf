@@ -1,0 +1,15 @@
+.container
+  .jumbotron.j_bottom
+    %p.lead
+      Bienvenidos al #{title_system} #{acronym_entity}
+      %br
+      donde podrá gestionar #{dashboard_text}.
+
+  - if current_user.is_admin_store?
+    - if minimum_stock.present?
+      = render 'shared/stores/minimum_stock'
+  - if current_user.is_admin?
+    .row
+      = render 'shared/admin'
+      = render 'shared/assets'
+      = render 'shared/derecognised'

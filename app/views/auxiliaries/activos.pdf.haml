@@ -1,0 +1,14 @@
+.title_pdf
+  %h3 Activos
+%table.table.table-condensed.table-bordered.valorado
+  %thead
+    %tr
+      %th Nro
+      %th= Asset.human_attribute_name('description')
+      %th= Asset.human_attribute_name('code')
+  %tbody
+    - @activos.each_with_index do |asset, i|
+      %tr
+        %td= i + 1
+        %td= asset.description
+        %td= asset.code

@@ -1,0 +1,58 @@
+.page-header{data: {action: 'request'}}
+  %h2= t("requests.title.new")
+
+#request-urls{data: {'obtiene-nro-solicitud' => obtiene_nro_solicitud_requests_path, 'request-id' => request_path('{id}'), 'get-subarticles' => get_subarticles_subarticles_path(format: :json, q: '%QUERY'), 'get-users' => autocomplete_users_path(format: :json, q: '%QUERY'), 'users-id' => user_path('{id}', format: :json)}}
+
+#selection_subarticles
+  %p.bg-info En la caja de texto busque el Artículo a desear, el cual sera añadido en la tabla una vez seleccionado
+  .row
+    .col-md-4
+      %form.form-horizontal
+        .form-group
+          %label.col-sm-4.control-label Fecha
+          .col-sm-8
+            = text_field_tag 'date_restricted', format_date(Date.today), class: 'form-control'
+        .form-group
+          %label.col-sm-4.control-label Funcionario
+          .col-sm-8
+            = text_field_tag 'people', '', class: 'form-control'
+        .form-group
+          .col-sm-12
+            = text_field_tag :subarticle, '', id: 'subarticle', class: 'form-control input-lg', placeholder: 'Código o Descripción del Artículo'
+    .col-md-8
+      %section#selected-user
+        %dl.dl-horizontal.funcionario-seleccionado
+          %dt.text-muted Funcionario
+          %dd.nombre-completo
+            %em.text-muted No seleccionado
+          %dt.text-muted Cargo
+          %dd.cargo
+            %em.text-muted No Seleccionado
+
+      %table.table.table-striped.table-bordered
+        %thead
+          %tr
+            %th.text-center= Subarticle.human_attribute_name('code')
+            %th.col-md-6= Subarticle.human_attribute_name('description')
+            %th.text-center Unidad
+            %th.text-center Stock
+            %th.text-center Cantidad
+            %th.actions-request
+        %tbody#subarticles
+
+      %form.form-horizontal
+        .form-group
+          %label.col-sm-4.control-label Observaciones
+          .col-sm-8
+            = text_area_tag 'observacion', '', class: 'form-control', placeholder: 'Ingrese las observaciones y/o información adicional'
+
+      .text-center
+        %button#btn-show-new-request.btn.btn-primary
+          %span.glyphicon.glyphicon-shopping-cart
+          Ver Solicitud
+#selected_subarticles
+
+= render 'material'
+
+#confirm-modal
+= render 'request_modal'

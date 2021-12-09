@@ -1,0 +1,126 @@
+- display_buttons ||= false
+%script{ id: 'tpl-proceeding-delivery', type: 'text/html' }
+  .row
+    .col-md-offset-1.col-md-10
+      .proceeding-title.text-center
+        %h3
+          {{^devolution}}
+          ASIGNACIÓN INDIVIDUAL
+          {{/devolution}}
+          {{#devolution}}
+          ACTA DE DEVOLUCIÓN
+          {{/devolution}}
+          DE BIENES
+        {{proceedingDate}}
+      %p.proceeding-description.text-justify
+        %h4
+          %span.text-muted Entidad:
+          {{entity}}
+        %h4.row
+          .col-xs-8.col-sm-8.col-md-8
+            %span.text-muted Responsable:
+            {{userName}}
+          .col-xs-4.col-sm-4.col-md-4
+            %span.text-muted C.I.:
+            {{userCi}}
+        %h4
+          %span.text-muted Cargo:
+          {{userTitle}}
+        %h4
+          %span.text-muted Oficina:
+          {{userDepartment}}
+        {{#citePlantillas}}
+        %h4
+          %span.text-muted CITE-plantillas:
+          {{citePlantillas}}
+        {{/citePlantillas}}
+        %h4
+          %span.text-muted Observaciones:
+          {{obsAsset}}
+
+      %table.table.table-striped.table-condensed.proceeding-assets.table-bordered.valorado.alineacion-media
+        %thead
+          %tr
+            %th Nro
+            %th Código
+            %th Cuenta
+            %th Descripción del Activo
+            %th Estado
+        %tbody
+          {{#assets}}
+          %tr
+            %td.text-center {{index}}
+            %td.text-center {{code}}
+            %td.no-dividir {{cuenta}}
+            %td {{description}}
+            %td.text-center {{state}}
+          {{/assets}}
+      .acta
+        %br/
+        %p.text-justify
+          {{^devolution}}
+          %b OBLIGACIONES SOBRE EL USO DE LOS ACTIVOS ASIGNADOS
+          %br
+          %p.text-justify
+            El funcionario que se suscribe como Responsable de los Activos señalados, declara conocer las siguientes disposiciones establecidas en el D.S. 0181 en el artículo No 157
+            %strong (Prohibición para los servidores públicos sobre el uso de activos fijos muebles),
+            con lo que se compromete a respetar, y aplicarlas durante todo su desempeño, dentro o fuera de las dependencias de la {{institucion}} ({{sigla}}).
+          %p
+            %strong Prohibiciones:
+          %ol
+            %li Usar los bienes para beneficio particular o privado;
+            %li Permitir el uso para beneficio particular o privado;
+            %li Prestar o transferir el bien a otro empleado público;
+            %li Enajenar el bien por cuenta propia;
+            %li Dañar o alterar sus características físicas o técnicas;
+            %li Poner en riesgo el bien;
+            %li Ingresar bienes particulares sin autorización de la Unidad Administrativa Financiera;
+            %li Sacar bienes de la entidad sin autorización de la Unidad Administrativa Financiera;
+          %p
+            %strong Obligaciones:
+          %ol
+            %li Comunicar a la Unidad Administrativa Financiera cualquier desperfecto o falla en el bien que requiera mantenimiento;
+            %li Solicitar el respectivo formulario para la salida de activos fuera de la institución;
+            %li Comunicar de manera inmediata cualquier pérdica, robo o hurto a la Unidad Administrativa Financiera;
+
+          %p La no observancia a éstas prohibiciones y obligaciones generará responsabilidades establecidas en la Ley N° 1178 y sus reglamentos.
+          %p En señal de conformidad y aceptación se firma el presente acta de asignación.
+          {{/devolution}}
+          {{#devolution}}
+          %b DEVOLUCIÓN DE ACTIVOS
+          %br
+          %p.text-justify
+            En cumplimiento al Artículo N° 148 (Liberación de la Responsabilidad) del D.S. 0181 de fecha 28/06/2009, se procedió con la devolución de los bienes, según detalle descrito en el presente documento.
+          {{/devolution}}
+
+      %table{ style: 'width: 100%' }
+        %tr
+          -# %td.text-center
+          -#   __________________________
+          -#   %p
+          -#     Autorización de
+          -#     {{^devolution}}
+          -#     Asignación
+          -#     {{/devolution}}
+          -#     {{#devolution}}
+          -#     Devolución
+          -#     {{/devolution}}
+          %td.text-center.firma-funcionario
+            __________________________
+            %p Responsable de Activos Fijos
+          %td.text-center.firma-funcionario
+            __________________________
+            %p Funcionario
+
+  - if display_buttons
+    %p.proceeding-pdf.text-center
+      = button_tag class: 'btn btn-primary btn-lg', data: {type: 'save'} do
+        %span.glyphicon.glyphicon-print
+        Imprimir PDF
+
+      = button_tag class: 'btn btn-danger btn-lg', data: {type: 'cancel'} do
+        %span.glyphicon.glyphicon-arrow-left
+        Volver atrás
+      = link_to assignation_assets_path, class: 'btn btn-warning btn-lg', title: 'Cancelar y Cerrar' do
+        %span.glyphicon.glyphicon-remove
+        Cerrar

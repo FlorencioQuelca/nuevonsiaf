@@ -1,0 +1,29 @@
+%table.table.table-striped.table-condensed.table-bordered.alineacion-media
+  %thead
+    %tr
+      %th
+      %th= Asset.human_attribute_name('description')
+      - if controller_name == 'departments'
+        %th= Asset.human_attribute_name('user')
+      %th= Asset.human_attribute_name('code')
+  %tbody
+    - @assets.each_with_index do |asset, index|
+      %tr
+        %td= index + 1
+        %td= asset.description
+        - if controller_name == 'departments'
+          %td= asset.user_name
+        %td.nowrap.text-center
+          - if current_user.is_super_admin? || params[:format] == 'pdf'
+            = asset.code
+          - else
+            = link_to asset.code, asset
+
+- if is_pdf?
+  %p.proceeding-date.text-right
+    La Paz, #{ I18n.l(Time.now.to_date, format: :long) }
+  %table{ style: 'width: 100%' }
+    %tr
+      %td.text-center.firma-funcionario
+        _______________________
+        %p Funcionario

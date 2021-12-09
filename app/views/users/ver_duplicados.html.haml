@@ -1,0 +1,28 @@
+%h2 Usuarios duplicados
+.pull-right
+  .row
+    .col-sm-6.col-md-6.col-lg-6
+      = link_to 'Regresar', verificar_usuario_users_path
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th #
+      %th Id
+      %th Nombre
+      %th CI
+      %th Email
+      %th Cargo
+      %th Cantidad duplicada
+
+  %tbody
+    - @user.each_with_index do |user, index|
+      %tr
+        %th= index + 1
+        %td= user.id
+        %td= user.name
+        %td= user.ci
+        %td= user.email
+        %td= user.title
+        %td
+          .badge.badge-error= user.cantidad

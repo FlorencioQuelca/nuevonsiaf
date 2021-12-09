@@ -1,0 +1,118 @@
+- unless is_pdf?
+  .page-header
+    .pull-right
+      - unless Rails.application.secrets.interoperabilidad_plantillas.present?
+        = link_to edit_ingreso_path(@ingreso), class: 'btn btn-primary' do
+          %span.glyphicon.glyphicon-edit
+          = t("general.btn.edit")
+      = link_to ingreso_path(@ingreso, format: :pdf), class: 'btn btn-info' do
+        %span.glyphicon.glyphicon-print
+        Imprimir PDF
+      = link_to ingresos_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list
+        = t("ingresos.title.title")
+
+    %h2 Ingreso de Activos Fijos Nro. #{@ingreso.obtiene_numero}
+
+- lista_de_campos = listar_campos(@activos)
+
+- if is_pdf?
+  .row{data: {action: 'devolution'}}
+    .col-md-12
+      %h3
+        .text-left.proceeding-title Nro. #{@ingreso.obtiene_numero}
+        .text-center Ingreso de Activos Fijos
+      - if @ingreso.factura_fecha.present?
+        %p
+          .text-center
+            Fecha de Incorporación: #{I18n.l @ingreso.factura_fecha}
+
+%table.table.table-bordered.table-striped.table-hover.table-condensed.valorado
+  %thead
+    %tr
+      %th.text-center Nro
+      %th.text-center Cuenta
+      %th.text-center Código
+      - lista_de_campos.each do |campo|
+        %th= Ingreso.human_attribute_name(campo)
+      %th.number.nowrap Precio Unit.
+  %tbody
+    - @activos.each_with_index do |activo, index|
+      %tr
+        %td.text-center= index + 1
+        %td.text-center= activo.account_name
+        %td.text-center{title: activo.barcode}= activo.barcode
+        - lista_de_campos.each do |campo|
+          %td= activo[campo]
+        %td.number= number_with_delimiter activo.precio
+    %tr
+      %th{ colspan: lista_de_campos.length+2 }
+      %th.number TOTAL
+      %th.number= number_with_delimiter @ingreso.total
+
+%table.table.table-bordered.table-condensed.valorado{ class: "#{is_pdf? ? 'margen' : 'table-striped'}" }
+  %thead
+    %tr
+      %th.col-md-6.col-sm-7.col-xs-8 Datos proveedor
+      %th.col-md-6.col-sm-5.col-xs-4 Firma Activos Fijos
+  %tbody
+    %tr
+      %td
+        %table.table-condensed
+          %tbody
+            - if @ingreso.tipo_ingreso.present?
+              %tr
+                %th.text-right Tipo de ingreso
+                %td= t("activerecord.attributes.ingreso.#{@ingreso.tipo_ingreso}")
+            - if @ingreso.supplier_name.present?
+              %tr
+                %th.text-right Proveedor
+                %td= @ingreso.supplier_name
+            - if @ingreso.supplier_nit.present?
+              %tr
+                %th.text-right NIT
+                %td= @ingreso.supplier_nit
+            - if @ingreso.factura_numero.present?
+              %tr
+                %th.text-right Número factura/Doc. respaldo
+                %td= @ingreso.factura_numero
+            - if @ingreso.factura_autorizacion.present?
+              %tr
+                %th.text-right Autorización
+                %td= @ingreso.factura_autorizacion
+            - if @ingreso.factura_fecha.present?
+              %tr
+                %th.text-right Fecha de factura/Doc. respaldo
+                %td= I18n.l @ingreso.factura_fecha
+            - if @ingreso.nota_entrega_numero.present?
+              %tr
+                %th.text-right Número nota de entrega
+                %td= @ingreso.nota_entrega_numero
+            - if @ingreso.nota_entrega_fecha.present?
+              %tr
+                %th.text-right Fecha nota de entrega
+                %td= I18n.l @ingreso.nota_entrega_fecha
+            - if @ingreso.c31_numero.present?
+              %tr
+                %th.text-right Nº requerimiento/Nº preventivo
+                %td= @ingreso.c31_numero
+            - if @ingreso.c31_fecha.present?
+              %tr
+                %th.text-right Fecha Nº requerimiento/Nº preventivo
+                %td= I18n.l @ingreso.c31_fecha
+            - if @ingreso.entidad_donante.present?
+              %tr
+                %th.text-right Entidad donante
+                %td= @ingreso.entidad_donante
+            - if @ingreso.observacion.present?
+              %tr
+                %th.text-right Observación
+                %td= @ingreso.observacion
+            - if Rails.application.secrets.interoperabilidad_plantillas.present?
+              %tr
+                %th.text-right CITE Plantillas
+                %td= @ingreso.documento_cite
+
+      %td
+
+= fecha_impresion if is_pdf?
